@@ -3,246 +3,244 @@
 
 ## *Project proposal*
 
-[![](https://mermaid.ink/img/pako:eNrVV21v2zYQ_iuCgAI25ji1HL-iC5o0weYi64rGa9HBXxjxLBGRSIGknLpZ8tt3lChZUpTEWbEB8wdD4t3z3AvvjtSt6wsK7txdcT8iSp0xEkgSr7iDv2zFWTL_GrRzm6-Z35s351wzvT0-3q395FwIHjiMVpcutWS4CBvg-gOJoSpbcA0BSIdsCIvIVQS5HVXV2QhGHUKpFXUY144vUq67D7QkxGJjOTpWfLfi1UA-A6dCVgMpsCl_BPIuVVrE8DJQ7sRHIaI6TG25H0rB2XegraHp_Ln7KMhuxR6x5sJLkBvmQ4v3e1i2xpJU-iFR-5j7BIlQTAu5rVfLbr1eMYpsoGPN5B5055aqqrZmnJ5uF7RjKwyVfk80E5xE97n2_RNOvRNcSxFF9U00TqmKrO4YyhLBFeRlfn_BlL53AtAnUVRkrfuEvnXKIPLHmvd7AMvdaWRnD2hjuzKjOXpB2_fu_U17ndjmDYCDJBqW4hp45w8F8gw0tqxy0t1zzbNTrHwg3NmQiNESaem0eek5T_M0PDxJddjqYpUlEoSa99Ot-ec4bQqTqX3vtkRHkBqHE_PRz6Z-r1BK0IkbIR_JnzH3I9OxMNciKgy3iLBsQT3qz0s7sewnA763HfdMHhtmL0QQNAdlJIICHINSJADsXTN_WhnOpRTyV8Jp1OQJs8VM3jn_5kPmrdNC9uoV9kVEjFiFLFHOFegbANQ1W8JAOcjkqLyWbPoezK6Dg-Ni-M2dlRsTjo6rlVtVL8pxp1shMChMVgOSHQg7_YLBKPskihralbHVjmF8g62UobK4T3aVjNHnVNXGMSyVVjcURWvnWSnaFSfCl2XhTJOhUVyGRQLuMB7xTwdQJTKoauPtgliGEgi1u1SefJWI7Bl-cPDXsfMp5dxcHPJ0xEkEMTKWbpRn9z7KJe9xdbcyRyn6Y89HnF4t7A8gZUZK3FqKuAwSOyWPEExBqwcO2E4yTFGm6mu2yaq31fjz6hXuWo8ZSN5aqvClzcAemCyu9x9P6t33T26Rbxe1aff2F1uj9DOJUugobV6CrfOzYyVobLlNoL84O_-wXCy_dv_lO-mz19G9b2cvHdI2hS23ptZRXtwIHlyffuAU-6925399Jro9F1snJozid1VmauXisMNoXNM9lMhr0zN3qIdTUFzinHPnWqbQc9PETGD7EVZfPKfGR3e-JpHCRXPdAXy9dTXmFw0FeElFRl_wNQvMeiojXA61TtT88NCI-wHTYXrV90V8qBgNidThZjY-HHvjKfGGMJ4MyWg4pP7VYDZde0eDNZ28HnjEvbvruQnhhvWbOx9M--PpcDwYj2beaHg0nXo9d-vOj7z-kTcbTyaT2WDizQYjBH0XAsN43Z8Mhqg-mg48b4yIWc-FLJzf8o_P7Bu050qRBmEZIRr8M4ObLNz9DX5DsRY?type=png)](https://mermaid.live/edit#pako:eNrVV21v2zYQ_iuCgAI25ji1HL-iC5o0weYi64rGa9HBXxjxLBGRSIGknLpZ8tt3lChZUpTEWbEB8wdD4t3z3AvvjtSt6wsK7txdcT8iSp0xEkgSr7iDv2zFWTL_GrRzm6-Z35s351wzvT0-3q395FwIHjiMVpcutWS4CBvg-gOJoSpbcA0BSIdsCIvIVQS5HVXV2QhGHUKpFXUY144vUq67D7QkxGJjOTpWfLfi1UA-A6dCVgMpsCl_BPIuVVrE8DJQ7sRHIaI6TG25H0rB2XegraHp_Ln7KMhuxR6x5sJLkBvmQ4v3e1i2xpJU-iFR-5j7BIlQTAu5rVfLbr1eMYpsoGPN5B5055aqqrZmnJ5uF7RjKwyVfk80E5xE97n2_RNOvRNcSxFF9U00TqmKrO4YyhLBFeRlfn_BlL53AtAnUVRkrfuEvnXKIPLHmvd7AMvdaWRnD2hjuzKjOXpB2_fu_U17ndjmDYCDJBqW4hp45w8F8gw0tqxy0t1zzbNTrHwg3NmQiNESaem0eek5T_M0PDxJddjqYpUlEoSa99Ot-ec4bQqTqX3vtkRHkBqHE_PRz6Z-r1BK0IkbIR_JnzH3I9OxMNciKgy3iLBsQT3qz0s7sewnA763HfdMHhtmL0QQNAdlJIICHINSJADsXTN_WhnOpRTyV8Jp1OQJs8VM3jn_5kPmrdNC9uoV9kVEjFiFLFHOFegbANQ1W8JAOcjkqLyWbPoezK6Dg-Ni-M2dlRsTjo6rlVtVL8pxp1shMChMVgOSHQg7_YLBKPskihralbHVjmF8g62UobK4T3aVjNHnVNXGMSyVVjcURWvnWSnaFSfCl2XhTJOhUVyGRQLuMB7xTwdQJTKoauPtgliGEgi1u1SefJWI7Bl-cPDXsfMp5dxcHPJ0xEkEMTKWbpRn9z7KJe9xdbcyRyn6Y89HnF4t7A8gZUZK3FqKuAwSOyWPEExBqwcO2E4yTFGm6mu2yaq31fjz6hXuWo8ZSN5aqvClzcAemCyu9x9P6t33T26Rbxe1aff2F1uj9DOJUugobV6CrfOzYyVobLlNoL84O_-wXCy_dv_lO-mz19G9b2cvHdI2hS23ptZRXtwIHlyffuAU-6925399Jro9F1snJozid1VmauXisMNoXNM9lMhr0zN3qIdTUFzinHPnWqbQc9PETGD7EVZfPKfGR3e-JpHCRXPdAXy9dTXmFw0FeElFRl_wNQvMeiojXA61TtT88NCI-wHTYXrV90V8qBgNidThZjY-HHvjKfGGMJ4MyWg4pP7VYDZde0eDNZ28HnjEvbvruQnhhvWbOx9M--PpcDwYj2beaHg0nXo9d-vOj7z-kTcbTyaT2WDizQYjBH0XAsN43Z8Mhqg-mg48b4yIWc-FLJzf8o_P7Bu050qRBmEZIRr8M4ObLNz9DX5DsRY)
+```mermaid
 
-[//]: # (```mermaid)
 
-[//]: # ()
-[//]: # (classDiagram)
+classDiagram
 
-[//]: # (    class Ticket {)
+    class Ticket {
 
-[//]: # (        <<Entity>>)
+        <<Entity>>
 
-[//]: # (        + Long id)
+        + Long id
 
-[//]: # (        + String eventName)
+        + String eventName
 
-[//]: # (        + Integer availableTickets)
+        + Integer availableTickets
 
-[//]: # (        + void addTickets&#40;int count&#41;)
+        + void addTickets(int count)
 
-[//]: # (        + void removeTicket&#40;&#41;)
+        + void removeTicket()
 
-[//]: # (    })
+    }
 
-[//]: # ()
-[//]: # (    class Vendor {)
 
-[//]: # (        + void run&#40;&#41;)
+    class Vendor {
 
-[//]: # (    })
+        + void run()
 
-[//]: # ()
-[//]: # (    class Customer {)
+    }
 
-[//]: # (        + void run&#40;&#41;)
 
-[//]: # (    })
+    class Customer {
 
-[//]: # ()
-[//]: # (    class TicketPool {)
+        + void run()
 
-[//]: # (        + synchronized void addTickets&#40;int tickets&#41;)
+    }
 
-[//]: # (        + synchronized Ticket removeTicket&#40;&#41;)
 
-[//]: # (    })
+    class TicketPool {
 
-[//]: # ()
-[//]: # (    class TicketService {)
+        + synchronized void addTickets(int tickets)
 
-[//]: # (        + void addTickets&#40;int tickets&#41;)
+        + synchronized Ticket removeTicket()
 
-[//]: # (        + Ticket purchaseTicket&#40;&#41;)
+    }
 
-[//]: # (    })
 
-[//]: # ()
-[//]: # (    class TicketRepository {)
+    class TicketService {
 
-[//]: # (        <<Repository>>)
+        + void addTickets(int tickets)
 
-[//]: # (        + save&#40;Ticket ticket&#41;: Ticket)
+        + Ticket purchaseTicket()
 
-[//]: # (        + findById&#40;Long id&#41;: Optional~Ticket~)
+    }
 
-[//]: # (    })
 
-[//]: # ()
-[//]: # (    class TicketController {)
+    class TicketRepository {
 
-[//]: # (        <<RestController>>)
+        <<Repository>>
 
-[//]: # (        + ResponseEntity~List~ getAllTickets&#40;&#41;)
+        + save(Ticket ticket): Ticket
 
-[//]: # (        + ResponseEntity~Ticket~ getTicketById&#40;Long id&#41;)
+        + findById(Long id): Optional~Ticket~
 
-[//]: # (        + ResponseEntity~Ticket~ addTicket&#40;Ticket ticket&#41;)
+    }
 
-[//]: # (        + ResponseEntity~Ticket~ purchaseTicket&#40;Long ticketId&#41;)
 
-[//]: # (    })
+    class TicketController {
 
-[//]: # ()
-[//]: # (    class JwtService {)
+        <<RestController>>
 
-[//]: # (        + String generateToken&#40;UserDetails userDetails&#41;)
+        + ResponseEntity~List~ getAllTickets()
 
-[//]: # (        + Boolean validateToken&#40;String token, UserDetails userDetails&#41;)
+        + ResponseEntity~Ticket~ getTicketById(Long id)
 
-[//]: # (    })
+        + ResponseEntity~Ticket~ addTicket(Ticket ticket)
 
-[//]: # ()
-[//]: # (    class AuthService {)
+        + ResponseEntity~Ticket~ purchaseTicket(Long ticketId)
 
-[//]: # (        + UserDetails loadUserByUsername&#40;String username&#41;)
+    }
 
-[//]: # (        + String authenticate&#40;String username, String password&#41;)
 
-[//]: # (    })
+    class JwtService {
 
-[//]: # ()
-[//]: # (    class User {)
+        + String generateToken(UserDetails userDetails)
 
-[//]: # (        <<Entity>>)
+        + Boolean validateToken(String token, UserDetails userDetails)
 
-[//]: # (        + Long id)
+    }
 
-[//]: # (        + String username)
 
-[//]: # (        + String password)
+    class AuthService {
 
-[//]: # (        + String roles)
+        + UserDetails loadUserByUsername(String username)
 
-[//]: # (    })
+        + String authenticate(String username, String password)
 
-[//]: # ()
-[//]: # (    class UserRepository {)
+    }
 
-[//]: # (        <<Repository>>)
 
-[//]: # (        + Optional~User~ findByUsername&#40;String username&#41;)
+    class User {
 
-[//]: # (    })
+        <<Entity>>
 
-[//]: # ()
-[//]: # (    class Logger {)
+        + Long id
 
-[//]: # (        + log&#40;String message&#41;: void)
+        + String username
 
-[//]: # (    })
+        + String password
 
-[//]: # ()
-[//]: # (    class ErrorHandler {)
+        + String roles
 
-[//]: # (        + handleError&#40;Exception e&#41;: void)
+    }
 
-[//]: # (    })
 
-[//]: # ()
-[//]: # (%% Relationships between entities and services)
+    class UserRepository {
 
-[//]: # (    TicketRepository --> Ticket : "manages")
+        <<Repository>>
 
-[//]: # (    TicketService --> TicketRepository : "uses")
+        + Optional~User~ findByUsername(String username)
 
-[//]: # (    TicketPool --> TicketService : "calls")
+    }
 
-[//]: # (    TicketController --> TicketService : "invokes")
 
-[//]: # ()
-[//]: # (%% Authentication)
+    class Logger {
 
-[//]: # (    AuthService --> JwtService : "generates and validates JWT")
+        + log(String message): void
 
-[//]: # (    AuthService --> UserRepository : "retrieves")
+    }
 
-[//]: # (    TicketController --> AuthService : "authenticates")
 
-[//]: # ()
-[//]: # (%% Threads and synchronization)
+    class ErrorHandler {
 
-[//]: # (    Vendor --|> Runnable : "implements")
+        + handleError(Exception e): void
 
-[//]: # (    Customer --|> Runnable : "implements")
+    }
 
-[//]: # (    Vendor --> TicketPool : "adds tickets to")
 
-[//]: # (    Customer --> TicketPool : "retrieves tickets from")
+%% Relationships between entities and services
 
-[//]: # ()
-[//]: # (%% Logs and errors)
+    TicketRepository --> Ticket : "manages"
 
-[//]: # (    Vendor --> Logger : "logs activities")
+    TicketService --> TicketRepository : "uses"
 
-[//]: # (    Customer --> Logger : "logs activities")
+    TicketPool --> TicketService : "calls"
 
-[//]: # (    Vendor --> ErrorHandler : "handles errors")
+    TicketController --> TicketService : "invokes"
 
-[//]: # (    Customer --> ErrorHandler : "handles errors")
 
-[//]: # ()
-[//]: # (%% JPA Relationships)
+%% Authentication
 
-[//]: # (    class Ticket {)
+    AuthService --> JwtService : "generates and validates JWT"
 
-[//]: # (        <<Entity>>)
+    AuthService --> UserRepository : "retrieves"
 
-[//]: # (        + @Id)
+    TicketController --> AuthService : "authenticates"
 
-[//]: # (        + @GeneratedValue&#40;strategy = GenerationType.IDENTITY&#41;)
 
-[//]: # (        + Long id)
+%% Threads and synchronization
 
-[//]: # (        + String eventName)
+    Vendor --|> Runnable : "implements"
 
-[//]: # (        + Integer availableTickets)
+    Customer --|> Runnable : "implements"
 
-[//]: # (        + addTickets&#40;int count&#41;)
+    Vendor --> TicketPool : "adds tickets to"
 
-[//]: # (        + removeTicket&#40;&#41;)
+    Customer --> TicketPool : "retrieves tickets from"
 
-[//]: # (    })
 
-[//]: # ()
-[//]: # (    class TicketRepository {)
+%% Logs and errors
 
-[//]: # (        <<Repository>>)
+    Vendor --> Logger : "logs activities"
 
-[//]: # (        + Ticket save&#40;Ticket ticket&#41;)
+    Customer --> Logger : "logs activities"
 
-[//]: # (        + Optional~Ticket~ findById&#40;Long id&#41;)
+    Vendor --> ErrorHandler : "handles errors"
 
-[//]: # (    })
+    Customer --> ErrorHandler : "handles errors"
 
-[//]: # ()
-[//]: # (    class User {)
 
-[//]: # (        <<Entity>>)
+%% JPA Relationships
 
-[//]: # (        + @Id)
+    class Ticket {
 
-[//]: # (        + @GeneratedValue&#40;strategy = GenerationType.IDENTITY&#41;)
+        <<Entity>>
 
-[//]: # (        + Long id)
+        + @Id
 
-[//]: # (        + String username)
+        + @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-[//]: # (        + String password)
+        + Long id
 
-[//]: # (        + String roles)
+        + String eventName
 
-[//]: # (    })
+        + Integer availableTickets
 
-[//]: # ()
-[//]: # (    class UserRepository {)
+        + addTickets(int count)
 
-[//]: # (        <<Repository>>)
+        + removeTicket()
 
-[//]: # (        + Optional~User~ findByUsername&#40;String username&#41;)
+    }
 
-[//]: # (    })
 
-[//]: # ()
-[//]: # (```)
+    class TicketRepository {
+
+        <<Repository>>
+
+        + Ticket save(Ticket ticket)
+
+        + Optional~Ticket~ findById(Long id)
+
+    }
+
+
+    class User {
+
+        <<Entity>>
+
+        + @Id
+
+        + @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+        + Long id
+
+        + String username
+
+        + String password
+
+        + String roles
+
+    }
+
+
+    class UserRepository {
+
+        <<Repository>>
+
+        + Optional~User~ findByUsername(String username)
+
+    }
+
+
+```
