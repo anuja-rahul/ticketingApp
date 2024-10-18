@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,7 +32,17 @@ public class LoggingAspect {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
 
         String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String logFileName = "ticketingapp-" + currentDate + ".log";
+        String logFileName = "logs/ticketingApp-" + currentDate + ".log";
+
+        Path logDirectory = Paths.get("logs");
+        if (!Files.exists(logDirectory)) {
+            try {
+                Files.createDirectory(logDirectory);
+            } catch (IOException e) {
+                logger.error("Failed to create logs directory", e);
+                return;
+            }
+        }
 
         String logMessage = String.format("Class: [%s], Method: [%s] executed at %s", className, methodName, timestamp);
 
