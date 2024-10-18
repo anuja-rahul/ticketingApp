@@ -1,6 +1,22 @@
 # Real-Time Event Ticketing System
 
 
+```mermaid
+
+graph TD
+    A[Front-End] <--> B[Controller Layer]
+    B[Controller Layer] <--> C[Service Layer]
+    C[Service Layer] <--> D[Repository Layer]
+    D[Repository Layer] <--> E[(Database)]
+
+    A <-->|Sends HTTP Requests| B
+    B <-->|Handles Requests| C
+    C <-->|Processes Business Logic| D
+    D <-->|Interacts with| E
+
+```
+
+
 ## *Project proposal*
 
 ```mermaid
