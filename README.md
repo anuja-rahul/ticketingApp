@@ -27,15 +27,27 @@ classDiagram
         + Long id
         + String eventName
         + Integer availableTickets
+        + Integer totalTickets
+        + Integer ticketReleaseRate
+        + Integer maxTicketCapacity
         + void addTickets(int count)
         + void removeTicket()
     }
 
     class Vendor {
+        <<Entity>>
+        + Long id
+        + String name
+        + String vendorCode
         + void run()
     }
 
-    class Customer {
+    class CustomerAccount {
+        <<Entity>>
+        + Long id
+        + String username
+        + String password
+        + String role    // CUSTOMER or VIP
         + void run()
     }
 
@@ -53,6 +65,29 @@ classDiagram
         <<Repository>>
         + save(Ticket ticket): Ticket
         + findById(Long id): Optional~Ticket~
+    }
+
+    class CustomerAccountRepository {
+        <<Repository>>
+        + Optional~CustomerAccount~ findByUsername(String username)
+    }
+
+    class TicketSale {
+        <<Entity>>
+        + Long id
+        + Long ticketId
+        + Long customerId
+        + Timestamp purchaseTime
+        + Integer quantity
+    }
+
+    class VendorActivity {
+        <<Entity>>
+        + Long id
+        + Long vendorId
+        + Long ticketId
+        + Integer addedTickets
+        + Timestamp timestamp
     }
 
     class TicketController {
@@ -73,19 +108,6 @@ classDiagram
         + String authenticate(String username, String password)
     }
 
-    class CustomerAccount {
-        <<Entity>>
-        + Long id
-        + String username
-        + String password
-        + String role    // "CUSTOMER"
-    }
-
-    class CustomerAccountRepository {
-        <<Repository>>
-        + Optional~CustomerAccount~ findByUsername(String username)
-    }
-
     class Logger {
         + log(String message): void
     }
@@ -99,6 +121,9 @@ classDiagram
     TicketService --> TicketRepository : "uses"
     TicketPool --> TicketService : "calls"
     TicketController --> TicketService : "invokes"
+    TicketSale --> CustomerAccount : "tracks sales for"
+    VendorActivity --> Vendor : "logs activities for"
+    VendorActivity --> Ticket : "logs ticket activity"
 
 %% Authentication
     AuthService --> JwtService : "generates and validates JWT"
@@ -107,48 +132,15 @@ classDiagram
 
 %% Threads and synchronization
     Vendor --|> Runnable : "implements"
-    Customer --|> Runnable : "implements"
+    CustomerAccount --|> Runnable : "implements"
     Vendor --> TicketPool : "adds tickets to"
-    Customer --> TicketPool : "retrieves tickets from"
+    CustomerAccount --> TicketPool : "retrieves tickets from"
 
 %% Logs and errors
     Vendor --> Logger : "logs activities"
-    Customer --> Logger : "logs activities"
+    CustomerAccount --> Logger : "logs activities"
     Vendor --> ErrorHandler : "handles errors"
-    Customer --> ErrorHandler : "handles errors"
-
-%% JPA Relationships
-    class Ticket {
-        <<Entity>>
-        + @Id
-        + @GeneratedValue(strategy = GenerationType.IDENTITY)
-        + Long id
-        + String eventName
-        + Integer availableTickets
-        + addTickets(int count)
-        + removeTicket()
-    }
-
-    class TicketRepository {
-        <<Repository>>
-        + Ticket save(Ticket ticket)
-        + Optional~Ticket~ findById(Long id)
-    }
-
-    class CustomerAccount {
-        <<Entity>>
-        + @Id
-        + @GeneratedValue(strategy = GenerationType.IDENTITY)
-        + Long id
-        + String username
-        + String password
-        + String role    // "CUSTOMER"
-    }
-
-    class CustomerAccountRepository {
-        <<Repository>>
-        + Optional~CustomerAccount~ findByUsername(String username)
-    }
+    CustomerAccount --> ErrorHandler : "handles errors"
 
 ```
 
