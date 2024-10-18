@@ -196,8 +196,9 @@ classDiagram
         - synchronized Ticket removeTicket()
 
 - [x] **Logger**
-    - Methods:
-        - void log(String message)
+    - Custom annotation:
+        - [x] MethodLogger(String message)
+        - [ ] ConstructorLogger(String message)
 
 - [ ] **ErrorHandler**
     - Methods:
