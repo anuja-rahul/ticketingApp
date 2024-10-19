@@ -46,7 +46,7 @@ public class LoggingAspect {
 
         String logMessage = String.format("Class: [%s], Method: [%s] executed at %s", className, methodName, timestamp);
 
-        logger.info(logMessage);
+        logger.debug(logMessage);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFileName, true))) {
             writer.write(logMessage);

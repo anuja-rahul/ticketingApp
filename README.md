@@ -1,20 +1,7 @@
 # Real-Time Event Ticketing System
 
 
-```mermaid
 
-graph TD
-    A[Front-End] <--> B[Controller Layer]
-    B[Controller Layer] <--> C[Service Layer]
-    C[Service Layer] <--> D[Repository Layer]
-    D[Repository Layer] <--> E[(Database)]
-
-    A <-->|Sends HTTP Requests| B
-    B <-->|Handles Requests| C
-    C <-->|Processes Business Logic| D
-    D <-->|Interacts with| E
-
-```
 
 
 ## *Project proposal*
@@ -141,6 +128,43 @@ classDiagram
     CustomerAccount --> Logger : "logs activities"
     Vendor --> ErrorHandler : "handles errors"
     CustomerAccount --> ErrorHandler : "handles errors"
+
+```
+
+## JWT Authentication
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant JWTAuthFilter
+    participant JWTService
+    participant UserDetailsService
+    participant Security
+    participant DispatcherServlet
+    participant Controller
+    participant Database
+
+    Client->>+JWTAuthFilter: Send HTTP Request
+    JWTAuthFilter->>JWTAuthFilter: Check JWT Token
+    
+    alt Missing or Invalid JWT
+        JWTAuthFilter-->>Client: HTTP 403 (Forbidden)
+    else Valid JWT
+        JWTAuthFilter->>+JWTService: Validate JWT Token
+        JWTService->>+UserDetailsService: Load User Details
+        UserDetailsService-->>-JWTService: User Details
+        JWTService-->>-JWTAuthFilter: Valid User
+    
+        JWTAuthFilter->>+Security: Update SecurityContextHolder
+        Security-->>-JWTAuthFilter: Success
+
+        JWTAuthFilter->>+DispatcherServlet: Pass Security Context
+        DispatcherServlet->>+Controller: Forward Request
+        Controller->>+Database: Query Database
+        Database-->>-Controller: Return Data
+        Controller-->>-DispatcherServlet: Return Response
+        DispatcherServlet-->>Client: HTTP 200 (Success)
+    end
 
 ```
 
