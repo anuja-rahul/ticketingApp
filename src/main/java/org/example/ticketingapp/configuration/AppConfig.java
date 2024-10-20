@@ -1,6 +1,5 @@
 package org.example.ticketingapp.configuration;
 
-//import org.springframework.context.annotation.Bean;
 import lombok.RequiredArgsConstructor;
 import org.example.ticketingapp.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
