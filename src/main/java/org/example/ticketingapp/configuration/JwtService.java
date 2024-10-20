@@ -19,7 +19,7 @@ import java.util.function.Function;
 public class JwtService {
 
     @Value("${SECRET_KEY}")
-    private static String SECRET_KEY;
+    private String SECRET_KEY;
 
     public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -61,7 +61,7 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSignInKey())
                 .build()
