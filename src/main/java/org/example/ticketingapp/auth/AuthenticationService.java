@@ -24,8 +24,10 @@ public class AuthenticationService {
         Role role;
         if (request.getRole().equals("vendor")) {
             role = Role.VENDOR;
-        } else {
+        } else if (request.getRole().equals("customer")) {
             role = Role.CUSTOMER;
+        } else {
+            role = Role.ADMIN;
         }
 
         var user = User.builder()
@@ -35,10 +37,12 @@ public class AuthenticationService {
                 .role(role)
                 .build();
         repository.save(user);
-
         var jwtToken = jwtService.generateToken(user);
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .username(request.getEmail())
+                .role(user.getRole().name())
                 .build();
     }
 
@@ -53,8 +57,11 @@ public class AuthenticationService {
                 .orElseThrow();
 
         var jwtToken = jwtService.generateToken(user);
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .username(user.getEmail())
+                .role(user.getRole().name())
                 .build();
     }
 }

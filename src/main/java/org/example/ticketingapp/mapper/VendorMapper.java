@@ -5,6 +5,7 @@ import org.example.ticketingapp.entity.Vendor;
 
 public class VendorMapper {
 
+
     public static VendorDTO mapToVendorDto(Vendor vendor) {
         return new VendorDTO(
                 vendor.getId(),
