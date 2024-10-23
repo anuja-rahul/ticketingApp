@@ -8,6 +8,7 @@ import org.example.ticketingapp.dto.CustomerDTO;
 import org.example.ticketingapp.dto.UserDTO;
 import org.example.ticketingapp.dto.VendorDTO;
 import org.example.ticketingapp.entity.User;
+import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.CustomerMapper;
 import org.example.ticketingapp.mapper.VendorMapper;
 import org.example.ticketingapp.repository.UserRepository;
@@ -37,7 +38,7 @@ public class UserController {
         String email = claims.getSubject();
 
         User user = repository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         if ("vendor".equalsIgnoreCase(user.getRole().name())) {
             VendorDTO vendorDTO = vendorService.getVendorByEmail(email);
             return ResponseEntity.ok(VendorMapper.mapToUserDto(vendorDTO));
