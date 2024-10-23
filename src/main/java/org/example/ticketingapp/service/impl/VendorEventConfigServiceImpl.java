@@ -22,11 +22,13 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
         return VendorEventConfigMapper.mapToVendorEventConfigDto(savedVendorEventConfig);
     }
 
+    // Finish these
     @Override
     public VendorEventConfigDTO getVendorEventConfigByEmail(String email) {
         return null;
     }
 
+    // Finish these
     @Override
     public VendorEventConfigDTO getAllVendorEventConfigs(String email) {
         return null;
