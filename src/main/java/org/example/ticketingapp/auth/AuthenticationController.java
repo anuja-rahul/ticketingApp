@@ -9,6 +9,7 @@ import org.example.ticketingapp.service.CustomerService;
 import org.example.ticketingapp.service.VendorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,7 @@ public class AuthenticationController {
     private final AuthenticationService service;
     private final VendorService vendorService;
     private final CustomerService customerService;
+    private final PasswordEncoder passwordEncoder;
 
     @Operation(summary = "Register a new user (vendor/customer)")
     @PostMapping("/register")
@@ -32,13 +34,13 @@ public class AuthenticationController {
             VendorDTO vendorDTO = new VendorDTO();
             vendorDTO.setName(request.getName());
             vendorDTO.setEmail(request.getEmail());
-            vendorDTO.setPassword(request.getPassword());
+            vendorDTO.setPassword(passwordEncoder.encode(request.getPassword()));
             vendorService.createVendor(vendorDTO);
         } else if ("customer".equalsIgnoreCase(request.getRole())) {
             CustomerDTO customerDTO = new CustomerDTO();
             customerDTO.setName(request.getName());
             customerDTO.setEmail(request.getEmail());
-            customerDTO.setPassword(request.getPassword());
+            customerDTO.setPassword(passwordEncoder.encode(request.getPassword()));
             customerService.createCustomer(customerDTO);
         }
 

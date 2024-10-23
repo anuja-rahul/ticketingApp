@@ -33,4 +33,12 @@ public class VendorMapper {
                 vendorDTO.getEmail()
         );
     }
+
+//    public static UserDTO maptoUserDto(Vendor vendor) {
+//        return new UserDTO(
+//                vendor.getId(),
+//                vendor.getName(),
+//                vendor.getEmail()
+//        );
+//    }
 }

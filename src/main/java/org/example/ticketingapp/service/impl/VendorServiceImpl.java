@@ -9,6 +9,9 @@ import org.example.ticketingapp.repository.VendorRepository;
 import org.example.ticketingapp.service.VendorService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class VendorServiceImpl implements VendorService {
@@ -28,5 +31,11 @@ public class VendorServiceImpl implements VendorService {
         Vendor vendor = vendorRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Vendor not found: " + email));
         return VendorMapper.mapToVendorDto(vendor);
+    }
+
+    @Override
+    public List<VendorDTO> getAllVendors() {
+        List<Vendor> vendors = vendorRepository.findAll();
+        return vendors.stream().map(VendorMapper::mapToVendorDto).collect(Collectors.toList());
     }
 }
