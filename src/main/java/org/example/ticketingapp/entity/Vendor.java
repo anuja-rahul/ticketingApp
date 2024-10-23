@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,8 +19,9 @@ public class Vendor {
 
     @Column
     private String name;
-    @Column
-    private String email;
     @Column(nullable = false, unique = true)
+    private String email;
+    @Column(nullable = false)
     private String password;
+
 }

@@ -1,6 +1,5 @@
 package org.example.ticketingapp.mapper;
 
-import org.example.ticketingapp.dto.CustomerDTO;
 import org.example.ticketingapp.dto.UserDTO;
 import org.example.ticketingapp.dto.VendorDTO;
 import org.example.ticketingapp.entity.Vendor;

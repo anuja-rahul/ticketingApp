@@ -1,22 +1,23 @@
 package org.example.ticketingapp.controller;
 
 
-import org.example.ticketingapp.dto.VendorConfigDTO;
+import org.example.ticketingapp.dto.VendorEventConfigDTO;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/config")
+@RequestMapping("/api/config")
 public class VendorConfigController {
-    private VendorConfigDTO vendorConfigDTO = new VendorConfigDTO();
 
-    @PostMapping("/")
-    public void updateConfig(@RequestBody VendorConfigDTO newVendorConfigDTO) {
-        this.vendorConfigDTO = newVendorConfigDTO;
-    }
+//    private VendorEventConfigDTO vendorConfigDTO = new VendorEventConfigDTO();
 
-    @GetMapping("/")
-    public VendorConfigDTO getConfig() {
-        return vendorConfigDTO;
-    }
+//    @PostMapping("/")
+//    public void updateConfig(@RequestBody VendorEventConfigDTO newVendorConfigDTO) {
+//        this.vendorConfigDTO = newVendorConfigDTO;
+//    }
+
+//    @GetMapping("/")
+//    public VendorEventConfigDTO getConfig() {
+//        return vendorConfigDTO;
+//    }
 }
