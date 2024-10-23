@@ -1,6 +1,7 @@
 package org.example.ticketingapp.mapper;
 
 import org.example.ticketingapp.dto.CustomerDTO;
+import org.example.ticketingapp.dto.UserDTO;
 import org.example.ticketingapp.entity.Customer;
 
 public class CustomerMapper {
@@ -19,6 +20,14 @@ public class CustomerMapper {
                 customerDTO.getName(),
                 customerDTO.getEmail(),
                 customerDTO.getPassword()
+        );
+    }
+
+    public static UserDTO mapToUserDto(CustomerDTO customerDTO) {
+        return new UserDTO(
+                customerDTO.getId(),
+                customerDTO.getName(),
+                customerDTO.getEmail()
         );
     }
 }

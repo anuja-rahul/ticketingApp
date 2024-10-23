@@ -20,4 +20,11 @@ public class CustomerServiceImpl implements CustomerService {
         Customer savedCustomer = customerRepository.save(customer);
         return CustomerMapper.mapToCustomerDto(savedCustomer);
     }
+
+    @Override
+    public CustomerDTO getCustomerByEmail(String email) {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Customer not found: " + email));
+        return CustomerMapper.mapToCustomerDto(customer);
+    }
 }
