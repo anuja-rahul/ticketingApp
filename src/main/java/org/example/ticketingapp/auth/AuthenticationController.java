@@ -7,6 +7,7 @@ import org.example.ticketingapp.dto.CustomerDTO;
 import org.example.ticketingapp.dto.VendorDTO;
 import org.example.ticketingapp.service.CustomerService;
 import org.example.ticketingapp.service.VendorService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +24,6 @@ public class AuthenticationController {
     private final CustomerService customerService;
     private final PasswordEncoder passwordEncoder;
 
-    // TODO: Fix repeating users in the database crashing the server.
 
     @Operation(summary = "Register a new user (vendor/customer)")
     @PostMapping("/register")
@@ -31,22 +31,26 @@ public class AuthenticationController {
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "User details for registration.", required = true)
             @RequestBody RegisterRequest request) {
+        try {
+            if ("vendor".equalsIgnoreCase(request.getRole())) {
+                VendorDTO vendorDTO = new VendorDTO();
+                vendorDTO.setName(request.getName());
+                vendorDTO.setEmail(request.getEmail());
+                vendorDTO.setPassword(passwordEncoder.encode(request.getPassword()));
+                vendorService.createVendor(vendorDTO);
+            } else if ("customer".equalsIgnoreCase(request.getRole())) {
+                CustomerDTO customerDTO = new CustomerDTO();
+                customerDTO.setName(request.getName());
+                customerDTO.setEmail(request.getEmail());
+                customerDTO.setPassword(passwordEncoder.encode(request.getPassword()));
+                customerService.createCustomer(customerDTO);
+            }
+            return new ResponseEntity<>(service.register(request), HttpStatus.CREATED);
 
-        if ("vendor".equalsIgnoreCase(request.getRole())) {
-            VendorDTO vendorDTO = new VendorDTO();
-            vendorDTO.setName(request.getName());
-            vendorDTO.setEmail(request.getEmail());
-            vendorDTO.setPassword(passwordEncoder.encode(request.getPassword()));
-            vendorService.createVendor(vendorDTO);
-        } else if ("customer".equalsIgnoreCase(request.getRole())) {
-            CustomerDTO customerDTO = new CustomerDTO();
-            customerDTO.setName(request.getName());
-            customerDTO.setEmail(request.getEmail());
-            customerDTO.setPassword(passwordEncoder.encode(request.getPassword()));
-            customerService.createCustomer(customerDTO);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        return new ResponseEntity<>(service.register(request), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Authenticate a user (vendor/customer)")

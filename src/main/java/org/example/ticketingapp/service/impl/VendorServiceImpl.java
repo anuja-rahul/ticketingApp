@@ -7,6 +7,7 @@ import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.VendorMapper;
 import org.example.ticketingapp.repository.VendorRepository;
 import org.example.ticketingapp.service.VendorService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,9 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     public VendorDTO createVendor(VendorDTO vendorDTO) {
-
+        if(vendorRepository.existsByEmail(vendorDTO.getEmail())) {
+            throw new DataIntegrityViolationException("Vendor already exists: " + vendorDTO.getEmail());
+        }
         Vendor vendor = VendorMapper.mapToVendor(vendorDTO);
         Vendor savedVendor = vendorRepository.save(vendor);
         return VendorMapper.mapToVendorDto(savedVendor);

@@ -6,6 +6,7 @@ import org.example.ticketingapp.configuration.JwtService;
 import org.example.ticketingapp.entity.Role;
 import org.example.ticketingapp.entity.User;
 import org.example.ticketingapp.repository.UserRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +22,9 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new DataIntegrityViolationException("User already exists: " + request.getEmail());
+        }
         Role role;
         if (request.getRole().equals("vendor")) {
             role = Role.VENDOR;
