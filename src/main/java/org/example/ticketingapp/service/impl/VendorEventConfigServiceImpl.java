@@ -9,15 +9,17 @@ import org.example.ticketingapp.repository.VendorEventConfigRepository;
 import org.example.ticketingapp.service.VendorEventConfigService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class VendorEventConfigServiceImpl implements VendorEventConfigService {
 
-    private VendorEventConfigRepository vendorEventConfigRepository;
+    private final VendorEventConfigRepository vendorEventConfigRepository;
 
     @Override
     public VendorEventConfigDTO createVendorConfig(VendorEventConfigDTO vendorEventConfigDTO) {
-
         VendorEventConfig vendorEventConfig = VendorEventConfigMapper.mapToVendorEventConfig(vendorEventConfigDTO);
         VendorEventConfig savedVendorEventConfig = vendorEventConfigRepository.save(vendorEventConfig);
         return VendorEventConfigMapper.mapToVendorEventConfigDto(savedVendorEventConfig);
@@ -30,9 +32,13 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
         return VendorEventConfigMapper.mapToVendorEventConfigDto(vendorEventConfig);
     }
 
-    // Finish these
     @Override
-    public VendorEventConfigDTO getAllVendorEventConfigs(String email) {
-        return null;
+    public List<VendorEventConfigDTO> getAllVendorEventConfigs(String email) {
+        List<VendorEventConfig> vendorEventConfigs = vendorEventConfigRepository.findAllByEmail(email);
+        return vendorEventConfigs.stream()
+                .map(VendorEventConfigMapper::mapToVendorEventConfigDto)
+                .collect(Collectors.toList());
+
     }
+
 }

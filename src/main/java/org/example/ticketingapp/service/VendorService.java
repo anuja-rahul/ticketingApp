@@ -6,9 +6,7 @@ import java.util.List;
 
 public interface VendorService {
 
-    VendorDTO createVendor(VendorDTO vendorDTO);
-
+    void createVendor(VendorDTO vendorDTO);
     VendorDTO getVendorByEmail(String email);
-
     List<VendorDTO> getAllVendors();
 }
