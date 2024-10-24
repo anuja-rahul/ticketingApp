@@ -3,6 +3,7 @@ package org.example.ticketingapp.service.impl;
 import lombok.AllArgsConstructor;
 import org.example.ticketingapp.dto.VendorEventConfigDTO;
 import org.example.ticketingapp.entity.VendorEventConfig;
+import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.VendorEventConfigMapper;
 import org.example.ticketingapp.repository.VendorEventConfigRepository;
 import org.example.ticketingapp.service.VendorEventConfigService;
@@ -22,10 +23,11 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
         return VendorEventConfigMapper.mapToVendorEventConfigDto(savedVendorEventConfig);
     }
 
-    // Finish these
     @Override
     public VendorEventConfigDTO getVendorEventConfigByEmail(String email) {
-        return null;
+        VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found: " + email));
+        return VendorEventConfigMapper.mapToVendorEventConfigDto(vendorEventConfig);
     }
 
     // Finish these

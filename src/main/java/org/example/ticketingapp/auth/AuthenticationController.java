@@ -23,6 +23,8 @@ public class AuthenticationController {
     private final CustomerService customerService;
     private final PasswordEncoder passwordEncoder;
 
+    // TODO: Fix repeating users in the database crashing the server.
+
     @Operation(summary = "Register a new user (vendor/customer)")
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
