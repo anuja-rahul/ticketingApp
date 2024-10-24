@@ -20,13 +20,13 @@ public class VendorServiceImpl implements VendorService {
     private VendorRepository vendorRepository;
 
     @Override
-    public VendorDTO createVendor(VendorDTO vendorDTO) {
+    public void createVendor(VendorDTO vendorDTO) {
         if(vendorRepository.existsByEmail(vendorDTO.getEmail())) {
             throw new DataIntegrityViolationException("Vendor already exists: " + vendorDTO.getEmail());
         }
         Vendor vendor = VendorMapper.mapToVendor(vendorDTO);
         Vendor savedVendor = vendorRepository.save(vendor);
-        return VendorMapper.mapToVendorDto(savedVendor);
+        VendorMapper.mapToVendorDto(savedVendor);
     }
 
     @Override
