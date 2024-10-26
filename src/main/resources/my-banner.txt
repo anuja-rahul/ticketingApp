@@ -10,5 +10,4 @@
 
 
 ${spring.application.name} is running on Spring Boot ${spring-boot.version}
-${spring.application.name} is powered by caffeine and self-hatred.
 
