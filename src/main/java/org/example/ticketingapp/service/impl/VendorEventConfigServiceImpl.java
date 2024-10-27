@@ -25,20 +25,30 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
         return VendorEventConfigMapper.mapToVendorEventConfigDto(savedVendorEventConfig);
     }
 
+
+//    @Override
+//    public VendorEventConfigDTO getVendorEventConfigByEmail(String email) {
+//        VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEmail(email)
+//                .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found: " + email));
+//        return VendorEventConfigMapper.mapToVendorEventConfigDto(vendorEventConfig);
+//    }
+
+    // TODO: FIX THIS
     @Override
-    public VendorEventConfigDTO getVendorEventConfigByEmail(String email) {
-        VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found: " + email));
+    public VendorEventConfigDTO getVendorEventConfigByEventName(String eventName) {
+        VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
+                .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found: " + eventName));
         return VendorEventConfigMapper.mapToVendorEventConfigDto(vendorEventConfig);
     }
 
     @Override
-    public List<VendorEventConfigDTO> getAllVendorEventConfigs(String email) {
+    public List<VendorEventConfigDTO> getAllVendorEventConfigsByEmail(String email) {
         List<VendorEventConfig> vendorEventConfigs = vendorEventConfigRepository.findAllByEmail(email);
         return vendorEventConfigs.stream()
                 .map(VendorEventConfigMapper::mapToVendorEventConfigDto)
                 .collect(Collectors.toList());
 
     }
+
 
 }

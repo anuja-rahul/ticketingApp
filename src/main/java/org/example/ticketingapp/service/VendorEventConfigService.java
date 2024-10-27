@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface VendorEventConfigService {
     VendorEventConfigDTO createVendorConfig(VendorEventConfigDTO vendorEventConfigDTO);
-    VendorEventConfigDTO getVendorEventConfigByEmail(String email);
-    List<VendorEventConfigDTO> getAllVendorEventConfigs(String email);
+    VendorEventConfigDTO getVendorEventConfigByEventName(String eventName);
+    List<VendorEventConfigDTO> getAllVendorEventConfigsByEmail(String email);
 }

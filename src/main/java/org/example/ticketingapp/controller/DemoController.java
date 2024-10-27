@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import io.jsonwebtoken.Claims;
 
 @RestController
-@RequestMapping("/demo")
+@RequestMapping("/api/demo")
 @RequiredArgsConstructor
 @CrossOrigin
 public class DemoController {
