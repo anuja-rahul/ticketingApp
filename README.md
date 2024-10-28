@@ -30,6 +30,17 @@
 ```
 
 
+```mermaid
+graph LR;
+  FrontEnd <--> DTO;
+  DTO <--> Controller;
+  Controller <--> Service;
+  Service <--> Repository;
+  Repository <--> Database;
+
+  classDef default fill:#000,stroke:#333,stroke-width:4px;
+```
+
 
 ## *Project proposal*
 
