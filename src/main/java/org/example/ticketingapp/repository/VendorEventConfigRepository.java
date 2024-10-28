@@ -1,5 +1,6 @@
 package org.example.ticketingapp.repository;
 
+import org.example.ticketingapp.dto.VendorEventConfigDTO;
 import org.example.ticketingapp.entity.VendorEventConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/user")
 @CrossOrigin
+@RequestMapping("/api/user")
 public class UserController {
 
     private VendorService vendorService;
@@ -79,7 +79,9 @@ public class UserController {
         // Only allows Customers to access the vendor pool
         if ("customer".equalsIgnoreCase(user.getRole().name())) {
             List<VendorDTO> vendors = vendorService.getAllVendors();
-            return ResponseEntity.ok(vendors.stream().map(VendorMapper::mapToUserDto).collect(Collectors.toList()));
+            return ResponseEntity.ok(vendors.stream()
+                    .map(VendorMapper::mapToUserDto)
+                    .collect(Collectors.toList()));
         } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
