@@ -19,7 +19,7 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     private final VendorEventConfigRepository vendorEventConfigRepository;
 
     @Override
-    public VendorEventConfigDTO createVendorConfig(VendorEventConfigDTO vendorEventConfigDTO) {
+    public VendorEventConfigDTO createVendorEventConfig(VendorEventConfigDTO vendorEventConfigDTO) {
         VendorEventConfig vendorEventConfig = VendorEventConfigMapper.mapToVendorEventConfig(vendorEventConfigDTO);
         VendorEventConfig savedVendorEventConfig = vendorEventConfigRepository.save(vendorEventConfig);
         return VendorEventConfigMapper.mapToVendorEventConfigDto(savedVendorEventConfig);
