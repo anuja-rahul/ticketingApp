@@ -1,7 +1,7 @@
 ![Java](https://img.shields.io/badge/java-000?style=for-the-badge&logo=openjdk&logoColor=f89820)
 ![JWT](https://img.shields.io/badge/-JWT-000?style=for-the-badge&logo=json-web-tokens)
 ![Spring](https://img.shields.io/badge/spring-000?style=for-the-badge&logo=spring&logoColor=green)
-![JPA](https://img.shields.io/badge/jpa-000?style=for-the-badge&logo=hibernate&logoColor=white)
+![HIBERNATE](https://img.shields.io/badge/Hibernate-000?style=for-the-badge&logo=hibernate&logoColor=white)
 ![POSTGRES](https://img.shields.io/badge/-postgresql-000?style=for-the-badge&logo=postgresql)
 
 
