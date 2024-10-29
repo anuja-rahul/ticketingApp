@@ -1,7 +1,7 @@
 package org.example.ticketingapp.mapper;
 
-import org.example.ticketingapp.dto.VendorDTO;
 import org.example.ticketingapp.dto.VendorEventConfigDTO;
+import org.example.ticketingapp.dto.VendorEventConfigDTOIn;
 import org.example.ticketingapp.entity.VendorEventConfig;
 
 public class VendorEventConfigMapper {
@@ -27,6 +27,18 @@ public class VendorEventConfigMapper {
                 vendorEventConfigDTO.getTicketReleaseRate(),
                 vendorEventConfigDTO.getCustomerRetrievalRate(),
                 vendorEventConfigDTO.getMaxTicketCapacity()
+        );
+    }
+
+    public static VendorEventConfigDTO mapFromInputSchema(VendorEventConfigDTOIn vendorEventConfigDTOIn, String email) {
+        return new VendorEventConfigDTO(
+                vendorEventConfigDTOIn.getId(),
+                email,
+                vendorEventConfigDTOIn.getEventName(),
+                vendorEventConfigDTOIn.getTotalTickets(),
+                vendorEventConfigDTOIn.getTicketReleaseRate(),
+                vendorEventConfigDTOIn.getCustomerRetrievalRate(),
+                vendorEventConfigDTOIn.getMaxTicketCapacity()
         );
     }
 }

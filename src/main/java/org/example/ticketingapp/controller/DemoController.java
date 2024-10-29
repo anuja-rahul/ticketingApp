@@ -1,5 +1,6 @@
 package org.example.ticketingapp.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.example.ticketingapp.configuration.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import io.jsonwebtoken.Claims;
 public class DemoController {
     private final JwtService jwtService;
 
+    @Operation(summary = "Secure endpoint available for testing the api JWT auth services")
     @GetMapping
     public ResponseEntity<String> hello(@RequestHeader("Authorization") String token) {
         if (token.startsWith("Bearer ")) {

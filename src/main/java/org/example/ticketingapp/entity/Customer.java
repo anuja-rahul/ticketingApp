@@ -16,10 +16,10 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
-    @Column
-    private String email;
     @Column(nullable = false, unique = true)
+    private String email;
+    @Column(nullable = false)
     private String password;
 }

@@ -2,6 +2,7 @@ package org.example.ticketingapp.controller;
 
 
 import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.example.ticketingapp.configuration.JwtService;
 import org.example.ticketingapp.dto.CustomerDTO;
@@ -36,6 +37,7 @@ public class UserController {
     /**
      * Get the user data if a valid token is included in the request header
      */
+    @Operation(summary = "Get the user profile information, if logged in")
     @GetMapping
     public ResponseEntity<UserDTO> getUserByEmail(@RequestHeader("Authorization") String token) {
         if (token.startsWith("Bearer ")) {
@@ -63,6 +65,7 @@ public class UserController {
     /**
      * Get a sequence of all vendor data if a valid customer token is included in the request header
      */
+    @Operation(summary = "Get a list of all vendors, only if logged in as a customer")
     @GetMapping("/vendors")
     public ResponseEntity<List<UserDTO>> getAllVendors(@RequestHeader("Authorization") String token) {
 
