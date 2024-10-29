@@ -5,10 +5,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VendorEventConfigDTO {
+public class VendorEventConfigDTO extends VendorEventConfigDTOIn {
     private long id;
     private String email;
     private String eventName;
