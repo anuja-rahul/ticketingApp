@@ -17,7 +17,7 @@ public class VendorEventConfig {
     @Column(nullable = false)
     private String email;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "event_name", unique = true, nullable = false)
     private String eventName;
 
     @Column
@@ -31,5 +31,4 @@ public class VendorEventConfig {
 
     @Column
     private int maxTicketCapacity;
-
 }

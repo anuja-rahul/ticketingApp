@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
 @AllArgsConstructor
 public class VendorEventConfigServiceImpl implements VendorEventConfigService {
@@ -43,7 +44,8 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
 
     @Override
     public List<VendorEventConfigDTO> getAllVendorEventConfigsByEmail(String email) {
-        List<VendorEventConfig> vendorEventConfigs = vendorEventConfigRepository.findAllByEmail(email);
+        List<VendorEventConfig> vendorEventConfigs = vendorEventConfigRepository.findAllByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found: " + email));
         return vendorEventConfigs.stream()
                 .map(VendorEventConfigMapper::mapToVendorEventConfigDto)
                 .collect(Collectors.toList());

@@ -9,7 +9,7 @@ public class CustomerMapper {
         return new CustomerDTO(
                 customer.getId(),
                 customer.getName(),
-                customer.getName(),
+                customer.getEmail(),
                 customer.getPassword()
         );
     }

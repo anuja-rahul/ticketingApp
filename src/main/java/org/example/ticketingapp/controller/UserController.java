@@ -39,7 +39,9 @@ public class UserController {
      */
     @Operation(summary = "Get the user profile information, if logged in")
     @GetMapping
-    public ResponseEntity<UserDTO> getUserByEmail(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<UserDTO> getUserByEmail(
+            @RequestHeader("Authorization") String token) {
+
         if (token.startsWith("Bearer ")) {
             token = token.substring(7);
         }

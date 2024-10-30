@@ -33,6 +33,7 @@ public class VendorEventConfigController {
     @GetMapping("/event")
     public ResponseEntity<List<VendorEventConfigDTO>> getConfigsByEmail(@RequestHeader("Authorization") String token) {
 
+        try {
         if (token.startsWith("Bearer ")) {
             token = token.substring(7);
         }
@@ -46,6 +47,9 @@ public class VendorEventConfigController {
             return ResponseEntity.ok(vendorEventConfigs);
         } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
