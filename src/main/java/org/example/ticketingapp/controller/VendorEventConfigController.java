@@ -5,12 +5,14 @@ import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.example.ticketingapp.configuration.JwtService;
+import org.example.ticketingapp.dto.TicketDTO;
 import org.example.ticketingapp.dto.VendorEventConfigDTO;
 import org.example.ticketingapp.dto.VendorEventConfigDTOIn;
 import org.example.ticketingapp.entity.User;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.VendorEventConfigMapper;
 import org.example.ticketingapp.repository.UserRepository;
+import org.example.ticketingapp.service.TicketService;
 import org.example.ticketingapp.service.VendorEventConfigService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ import java.util.List;
 public class VendorEventConfigController {
 
     private VendorEventConfigService vendorEventConfigService;
+    private TicketService ticketService;
     private final UserRepository repository;
     private final JwtService jwtService;
 
@@ -73,6 +76,14 @@ public class VendorEventConfigController {
                 VendorEventConfigDTO savedVendorEventConfig = vendorEventConfigService
                         .createVendorEventConfig(VendorEventConfigMapper
                                 .mapFromInputSchema(vendorEventConfigDTOIn, email));
+
+                TicketDTO newTicketDto = new TicketDTO(
+                        savedVendorEventConfig.getEventName(),
+                        savedVendorEventConfig.getTotalTickets(),
+                        VendorEventConfigMapper.mapToVendorEventConfig(savedVendorEventConfig));
+
+                ticketService.createTicket(newTicketDto);
+
                 return new ResponseEntity<>(savedVendorEventConfig, HttpStatus.CREATED);
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);

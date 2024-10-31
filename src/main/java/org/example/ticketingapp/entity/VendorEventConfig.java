@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,4 +33,7 @@ public class VendorEventConfig {
 
     @Column
     private int maxTicketCapacity;
+
+//    @OneToMany(mappedBy = "vendor_event_config")
+//    private List<UserTicket> tickets;
 }

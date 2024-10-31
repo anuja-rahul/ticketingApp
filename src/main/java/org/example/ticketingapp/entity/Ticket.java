@@ -23,5 +23,3 @@ public class Ticket {
     @JoinColumn(name = "vendor_event_config_id", referencedColumnName = "id")
     private VendorEventConfig vendorEventConfig;
 }
-
-// TODO: add logic to automatically add a column every time a config is created

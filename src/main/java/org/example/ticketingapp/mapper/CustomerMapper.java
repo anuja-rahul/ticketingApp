@@ -5,6 +5,7 @@ import org.example.ticketingapp.dto.UserDTO;
 import org.example.ticketingapp.entity.Customer;
 
 public class CustomerMapper {
+
     public static CustomerDTO mapToCustomerDto(Customer customer) {
         return new CustomerDTO(
                 customer.getId(),
