@@ -52,5 +52,10 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
 
     }
 
+    @Override
+    public boolean existsByEventName(String eventName) {
+        return vendorEventConfigRepository.existsByEventName(eventName);
+    }
+
 
 }

@@ -11,7 +11,6 @@ import org.example.ticketingapp.repository.CustomerTicketRepository;
 import org.example.ticketingapp.service.CustomerTicketService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -26,12 +25,25 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
         return CustomerTicketMapper.mapToCustomerTicketDtoOut(savedCustomerTicket);
     }
 
-    // TODO: Review this method
+    // TODO: Review this sh*t
     @Override
     public CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID) {
         CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
         return CustomerTicketMapper.mapToCustomerTicketDtoOut(customerTicket);
+    }
+
+    @Override
+    public CustomerTicketDtoOut updateCustomerTicket(CustomerTicketID customerTicketID, CustomerTicketDTO customerTicketDTO, int ticketRetrievalRate) {
+        CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
+
+        customerTicket.setCustomerEmail(customerTicketDTO.getCustomerEmail());
+        customerTicket.setEventName(customerTicketDTO.getEventName());
+        customerTicket.setTicketsBought(customerTicket.getTicketsBought() + ticketRetrievalRate);
+
+        CustomerTicket updatedCustomerTicket = customerTicketRepository.save(customerTicket);
+        return CustomerTicketMapper.mapToCustomerTicketDtoOut(updatedCustomerTicket);
     }
 
     @Override
