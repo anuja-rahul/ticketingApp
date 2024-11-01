@@ -48,17 +48,17 @@ public class CustomerTicketController {
             if ("customer".equalsIgnoreCase(user.getRole().name())) {
                 CustomerTicketID customerTicketID = new CustomerTicketID(email, eventName);
 
-                boolean exists = customerTicketService.existsById(customerTicketID);
+                boolean customerTicketExists = customerTicketService.existsById(customerTicketID);
                 boolean configExists = vendorEventConfigService.existsByEventName(eventName);
 
-                int ticketRetrievalRate = getTicketRetrievalRate(eventName);
-                CustomerTicketDTO customerTicketDTO = new CustomerTicketDTO(
-                        email,
-                        eventName,
-                        ticketRetrievalRate);
-
                 if (configExists) {
-                    if(!exists) {
+                    int ticketRetrievalRate = getTicketRetrievalRate(eventName);
+                    CustomerTicketDTO customerTicketDTO = new CustomerTicketDTO(
+                            email,
+                            eventName,
+                            ticketRetrievalRate);
+
+                    if(!customerTicketExists) {
                         CustomerTicketDtoOut newCustomerTicket = customerTicketService.createCustomerTicket(customerTicketDTO);
                         return new ResponseEntity<>(newCustomerTicket, HttpStatus.CREATED);
                     } else {
