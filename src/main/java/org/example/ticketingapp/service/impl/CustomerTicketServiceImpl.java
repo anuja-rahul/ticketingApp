@@ -17,9 +17,10 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
     private CustomerTicketRepository customerTicketRepository;
 
     @Override
-    public CustomerTicketDtoOut createCustomer(CustomerTicketDTO customerTicketDTO) {
+    public CustomerTicketDtoOut createCustomerTicket(CustomerTicketDTO customerTicketDTO) {
         CustomerTicket customerTicket = CustomerTicketMapper.mapToCustomerTicket(customerTicketDTO);
-        return null;
+        CustomerTicket savedCustomerTicket =  customerTicketRepository.save(customerTicket);
+        return CustomerTicketMapper.mapToCustomerTicketDtoOut(savedCustomerTicket);
     }
 
     @Override
