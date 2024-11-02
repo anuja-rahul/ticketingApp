@@ -63,7 +63,7 @@ public class CustomerTicketController {
                             eventName,
                             ticketRetrievalRate);
 
-                    // reduce from ticket storage, logic
+                    // logic to update ticket storage, vendor event config
                     ticketService.updateTicket(ticketService.getTicketByEventName(eventName), ticketRetrievalRate);
 
                     if(!customerTicketExists) {
