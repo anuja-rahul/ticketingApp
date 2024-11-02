@@ -12,6 +12,7 @@ import org.example.ticketingapp.entity.User;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.repository.UserRepository;
 import org.example.ticketingapp.service.CustomerTicketService;
+import org.example.ticketingapp.service.TicketService;
 import org.example.ticketingapp.service.VendorEventConfigService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerTicketController {
 
     private CustomerTicketService customerTicketService;
+    private TicketService ticketService;
     private VendorEventConfigService vendorEventConfigService;
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -35,33 +37,41 @@ public class CustomerTicketController {
             @RequestHeader("Authorization") String token,
             @PathVariable String eventName) {
         try {
+
+            // get email/user from jwt token
             if (token.startsWith("Bearer ")) {
                 token = token.substring(7);
             }
-
             Claims claims = jwtService.extractAllClaims(token);
             String email = claims.getSubject();
-
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
             if ("customer".equalsIgnoreCase(user.getRole().name())) {
                 CustomerTicketID customerTicketID = new CustomerTicketID(email, eventName);
 
+                // check for existence of customer ticket, config and ticket
                 boolean customerTicketExists = customerTicketService.existsById(customerTicketID);
                 boolean configExists = vendorEventConfigService.existsByEventName(eventName);
+                boolean ticketExists = ticketService.existsByEventName(eventName);
 
-                if (configExists) {
+                if (configExists && ticketExists) {
+                    // get ticket retrieval rate
                     int ticketRetrievalRate = getTicketRetrievalRate(eventName);
                     CustomerTicketDTO customerTicketDTO = new CustomerTicketDTO(
                             email,
                             eventName,
                             ticketRetrievalRate);
 
+                    // reduce from ticket storage, logic
+                    ticketService.updateTicket(ticketService.getTicketByEventName(eventName), ticketRetrievalRate);
+
                     if(!customerTicketExists) {
+                        // create a new customer ticket
                         CustomerTicketDtoOut newCustomerTicket = customerTicketService.createCustomerTicket(customerTicketDTO);
                         return new ResponseEntity<>(newCustomerTicket, HttpStatus.CREATED);
                     } else {
+                        // update existing customer ticket
                         CustomerTicketDtoOut updatedCustomerTicketDtoOut = customerTicketService.updateCustomerTicket(
                                 customerTicketID, customerTicketDTO, ticketRetrievalRate);
                         return new ResponseEntity<>(updatedCustomerTicketDtoOut, HttpStatus.OK);
@@ -69,7 +79,6 @@ public class CustomerTicketController {
                 } else {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
-
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }

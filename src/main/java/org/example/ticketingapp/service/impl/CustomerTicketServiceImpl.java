@@ -38,8 +38,8 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
         CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
 
-        customerTicket.setCustomerEmail(customerTicketDTO.getCustomerEmail());
-        customerTicket.setEventName(customerTicketDTO.getEventName());
+        //customerTicket.setCustomerEmail(customerTicketDTO.getCustomerEmail());
+        //customerTicket.setEventName(customerTicketDTO.getEventName());
         customerTicket.setTicketsBought(customerTicket.getTicketsBought() + ticketRetrievalRate);
 
         CustomerTicket updatedCustomerTicket = customerTicketRepository.save(customerTicket);
