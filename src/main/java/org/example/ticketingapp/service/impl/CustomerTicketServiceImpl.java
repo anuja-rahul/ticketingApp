@@ -26,12 +26,12 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
     }
 
     // TODO: Review this sh*t
-    @Override
-    public CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID) {
-        CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
-        return CustomerTicketMapper.mapToCustomerTicketDtoOut(customerTicket);
-    }
+//    @Override
+//    public CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID) {
+//        CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
+//                .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
+//        return CustomerTicketMapper.mapToCustomerTicketDtoOut(customerTicket);
+//    }
 
     @Override
     public CustomerTicketDtoOut updateCustomerTicket(CustomerTicketID customerTicketID, CustomerTicketDTO customerTicketDTO, int ticketRetrievalRate) {

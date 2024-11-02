@@ -9,9 +9,9 @@ import java.util.Optional;
 public interface CustomerTicketService {
     CustomerTicketDtoOut createCustomerTicket(CustomerTicketDTO customerTicketDTO);
     boolean existsById(CustomerTicketID customerTicketID);
-    CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID);
     CustomerTicketDtoOut updateCustomerTicket(
             CustomerTicketID customerTicketID,
             CustomerTicketDTO customerTicketDTO,
             int ticketRetrievalRate);
+//    CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID);
 }

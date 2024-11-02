@@ -7,11 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TicketingAppApplication {
     public static void main(String[] args) {
 
-
-
         SpringApplication.run(TicketingAppApplication.class, args);
-        System.out.println("\nThis is before launching my spring application\n");
-        System.out.println("\nHello\n");
+        System.out.println("\nThis is after launching my spring application\n");
     }
 
 }
