@@ -10,10 +10,16 @@ public class CliConfig {
     public static void readFromCli() throws IOException {
         CliConfig config = new CliConfig();
 
-        int totalTickets = config.takeInputs("Enter total tickets:");
-        int ticketReleaseRate = config.takeInputs("Enter ticket release rate:");
-        int customerRetrievalRate = config.takeInputs("Enter customer retrieval rate:", ticketReleaseRate);
         int maxTicketCapacity = config.takeInputs("Enter max ticket capacity:");
+        int totalTickets = config.takeInputs(
+                "Enter total tickets:",
+                maxTicketCapacity,
+                "total tickets must be less than max ticket capacity.");
+        int ticketReleaseRate = config.takeInputs("Enter ticket release rate:");
+        int customerRetrievalRate = config.takeInputs(
+                "Enter customer retrieval rate:",
+                ticketReleaseRate,
+                "customer retrieval rate must be less than ticket release rate.");
 
         CliVendorEventConfig cliVendorEventConfig = new CliVendorEventConfig(
                 totalTickets, ticketReleaseRate, customerRetrievalRate, maxTicketCapacity);
@@ -45,16 +51,16 @@ public class CliConfig {
         }
     }
 
-    // overloading for a specific case (customerRetrievalRate)
-    private int takeInputs(String message, int ticketReleaseRate) {
+    // overloading for a specific case (customerRetrievalRate, totalTickets)
+    private int takeInputs(String message, int bigValue, String errorMessage) {
         while (true) {
             System.out.println(message);
             if (sc.hasNextInt()) {
                 int value = sc.nextInt();
-                if (validateInputs(value, ticketReleaseRate)) {
+                if (validateInputs(value, bigValue)) {
                     return value;
                 } else {
-                    System.out.println("Customer retrieval rate must be less than ticket release rate and greater than zero.");
+                    System.out.println(errorMessage);
                 }
             } else {
                 System.out.println("Please enter a valid integer.");
@@ -67,7 +73,7 @@ public class CliConfig {
         return value > 0;
     }
 
-    private boolean validateInputs(int value, int ticketReleaseRate) {
-        return value > 0 && value < ticketReleaseRate;
+    private boolean validateInputs(int value, int bigValue) {
+        return value > 0 && value <= bigValue;
     }
 }
