@@ -12,7 +12,7 @@ public class CliConfig {
 
         int totalTickets = config.takeInputs("Enter total tickets:");
         int ticketReleaseRate = config.takeInputs("Enter ticket release rate:");
-        int customerRetrievalRate = config.takeInputs("Enter customer retrieval rate:");
+        int customerRetrievalRate = config.takeInputs("Enter customer retrieval rate:", ticketReleaseRate);
         int maxTicketCapacity = config.takeInputs("Enter max ticket capacity:");
 
         CliVendorEventConfig cliVendorEventConfig = new CliVendorEventConfig(
@@ -24,8 +24,8 @@ public class CliConfig {
         System.out.println("Customer Retrieval Rate: " + cliVendorEventConfig.getCustomerRetrievalRate());
         System.out.println("Max Ticket Capacity: " + cliVendorEventConfig.getMaxTicketCapacity());
 
+        // Writing to config.json file at the root of the application
         cliVendorEventConfig.writeToJson();
-
     }
 
     private int takeInputs(String message) {
@@ -45,7 +45,29 @@ public class CliConfig {
         }
     }
 
+    // overloading for a specific case (customerRetrievalRate)
+    private int takeInputs(String message, int ticketReleaseRate) {
+        while (true) {
+            System.out.println(message);
+            if (sc.hasNextInt()) {
+                int value = sc.nextInt();
+                if (validateInputs(value, ticketReleaseRate)) {
+                    return value;
+                } else {
+                    System.out.println("Customer retrieval rate must be less than ticket release rate and greater than zero.");
+                }
+            } else {
+                System.out.println("Please enter a valid integer.");
+                sc.next();
+            }
+        }
+    }
+
     private boolean validateInputs(int value) {
         return value > 0;
+    }
+
+    private boolean validateInputs(int value, int ticketReleaseRate) {
+        return value > 0 && value < ticketReleaseRate;
     }
 }
