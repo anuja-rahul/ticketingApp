@@ -101,7 +101,7 @@ public class VendorEventConfigController {
         return null;
     }
 
-    @Operation(summary = "Create a new VendorEventConfig, only if logged in as a vendor")
+    @Operation(summary = "Updates a VendorEventConfig totalTicket, only if logged in as a vendor and it already exists")
     @PutMapping("/event/{eventName}/{totalTickets}")
     public ResponseEntity<VendorEventConfigDTO> updateVendorEventConfig(
             @RequestHeader("Authorization") String token,
