@@ -34,6 +34,4 @@ public class VendorEventConfig {
     @Column
     private int maxTicketCapacity;
 
-//    @OneToMany(mappedBy = "vendor_event_config")
-//    private List<UserTicket> tickets;
 }
