@@ -33,6 +33,8 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
 //        return CustomerTicketMapper.mapToCustomerTicketDtoOut(customerTicket);
 //    }
 
+    // TODO: Implement logic for getting all tickets based on customer email
+
     @Override
     public CustomerTicketDtoOut updateCustomerTicket(
             CustomerTicketID customerTicketID,
