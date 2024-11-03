@@ -1,5 +1,6 @@
 package org.example.ticketingapp.mapper;
 
+import org.example.ticketingapp.configuration.cli.CliVendorEventConfig;
 import org.example.ticketingapp.dto.VendorEventConfigDTO;
 import org.example.ticketingapp.dto.VendorEventConfigDTOIn;
 import org.example.ticketingapp.entity.VendorEventConfig;
@@ -40,5 +41,12 @@ public class VendorEventConfigMapper {
                 vendorEventConfigDTOIn.getCustomerRetrievalRate(),
                 vendorEventConfigDTOIn.getMaxTicketCapacity()
         );
+    }
+
+
+    // TODO: finish this
+    public static VendorEventConfigDTO mapFromCLiVendorEventConfig(
+            CliVendorEventConfig cliVendorEventConfig, String email) {
+        return new VendorEventConfigDTO();
     }
 }
