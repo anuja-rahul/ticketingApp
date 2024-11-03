@@ -2,9 +2,12 @@ package org.example.ticketingapp.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.example.ticketingapp.dto.VendorEventConfigDTO;
+import org.example.ticketingapp.entity.Ticket;
 import org.example.ticketingapp.entity.VendorEventConfig;
+import org.example.ticketingapp.exception.ResourceCapacityException;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.VendorEventConfigMapper;
+import org.example.ticketingapp.repository.TicketRepository;
 import org.example.ticketingapp.repository.VendorEventConfigRepository;
 import org.example.ticketingapp.service.VendorEventConfigService;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 public class VendorEventConfigServiceImpl implements VendorEventConfigService {
 
     private final VendorEventConfigRepository vendorEventConfigRepository;
+    private final TicketRepository ticketRepository;
 
     @Override
     public VendorEventConfigDTO createVendorEventConfig(VendorEventConfigDTO vendorEventConfigDTO) {
@@ -50,6 +54,27 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
                 .map(VendorEventConfigMapper::mapToVendorEventConfigDto)
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public VendorEventConfigDTO updateTotalTickets(String eventName, int totalTickets) {
+
+        VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
+                .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found by event name " + eventName));
+
+        Ticket ticket = ticketRepository.findByEventName(eventName)
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found under: " + eventName));
+
+        if (vendorEventConfig.getMaxTicketCapacity() > totalTickets) {
+            ticket.setTotalTickets(totalTickets);
+            vendorEventConfig.setTotalTickets(totalTickets);
+
+            ticketRepository.save(ticket);
+            VendorEventConfig updatedVendorEventConfig = vendorEventConfigRepository.save(vendorEventConfig);
+
+            return VendorEventConfigMapper.mapToVendorEventConfigDto(updatedVendorEventConfig);
+        }
+        throw(new ResourceCapacityException("Total capacity exceeded"));
     }
 
     @Override

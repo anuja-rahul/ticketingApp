@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.example.ticketingapp.dto.TicketDTO;
 import org.example.ticketingapp.entity.Ticket;
 import org.example.ticketingapp.entity.VendorEventConfig;
+import org.example.ticketingapp.exception.ResourceCapacityException;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.TicketMapper;
 import org.example.ticketingapp.repository.TicketRepository;
@@ -32,7 +33,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public TicketDTO updateTicket(TicketDTO ticketDTO, int ticketCount) {
+    public TicketDTO decreaseTicket(TicketDTO ticketDTO, int ticketCount) {
+
         Ticket ticket = ticketRepository.findByEventName(ticketDTO.getEventName())
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket not found under: " + ticketDTO.getEventName()));
 
@@ -40,16 +42,35 @@ public class TicketServiceImpl implements TicketService {
                 .orElseThrow(() -> new ResourceNotFoundException("Vendor Event Config not found under: " + ticketDTO.getEventName()));
 
         if (ticket.getTotalTickets() < ticketCount) {
-            throw new ResourceNotFoundException("Not enough tickets available for: " + ticketDTO.getEventName());
+            throw new ResourceCapacityException("Not enough tickets available for: " + ticketDTO.getEventName());
+        } else {
+            vendorEventConfig.setTotalTickets(vendorEventConfig.getTotalTickets() - ticketCount);
+            ticket.setTotalTickets(ticket.getTotalTickets() - ticketCount);
+
+            vendorEventConfigRepository.save(vendorEventConfig);
+            Ticket updatedTicket = ticketRepository.save(ticket);
+
+            return TicketMapper.mapToTicketDto(updatedTicket);
         }
-        vendorEventConfig.setTotalTickets(vendorEventConfig.getTotalTickets() - ticketCount);
-        ticket.setTotalTickets(ticket.getTotalTickets() - ticketCount);
 
-        vendorEventConfigRepository.save(vendorEventConfig);
-        Ticket updatedTicket = ticketRepository.save(ticket);
-
-        return TicketMapper.mapToTicketDto(updatedTicket);
     }
+
+//    @Override
+//    public TicketDTO updateTicket(TicketDTO ticketDTO, int ticketCount) {
+//        Ticket ticket = ticketRepository.findByEventName(ticketDTO.getEventName())
+//                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found under: " + ticketDTO.getEventName()));
+//
+//        VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(ticketDTO.getEventName())
+//                .orElseThrow(() -> new ResourceNotFoundException("Vendor Event Config not found under: " + ticketDTO.getEventName()));
+//
+//        if (vendorEventConfig.getMaxTicketCapacity() < ticketCount) {
+//            throw new ResourceCapacityException("Too many tickets: " + ticketDTO.getEventName());
+//        } else {
+//            ticket.setTotalTickets(ticketCount);
+//            Ticket updatedTicket = ticketRepository.save(ticket);
+//            return TicketMapper.mapToTicketDto(updatedTicket);
+//        }
+//    }
 
     @Override
     public boolean existsByEventName(String eventName) {

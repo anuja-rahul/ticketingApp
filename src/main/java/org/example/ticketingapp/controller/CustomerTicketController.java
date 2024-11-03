@@ -9,6 +9,7 @@ import org.example.ticketingapp.dto.CustomerTicketDtoOut;
 import org.example.ticketingapp.dto.VendorEventConfigDTO;
 import org.example.ticketingapp.entity.CustomerTicketID;
 import org.example.ticketingapp.entity.User;
+import org.example.ticketingapp.exception.ResourceCapacityException;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.repository.UserRepository;
 import org.example.ticketingapp.service.CustomerTicketService;
@@ -64,7 +65,7 @@ public class CustomerTicketController {
                             ticketRetrievalRate);
 
                     // logic to update ticket storage, vendor event config
-                    ticketService.updateTicket(ticketService.getTicketByEventName(eventName), ticketRetrievalRate);
+                    ticketService.decreaseTicket(ticketService.getTicketByEventName(eventName), ticketRetrievalRate);
 
                     if(!customerTicketExists) {
                         // create a new customer ticket
@@ -76,19 +77,19 @@ public class CustomerTicketController {
                                 customerTicketID, customerTicketDTO, ticketRetrievalRate);
                         return new ResponseEntity<>(updatedCustomerTicketDtoOut, HttpStatus.OK);
                     }
-                } else {
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
 
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (ResourceCapacityException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
     }
 
     private int getTicketRetrievalRate(String eventName) {

@@ -9,6 +9,7 @@ import org.example.ticketingapp.dto.TicketDTO;
 import org.example.ticketingapp.dto.VendorEventConfigDTO;
 import org.example.ticketingapp.dto.VendorEventConfigDTOIn;
 import org.example.ticketingapp.entity.User;
+import org.example.ticketingapp.exception.ResourceCapacityException;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.VendorEventConfigMapper;
 import org.example.ticketingapp.repository.UserRepository;
@@ -100,5 +101,41 @@ public class VendorEventConfigController {
         return null;
     }
 
+    @Operation(summary = "Create a new VendorEventConfig, only if logged in as a vendor")
+    @PutMapping("/event/{eventName}/{totalTickets}")
+    public ResponseEntity<VendorEventConfigDTO> updateVendorEventConfig(
+            @RequestHeader("Authorization") String token,
+            @PathVariable String eventName,
+            @PathVariable int totalTickets
+    ) {
 
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        Claims claims = jwtService.extractAllClaims(token);
+        String email = claims.getSubject();
+        User user = repository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        try {
+            if ("vendor".equalsIgnoreCase(user.getRole().name())) {
+                boolean configExist = vendorEventConfigService.existsByEventName(eventName);
+                if (configExist) {
+                    VendorEventConfigDTO updatedVendorEventConfig = vendorEventConfigService
+                            .updateTotalTickets(eventName, totalTickets);
+
+                    // TODO: update Ticket table logic
+
+                    return new ResponseEntity<>(updatedVendorEventConfig, HttpStatus.OK);
+                }
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        } catch (ResourceNotFoundException resEx) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (ResourceCapacityException resCapEx) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
 }

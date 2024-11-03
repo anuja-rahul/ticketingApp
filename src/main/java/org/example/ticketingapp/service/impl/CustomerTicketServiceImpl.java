@@ -34,14 +34,15 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
 //    }
 
     @Override
-    public CustomerTicketDtoOut updateCustomerTicket(CustomerTicketID customerTicketID, CustomerTicketDTO customerTicketDTO, int ticketRetrievalRate) {
+    public CustomerTicketDtoOut updateCustomerTicket(
+            CustomerTicketID customerTicketID,
+            CustomerTicketDTO customerTicketDTO,
+            int ticketRetrievalRate) {
+
         CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
 
-        //customerTicket.setCustomerEmail(customerTicketDTO.getCustomerEmail());
-        //customerTicket.setEventName(customerTicketDTO.getEventName());
         customerTicket.setTicketsBought(customerTicket.getTicketsBought() + ticketRetrievalRate);
-
         CustomerTicket updatedCustomerTicket = customerTicketRepository.save(customerTicket);
         return CustomerTicketMapper.mapToCustomerTicketDtoOut(updatedCustomerTicket);
     }
