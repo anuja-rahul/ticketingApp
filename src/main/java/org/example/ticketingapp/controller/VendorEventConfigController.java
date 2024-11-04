@@ -75,13 +75,6 @@ public class VendorEventConfigController {
                         .createVendorEventConfig(vendorEventConfigDTOIn, email);
                 return new ResponseEntity<>(savedVendorEventConfig, HttpStatus.CREATED);
 
-//                TicketDTO newTicketDto = new TicketDTO(
-//                        savedVendorEventConfig.getEventName(),
-//                        savedVendorEventConfig.getTotalTickets(),
-//                        VendorEventConfigMapper.mapToVendorEventConfig(savedVendorEventConfig));
-//
-//                ticketService.createTicket(newTicketDto);
-
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }

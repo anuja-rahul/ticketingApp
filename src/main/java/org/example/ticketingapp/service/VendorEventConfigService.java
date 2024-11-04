@@ -12,5 +12,5 @@ public interface VendorEventConfigService {
     List<VendorEventConfigDTO> getAllVendorEventConfigsByEmail(String email);
     VendorEventConfigDTO updateTotalTickets(String eventName, int totalTickets) throws IOException;
     boolean existsByEventName(String eventName);
-    VendorEventConfigDTO buyTickets(String eventName);
+    void buyTickets(String eventName);
 }

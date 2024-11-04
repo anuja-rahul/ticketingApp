@@ -39,13 +39,6 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     }
 
 
-//    @Override
-//    public VendorEventConfigDTO getVendorEventConfigByEmail(String email) {
-//        VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEmail(email)
-//                .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found: " + email));
-//        return VendorEventConfigMapper.mapToVendorEventConfigDto(vendorEventConfig);
-//    }
-
     @Override
     public VendorEventConfigDTO getVendorEventConfigByEventName(String eventName) {
         VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
@@ -64,25 +57,11 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
 
     @Override
     public VendorEventConfigDTO updateTotalTickets(String eventName, int totalTickets){
-//        CliVendorEventConfig cliVendorEventConfig = CliVendorEventConfig.readFromJson();
 
         VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
                 .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found by event name " + eventName));
 
-//        Ticket ticket = ticketRepository.findByEventName(eventName)
-//                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found under: " + eventName));
-
-//        vendorEventConfig.setTicketReleaseRate(cliVendorEventConfig.getTicketReleaseRate());
-//        vendorEventConfig.setCustomerRetrievalRate(cliVendorEventConfig.getCustomerRetrievalRate());
-//        vendorEventConfig.setMaxTicketCapacity(cliVendorEventConfig.getMaxTicketCapacity());
-//
-//        VendorEventConfig newVendorEventConfig = vendorEventConfigRepository.save(vendorEventConfig);
-
         if (vendorEventConfig.getMaxTicketCapacity() > totalTickets) {
-
-//            ticket.setTotalTickets(totalTickets);
-//            ticketRepository.save(ticket);
-
             vendorEventConfig.setTotalTickets(totalTickets);
             VendorEventConfig updatedVendorEventConfig = vendorEventConfigRepository.save(vendorEventConfig);
 
@@ -97,14 +76,13 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     }
 
     @Override
-    public VendorEventConfigDTO buyTickets(String eventName) {
+    public void buyTickets(String eventName) {
         VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
                 .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found by event name " + eventName));
 
         if (vendorEventConfig.getTotalTickets() > vendorEventConfig.getCustomerRetrievalRate()) {
             vendorEventConfig.setTotalTickets(vendorEventConfig.getTotalTickets() - vendorEventConfig.getCustomerRetrievalRate());
-            VendorEventConfig updatedVendorEventConfig = vendorEventConfigRepository.save(vendorEventConfig);
-            return VendorEventConfigMapper.mapToVendorEventConfigDto(updatedVendorEventConfig);
+            vendorEventConfigRepository.save(vendorEventConfig);
         }else {
             throw new ResourceCapacityException("Not enough tickets available");
         }
