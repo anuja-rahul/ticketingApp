@@ -52,7 +52,6 @@ public class UserController {
         User user = repository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-
         if ("vendor".equalsIgnoreCase(user.getRole().name())) {
             VendorDTO vendorDTO = vendorService.getVendorByEmail(email);
             return ResponseEntity.ok(VendorMapper.mapToUserDto(vendorDTO));

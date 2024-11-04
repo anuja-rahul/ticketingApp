@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @OpenAPIDefinition(info = @Info(title = "TicketingAPI", version = "1.0",
         description = "Dynamic ticketing application restful API"))
-public class TestController {
+public class DefaultController {
 
     @Operation(summary = "Public endpoint available for testing the api status")
     @GetMapping("/hello")
