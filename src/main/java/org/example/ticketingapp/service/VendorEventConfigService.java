@@ -1,13 +1,16 @@
 package org.example.ticketingapp.service;
 
 import org.example.ticketingapp.dto.VendorEventConfigDTO;
+import org.example.ticketingapp.dto.VendorEventConfigDTOIn;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface VendorEventConfigService {
-    VendorEventConfigDTO createVendorEventConfig(VendorEventConfigDTO vendorEventConfigDTO);
+    VendorEventConfigDTO createVendorEventConfig(VendorEventConfigDTOIn vendorEventConfigDTOIn, String email) throws IOException;
     VendorEventConfigDTO getVendorEventConfigByEventName(String eventName);
     List<VendorEventConfigDTO> getAllVendorEventConfigsByEmail(String email);
-    VendorEventConfigDTO updateTotalTickets(String eventName, int totalTickets);
+    VendorEventConfigDTO updateTotalTickets(String eventName, int totalTickets) throws IOException;
     boolean existsByEventName(String eventName);
+    VendorEventConfigDTO buyTickets(String eventName);
 }

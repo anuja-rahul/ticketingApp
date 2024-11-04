@@ -13,7 +13,6 @@ import org.example.ticketingapp.exception.ResourceCapacityException;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.repository.UserRepository;
 import org.example.ticketingapp.service.CustomerTicketService;
-import org.example.ticketingapp.service.TicketService;
 import org.example.ticketingapp.service.VendorEventConfigService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +25,12 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerTicketController {
 
     private CustomerTicketService customerTicketService;
-    private TicketService ticketService;
     private VendorEventConfigService vendorEventConfigService;
     private final UserRepository userRepository;
     private final JwtService jwtService;
 
 
-    @Operation(summary = "Add a ticket if logged in as a customer, creates a new tickets if no pre existing tickets are found")
+    @Operation(summary = "Add tickets if logged in as a customer, creates a new tickets if no pre existing tickets are found")
     @PostMapping("add/{eventName}")
     public ResponseEntity<CustomerTicketDtoOut> addCustomerTicket(
             @RequestHeader("Authorization") String token,
@@ -54,9 +52,8 @@ public class CustomerTicketController {
                 // check for existence of customer ticket, config and ticket
                 boolean customerTicketExists = customerTicketService.existsById(customerTicketID);
                 boolean configExists = vendorEventConfigService.existsByEventName(eventName);
-                boolean ticketExists = ticketService.existsByEventName(eventName);
 
-                if (configExists && ticketExists) {
+                if (configExists) {
                     // get ticket retrieval rate
                     int ticketRetrievalRate = getTicketRetrievalRate(eventName);
                     CustomerTicketDTO customerTicketDTO = new CustomerTicketDTO(
@@ -64,8 +61,8 @@ public class CustomerTicketController {
                             eventName,
                             ticketRetrievalRate);
 
-                    // logic to update ticket storage, vendor event config
-                    ticketService.decreaseTicket(ticketService.getTicketByEventName(eventName), ticketRetrievalRate);
+                    // logic to update vendor event config
+                    vendorEventConfigService.buyTickets(eventName);
 
                     if(!customerTicketExists) {
                         // create a new customer ticket

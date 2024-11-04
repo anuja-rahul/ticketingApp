@@ -31,22 +31,19 @@ public class VendorEventConfigMapper {
         );
     }
 
-    public static VendorEventConfigDTO mapFromInputSchema(VendorEventConfigDTOIn vendorEventConfigDTOIn, String email) {
+    public static VendorEventConfigDTO mapFromInputSchema(
+            CliVendorEventConfig cliVendorEventConfig,
+            VendorEventConfigDTOIn vendorEventConfigDTOIn,
+            String email) {
+
         return new VendorEventConfigDTO(
                 vendorEventConfigDTOIn.getId(),
                 email,
                 vendorEventConfigDTOIn.getEventName(),
-                vendorEventConfigDTOIn.getTotalTickets(),
-                vendorEventConfigDTOIn.getTicketReleaseRate(),
-                vendorEventConfigDTOIn.getCustomerRetrievalRate(),
-                vendorEventConfigDTOIn.getMaxTicketCapacity()
+                cliVendorEventConfig.getTotalTickets(),
+                cliVendorEventConfig.getTicketReleaseRate(),
+                cliVendorEventConfig.getCustomerRetrievalRate(),
+                cliVendorEventConfig.getMaxTicketCapacity()
         );
-    }
-
-
-    // TODO: finish this
-    public static VendorEventConfigDTO mapFromCLiVendorEventConfig(
-            CliVendorEventConfig cliVendorEventConfig, String email) {
-        return new VendorEventConfigDTO();
     }
 }

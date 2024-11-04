@@ -5,21 +5,19 @@ import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.example.ticketingapp.configuration.JwtService;
-import org.example.ticketingapp.dto.TicketDTO;
 import org.example.ticketingapp.dto.VendorEventConfigDTO;
 import org.example.ticketingapp.dto.VendorEventConfigDTOIn;
 import org.example.ticketingapp.entity.User;
 import org.example.ticketingapp.exception.ResourceCapacityException;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
-import org.example.ticketingapp.mapper.VendorEventConfigMapper;
 import org.example.ticketingapp.repository.UserRepository;
-import org.example.ticketingapp.service.TicketService;
 import org.example.ticketingapp.service.VendorEventConfigService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @AllArgsConstructor
@@ -29,7 +27,6 @@ import java.util.List;
 public class VendorEventConfigController {
 
     private VendorEventConfigService vendorEventConfigService;
-    private TicketService ticketService;
     private final UserRepository repository;
     private final JwtService jwtService;
 
@@ -38,20 +35,20 @@ public class VendorEventConfigController {
     public ResponseEntity<List<VendorEventConfigDTO>> getConfigsByEmail(@RequestHeader("Authorization") String token) {
 
         try {
-        if (token.startsWith("Bearer ")) {
-            token = token.substring(7);
-        }
-        Claims claims = jwtService.extractAllClaims(token);
-        String email = claims.getSubject();
-        User user = repository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+            Claims claims = jwtService.extractAllClaims(token);
+            String email = claims.getSubject();
+            User user = repository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if ("vendor".equalsIgnoreCase(user.getRole().name())) {
-            List<VendorEventConfigDTO> vendorEventConfigs = vendorEventConfigService.getAllVendorEventConfigsByEmail(email);
-            return ResponseEntity.ok(vendorEventConfigs);
-        } else {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+            if ("vendor".equalsIgnoreCase(user.getRole().name())) {
+                List<VendorEventConfigDTO> vendorEventConfigs = vendorEventConfigService.getAllVendorEventConfigsByEmail(email);
+                return ResponseEntity.ok(vendorEventConfigs);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -75,31 +72,27 @@ public class VendorEventConfigController {
         try {
             if ("vendor".equalsIgnoreCase(user.getRole().name())) {
                 VendorEventConfigDTO savedVendorEventConfig = vendorEventConfigService
-                        .createVendorEventConfig(VendorEventConfigMapper
-                                .mapFromInputSchema(vendorEventConfigDTOIn, email));
-
-                TicketDTO newTicketDto = new TicketDTO(
-                        savedVendorEventConfig.getEventName(),
-                        savedVendorEventConfig.getTotalTickets(),
-                        VendorEventConfigMapper.mapToVendorEventConfig(savedVendorEventConfig));
-
-                ticketService.createTicket(newTicketDto);
-
+                        .createVendorEventConfig(vendorEventConfigDTOIn, email);
                 return new ResponseEntity<>(savedVendorEventConfig, HttpStatus.CREATED);
+
+//                TicketDTO newTicketDto = new TicketDTO(
+//                        savedVendorEventConfig.getEventName(),
+//                        savedVendorEventConfig.getTotalTickets(),
+//                        VendorEventConfigMapper.mapToVendorEventConfig(savedVendorEventConfig));
+//
+//                ticketService.createTicket(newTicketDto);
+
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
         } catch (DataIntegrityViolationException ex) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (IOException IoEx) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @Operation(summary = "Create a new default VendorEventConfig, still working on this")
-    @PostMapping("/event/default")
-    public ResponseEntity<VendorEventConfigDTO> createDefaultConfig() {
-        // TODO: implement reading from local json file and applying default values (Core java CLI)
-        return null;
-    }
+
 
     @Operation(summary = "Updates a VendorEventConfig totalTicket, only if logged in as a vendor and it already exists")
     @PutMapping("/event/{eventName}/{totalTickets}")
@@ -124,7 +117,6 @@ public class VendorEventConfigController {
                     VendorEventConfigDTO updatedVendorEventConfig = vendorEventConfigService
                             .updateTotalTickets(eventName, totalTickets);
 
-                    // TODO: update Ticket table logic
 
                     return new ResponseEntity<>(updatedVendorEventConfig, HttpStatus.OK);
                 }
@@ -136,6 +128,8 @@ public class VendorEventConfigController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (ResourceCapacityException resCapEx) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

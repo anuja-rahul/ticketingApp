@@ -21,7 +21,7 @@ public class CliVendorEventConfig {
         CliConfigWriter.writeConfig(this);
     }
 
-    public CliVendorEventConfig readFromJson() throws IOException {
+    public static CliVendorEventConfig readFromJson() throws IOException {
         return CliConfigWriter.readConfig();
     }
 

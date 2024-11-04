@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 public class VendorEventConfigDTOIn {
     private long id;
     private String eventName;
-    private int totalTickets;
-    private int ticketReleaseRate;
-    private int customerRetrievalRate;
-    private int maxTicketCapacity;
+//    private int totalTickets;
+//    private int ticketReleaseRate;
+//    private int customerRetrievalRate;
+//    private int maxTicketCapacity;
 }
