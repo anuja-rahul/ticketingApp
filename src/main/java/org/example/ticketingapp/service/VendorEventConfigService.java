@@ -9,6 +9,7 @@ import java.util.concurrent.CompletableFuture;
 
 public interface VendorEventConfigService {
     CompletableFuture<VendorEventConfigDTO> createVendorEventConfig(VendorEventConfigDTOIn vendorEventConfigDTOIn, String email) throws IOException;
+    void deleteVendorEventConfig(String eventName);
     CompletableFuture<VendorEventConfigDTO> getVendorEventConfigByEventName(String eventName);
     CompletableFuture<List<VendorEventConfigDTO>> getAllVendorEventConfigsByEmail(String email);
     VendorEventConfigDTO updateTotalTickets(String eventName, int totalTickets) throws IOException;

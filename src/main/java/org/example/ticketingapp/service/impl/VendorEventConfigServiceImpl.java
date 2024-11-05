@@ -45,6 +45,11 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
         return CompletableFuture.completedFuture(result);
     }
 
+    @Override
+    public void deleteVendorEventConfig(String eventName) {
+        // TODO: define a thread safe method logic to delete event/config (removeTickets) by event name
+    }
+
 
     @Override
     @Async("taskExecutor")
@@ -105,7 +110,5 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
             throw new ResourceCapacityException("Not enough tickets available");
         }
     }
-
-    // TODO: define a thread safe method to delete event/config (removeTickets) by event name
 
 }
