@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @AllArgsConstructor
 @CrossOrigin
@@ -44,8 +46,8 @@ public class VendorEventConfigController {
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
             if ("vendor".equalsIgnoreCase(user.getRole().name())) {
-                List<VendorEventConfigDTO> vendorEventConfigs = vendorEventConfigService.getAllVendorEventConfigsByEmail(email);
-                return ResponseEntity.ok(vendorEventConfigs);
+                CompletableFuture<List<VendorEventConfigDTO>> vendorEventConfigs = vendorEventConfigService.getAllVendorEventConfigsByEmail(email);
+                return ResponseEntity.ok(vendorEventConfigs.get());
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
@@ -71,16 +73,16 @@ public class VendorEventConfigController {
 
         try {
             if ("vendor".equalsIgnoreCase(user.getRole().name())) {
-                VendorEventConfigDTO savedVendorEventConfig = vendorEventConfigService
+                CompletableFuture<VendorEventConfigDTO> savedVendorEventConfig = vendorEventConfigService
                         .createVendorEventConfig(vendorEventConfigDTOIn, email);
-                return new ResponseEntity<>(savedVendorEventConfig, HttpStatus.CREATED);
+                return new ResponseEntity<>(savedVendorEventConfig.get(), HttpStatus.CREATED);
 
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
         } catch (DataIntegrityViolationException ex) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        } catch (IOException IoEx) {
+        } catch (IOException | InterruptedException | ExecutionException IoEx) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -3,6 +3,8 @@ package org.example.ticketingapp.configuration.cli;
 import java.io.IOException;
 import java.util.Scanner;
 
+import static org.example.ticketingapp.utility.BaseUtils.divideAndCeil;
+
 public class CliConfig {
 
     private final Scanner sc = new Scanner(System.in);
@@ -10,25 +12,35 @@ public class CliConfig {
     public static void readFromCli() throws IOException {
         CliConfig config = new CliConfig();
 
-        int maxTicketCapacity = config.takeInputs("Enter max ticket capacity:");
+        int maxTicketCapacity = config.takeInputs("\nEnter max ticket capacity:");
         int totalTickets = config.takeInputs(
-                "Enter total tickets:",
+                "\nEnter total tickets:",
                 maxTicketCapacity,
                 "total tickets must be less than max ticket capacity.");
-        int ticketReleaseRate = config.takeInputs("Enter ticket release rate:");
+        int ticketReleaseRate = config.takeInputs("\nEnter ticket release rate:");
         int customerRetrievalRate = config.takeInputs(
-                "Enter customer retrieval rate:",
+                "\nEnter customer retrieval rate:",
                 ticketReleaseRate,
                 "customer retrieval rate must be less than ticket release rate.");
 
         CliVendorEventConfig cliVendorEventConfig = new CliVendorEventConfig(
                 totalTickets, ticketReleaseRate, customerRetrievalRate, maxTicketCapacity);
 
-        System.out.println("Configuration:");
+        System.out.println("\nConfiguration:\n");
         System.out.println("Total Tickets: " + cliVendorEventConfig.getTotalTickets());
         System.out.println("Ticket Release Rate: " + cliVendorEventConfig.getTicketReleaseRate());
         System.out.println("Customer Retrieval Rate: " + cliVendorEventConfig.getCustomerRetrievalRate());
         System.out.println("Max Ticket Capacity: " + cliVendorEventConfig.getMaxTicketCapacity());
+
+        CliVendorEventConfig tempClVendorEventConfig = CliVendorEventConfig.readFromJson();
+        int basePoolSize = divideAndCeil(
+                cliVendorEventConfig.getTicketReleaseRate(),
+                cliVendorEventConfig.getCustomerRetrievalRate());
+        int maxQueueSize = divideAndCeil(
+                cliVendorEventConfig.getMaxTicketCapacity(), basePoolSize);
+
+        System.out.println("\nbaseThreadPoolSize: " + basePoolSize);
+        System.out.println("maxTaskQueueSize: " + maxQueueSize + "\n");
 
         // Writing to config.json file at the root of the application
         cliVendorEventConfig.writeToJson();

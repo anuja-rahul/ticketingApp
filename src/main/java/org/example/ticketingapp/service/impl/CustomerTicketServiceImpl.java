@@ -9,20 +9,26 @@ import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.CustomerTicketMapper;
 import org.example.ticketingapp.repository.CustomerTicketRepository;
 import org.example.ticketingapp.service.CustomerTicketService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 
 @Service
 @AllArgsConstructor
 public class CustomerTicketServiceImpl implements CustomerTicketService {
 
+    @Autowired
     private final CustomerTicketRepository customerTicketRepository;
 
     @Override
-    public CustomerTicketDtoOut createCustomerTicket(CustomerTicketDTO customerTicketDTO) {
+    public CompletableFuture<CustomerTicketDtoOut> createCustomerTicket(CustomerTicketDTO customerTicketDTO) {
         CustomerTicket customerTicket = CustomerTicketMapper.mapToCustomerTicket(customerTicketDTO);
         CustomerTicket savedCustomerTicket =  customerTicketRepository.save(customerTicket);
-        return CustomerTicketMapper.mapToCustomerTicketDtoOut(savedCustomerTicket);
+        CustomerTicketDtoOut result = CustomerTicketMapper.mapToCustomerTicketDtoOut(savedCustomerTicket);
+        return CompletableFuture.completedFuture(result);
     }
 
     // TODO: Review this sh*t
@@ -36,7 +42,8 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
     // TODO: Implement logic for getting all tickets based on customer email
 
     @Override
-    public CustomerTicketDtoOut updateCustomerTicket(
+    @Async("ticketExecutor")
+    public CompletableFuture<CustomerTicketDtoOut> updateCustomerTicket(
             CustomerTicketID customerTicketID,
             CustomerTicketDTO customerTicketDTO,
             int ticketRetrievalRate) {
@@ -46,7 +53,8 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
 
         customerTicket.setTicketsBought(customerTicket.getTicketsBought() + ticketRetrievalRate);
         CustomerTicket updatedCustomerTicket = customerTicketRepository.save(customerTicket);
-        return CustomerTicketMapper.mapToCustomerTicketDtoOut(updatedCustomerTicket);
+        CustomerTicketDtoOut result = CustomerTicketMapper.mapToCustomerTicketDtoOut(updatedCustomerTicket);
+        return CompletableFuture.completedFuture(result);
     }
 
     @Override

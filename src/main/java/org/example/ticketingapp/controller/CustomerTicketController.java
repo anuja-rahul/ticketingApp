@@ -18,6 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 @AllArgsConstructor
 @CrossOrigin
 @RestController
@@ -30,7 +33,8 @@ public class CustomerTicketController {
     private final JwtService jwtService;
 
 
-    @Operation(summary = "Add tickets if logged in as a customer, creates a new tickets if no pre existing tickets are found")
+    @Operation(summary = "Add tickets if logged in as a customer, " +
+            "creates a new tickets if no pre existing tickets are found")
     @PostMapping("add/{eventName}")
     public ResponseEntity<CustomerTicketDtoOut> addCustomerTicket(
             @RequestHeader("Authorization") String token,
@@ -65,14 +69,16 @@ public class CustomerTicketController {
                     vendorEventConfigService.buyTickets(eventName);
 
                     if(!customerTicketExists) {
-                        // create a new customer ticket
-                        CustomerTicketDtoOut newCustomerTicket = customerTicketService.createCustomerTicket(customerTicketDTO);
-                        return new ResponseEntity<>(newCustomerTicket, HttpStatus.CREATED);
+                        // create a new customer ticket (async)
+                        CompletableFuture<CustomerTicketDtoOut> newCustomerTicket = customerTicketService
+                                .createCustomerTicket(customerTicketDTO);
+                        return new ResponseEntity<>(newCustomerTicket.get(), HttpStatus.CREATED);
                     } else {
-                        // update existing customer ticket
-                        CustomerTicketDtoOut updatedCustomerTicketDtoOut = customerTicketService.updateCustomerTicket(
+                        // update existing customer ticket (async)
+                        CompletableFuture<CustomerTicketDtoOut> updatedCustomerTicketDtoOut = customerTicketService
+                                .updateCustomerTicket(
                                 customerTicketID, customerTicketDTO, ticketRetrievalRate);
-                        return new ResponseEntity<>(updatedCustomerTicketDtoOut, HttpStatus.OK);
+                        return new ResponseEntity<>(updatedCustomerTicketDtoOut.get(), HttpStatus.OK);
                     }
                 }
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -84,13 +90,15 @@ public class CustomerTicketController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (ResourceCapacityException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (InterruptedException | ExecutionException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    private int getTicketRetrievalRate(String eventName) {
-        VendorEventConfigDTO vendorEventConfigDTO = vendorEventConfigService.getVendorEventConfigByEventName(eventName);
-        return vendorEventConfigDTO.getCustomerRetrievalRate();
+    private int getTicketRetrievalRate(String eventName) throws ExecutionException, InterruptedException {
+        CompletableFuture<VendorEventConfigDTO> vendorEventConfigDTO = vendorEventConfigService.getVendorEventConfigByEventName(eventName);
+        return vendorEventConfigDTO.get().getCustomerRetrievalRate();
     }
 }
