@@ -354,7 +354,7 @@
 ## Real-Time Event Ticketing System Checklist
 
 ## Entities
-- [ ] **Ticket**
+- [x] **Ticket**
     - Properties:
         - Long id
         - String eventName
@@ -363,7 +363,7 @@
         - void addTickets(int count)
         - void removeTicket()
 
-- [ ] **CustomerAccount** (renamed from User)
+- [x] **CustomerAccount** (renamed from User)
     - Properties:
         - Long id
         - String username
@@ -371,33 +371,33 @@
         - String role (e.g., "VENDOR" or "CUSTOMER")
 
 ## Repositories
-- [ ] **TicketRepository**
+- [x] **TicketRepository**
     - Methods:
         - Ticket save(Ticket ticket)
         - Optional~Ticket~ findById(Long id)
 
-- [ ] **CustomerAccountRepository** (renamed from UserRepository)
+- [x] **CustomerAccountRepository** (renamed from UserRepository)
     - Methods:
         - Optional~CustomerAccount~ findByUsername(String username)
 
 ## Services
-- [ ] **TicketService**
+- [x] **TicketService**
     - Methods:
         - void addTickets(int tickets)
         - Ticket purchaseTicket()
 
-- [ ] **AuthService**
+- [x] **AuthService**
     - Methods:
         - UserDetails loadUserByUsername(String username)
         - String authenticate(String username, String password)
 
-- [ ] **JwtService**
+- [x] **JwtService**
     - Methods:
         - String generateToken(UserDetails userDetails)
         - Boolean validateToken(String token, UserDetails userDetails)
 
 ## Controllers
-- [ ] **TicketController**
+- [x] **TicketController**
     - Methods:
         - ResponseEntity~List~ getAllTickets()
         - ResponseEntity~Ticket~ getTicketById(Long id)
@@ -405,7 +405,7 @@
         - ResponseEntity~Ticket~ purchaseTicket(Long ticketId)
 
 ## Utility Classes
-- [ ] **TicketPool**
+- [x] **TicketPool**
     - Methods:
         - synchronized void addTickets(int tickets)
         - synchronized Ticket removeTicket()
@@ -415,7 +415,7 @@
         - [x] MethodLogger(String message)
         - [ ] ConstructorLogger(String message)
 
-- [ ] **ErrorHandler**
+- [x] **ErrorHandler**
     - Methods:
         - void handleError(Exception e)
 
