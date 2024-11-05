@@ -9,9 +9,9 @@ import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.CustomerTicketMapper;
 import org.example.ticketingapp.repository.CustomerTicketRepository;
 import org.example.ticketingapp.service.CustomerTicketService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -20,7 +20,6 @@ import java.util.concurrent.CompletableFuture;
 @AllArgsConstructor
 public class CustomerTicketServiceImpl implements CustomerTicketService {
 
-    @Autowired
     private final CustomerTicketRepository customerTicketRepository;
 
     @Override
@@ -43,6 +42,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
 
     @Override
     @Async("ticketExecutor")
+    @Transactional
     public CompletableFuture<CustomerTicketDtoOut> updateCustomerTicket(
             CustomerTicketID customerTicketID,
             CustomerTicketDTO customerTicketDTO,
