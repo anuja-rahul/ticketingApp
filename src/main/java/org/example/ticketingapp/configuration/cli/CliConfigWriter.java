@@ -20,7 +20,7 @@ public class CliConfigWriter {
             gson.toJson(config, writer);
         }
 
-        System.out.println("Configuration saved to " + filePath);
+        System.out.println("Configuration saved to " + filePath + "\n");
     }
 
     public static CliVendorEventConfig readConfig() throws IOException {
