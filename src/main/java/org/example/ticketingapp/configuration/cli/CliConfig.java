@@ -5,12 +5,35 @@ import java.util.Scanner;
 
 import static org.example.ticketingapp.utility.BaseUtils.divideAndCeil;
 
+/**
+ * Singleton class to read configuration from CLI
+ * This class was made singleton to avoid multiple instances of the configuration at the startup due to spring boot
+ * autoconfiguration and dependency injection.
+ */
 public class CliConfig {
 
+    private static CliConfig instance;
     private final Scanner sc = new Scanner(System.in);
+    public static boolean isConfigured = false;
+
+    // Private constructor to prevent instantiation
+    private CliConfig() {}
+
+    // Public method to provide access to the instance
+    public static synchronized CliConfig getInstance() {
+        if (instance == null) {
+            instance = new CliConfig();
+        }
+        return instance;
+    }
 
     public static void readFromCli() throws IOException {
-        CliConfig config = new CliConfig();
+        CliConfig config = CliConfig.getInstance();
+
+        if (isConfigured) {
+            System.out.println("Configuration already read, skipping...");
+            return;
+        }
 
         int maxTicketCapacity = config.takeInputs("\nEnter max ticket capacity:");
         int totalTickets = config.takeInputs(
@@ -26,24 +49,26 @@ public class CliConfig {
         CliVendorEventConfig cliVendorEventConfig = new CliVendorEventConfig(
                 totalTickets, ticketReleaseRate, customerRetrievalRate, maxTicketCapacity);
 
+        // Writing to config.json file at the root of the application
+        cliVendorEventConfig.writeToJson();
+
         System.out.println("\nConfiguration:\n");
         System.out.println("Total Tickets: " + cliVendorEventConfig.getTotalTickets());
         System.out.println("Ticket Release Rate: " + cliVendorEventConfig.getTicketReleaseRate());
         System.out.println("Customer Retrieval Rate: " + cliVendorEventConfig.getCustomerRetrievalRate());
         System.out.println("Max Ticket Capacity: " + cliVendorEventConfig.getMaxTicketCapacity());
 
-        CliVendorEventConfig tempClVendorEventConfig = CliVendorEventConfig.readFromJson();
+        CliVendorEventConfig tempCliVendorEventConfig = CliVendorEventConfig.readFromJson();
         int basePoolSize = divideAndCeil(
-                cliVendorEventConfig.getTicketReleaseRate(),
-                cliVendorEventConfig.getCustomerRetrievalRate());
+                tempCliVendorEventConfig.getTicketReleaseRate(),
+                tempCliVendorEventConfig.getCustomerRetrievalRate());
         int maxQueueSize = divideAndCeil(
-                cliVendorEventConfig.getMaxTicketCapacity(), basePoolSize);
+                tempCliVendorEventConfig.getMaxTicketCapacity(), basePoolSize);
 
         System.out.println("\nbaseThreadPoolSize: " + basePoolSize);
         System.out.println("maxTaskQueueSize: " + maxQueueSize + "\n");
 
-        // Writing to config.json file at the root of the application
-        cliVendorEventConfig.writeToJson();
+        isConfigured = true;
     }
 
     private int takeInputs(String message) {
@@ -63,7 +88,7 @@ public class CliConfig {
         }
     }
 
-    // overloading for a specific case (customerRetrievalRate, totalTickets)
+    // Overloading for a specific case (customerRetrievalRate, totalTickets)
     private int takeInputs(String message, int bigValue, String errorMessage) {
         while (true) {
             System.out.println(message);
