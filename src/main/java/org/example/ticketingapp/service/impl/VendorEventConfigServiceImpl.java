@@ -12,6 +12,7 @@ import org.example.ticketingapp.repository.VendorEventConfigRepository;
 import org.example.ticketingapp.service.VendorEventConfigService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,7 +30,7 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     private final Lock lock = new ReentrantLock();
 
     @Override
-    @Async("taskExecutor")
+    @Async("vendorExecutor")
     public CompletableFuture<VendorEventConfigDTO> createVendorEventConfig(
             VendorEventConfigDTOIn vendorEventConfigDTOin,
             String email) throws IOException {
@@ -52,7 +53,7 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
 
 
     @Override
-    @Async("taskExecutor")
+    @Async("vendorExecutor")
     public CompletableFuture<VendorEventConfigDTO> getVendorEventConfigByEventName(String eventName) {
         VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
                 .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found: " + eventName));
@@ -61,7 +62,7 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     }
 
     @Override
-    @Async("taskExecutor")
+    @Async("vendorExecutor")
     public CompletableFuture<List<VendorEventConfigDTO>> getAllVendorEventConfigsByEmail(String email) {
         List<VendorEventConfig> vendorEventConfigs = vendorEventConfigRepository.findAllByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found: " + email));
@@ -71,8 +72,11 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
         return CompletableFuture.completedFuture(result);
     }
 
+    // synchronized method to update total tickets
     @Override
-    public VendorEventConfigDTO updateTotalTickets(String eventName, int totalTickets){
+    @Async("vendorExecutor")
+    @Transactional
+    public CompletableFuture<VendorEventConfigDTO> updateTotalTickets(String eventName, int totalTickets){
         lock.lock();
         try {
             VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
@@ -82,7 +86,9 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
                 vendorEventConfig.setTotalTickets(totalTickets);
                 VendorEventConfig updatedVendorEventConfig = vendorEventConfigRepository.save(vendorEventConfig);
 
-                return VendorEventConfigMapper.mapToVendorEventConfigDto(updatedVendorEventConfig);
+                VendorEventConfigDTO result = VendorEventConfigMapper.mapToVendorEventConfigDto(updatedVendorEventConfig);
+
+                return CompletableFuture.completedFuture(result);
             }
             throw(new ResourceCapacityException("Total capacity exceeded"));
 
@@ -98,7 +104,8 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     }
 
     @Override
-    @Async("taskExecutor")
+    @Async("ticketExecutor")
+    @Transactional
     public void buyTickets(String eventName) {
         VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
                 .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found by event name " + eventName));

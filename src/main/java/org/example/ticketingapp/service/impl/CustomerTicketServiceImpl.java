@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 @Service
@@ -21,6 +23,7 @@ import java.util.concurrent.CompletableFuture;
 public class CustomerTicketServiceImpl implements CustomerTicketService {
 
     private final CustomerTicketRepository customerTicketRepository;
+    private final Lock lock = new ReentrantLock();
 
     @Override
     public CompletableFuture<CustomerTicketDtoOut> createCustomerTicket(CustomerTicketDTO customerTicketDTO) {
@@ -48,13 +51,19 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
             CustomerTicketDTO customerTicketDTO,
             int ticketRetrievalRate) {
 
-        CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
+        lock.lock();
 
-        customerTicket.setTicketsBought(customerTicket.getTicketsBought() + ticketRetrievalRate);
-        CustomerTicket updatedCustomerTicket = customerTicketRepository.save(customerTicket);
-        CustomerTicketDtoOut result = CustomerTicketMapper.mapToCustomerTicketDtoOut(updatedCustomerTicket);
-        return CompletableFuture.completedFuture(result);
+        try {
+            CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
+                    .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
+
+            customerTicket.setTicketsBought(customerTicket.getTicketsBought() + ticketRetrievalRate);
+            CustomerTicket updatedCustomerTicket = customerTicketRepository.save(customerTicket);
+            CustomerTicketDtoOut result = CustomerTicketMapper.mapToCustomerTicketDtoOut(updatedCustomerTicket);
+            return CompletableFuture.completedFuture(result);
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override

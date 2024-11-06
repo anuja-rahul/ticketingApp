@@ -12,7 +12,7 @@ public interface VendorEventConfigService {
     void deleteVendorEventConfig(String eventName);
     CompletableFuture<VendorEventConfigDTO> getVendorEventConfigByEventName(String eventName);
     CompletableFuture<List<VendorEventConfigDTO>> getAllVendorEventConfigsByEmail(String email);
-    VendorEventConfigDTO updateTotalTickets(String eventName, int totalTickets) throws IOException;
+    CompletableFuture<VendorEventConfigDTO> updateTotalTickets(String eventName, int totalTickets) throws IOException;
     boolean existsByEventName(String eventName);
     void buyTickets(String eventName);
 }

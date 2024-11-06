@@ -1,20 +1,28 @@
 package org.example.ticketingapp;
 
 import org.example.ticketingapp.configuration.cli.CliConfig;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+import java.io.IOException;
+
 @SpringBootApplication
 @EnableAsync
-public class TicketingAppApplication implements CommandLineRunner {
-    public static void main(String[] args) {
-        SpringApplication.run(TicketingAppApplication.class, args);
+public class TicketingAppApplication{
+
+    public static void main(String[] args){
+        try {
+            config();
+            SpringApplication.run(TicketingAppApplication.class, args);
+        } catch (IOException e) {
+            System.err.println("Error reading from CLI: " + e.getMessage());
+            System.exit(1);
+        }
     }
 
-    @Override
-    public void run(String... args) throws Exception {
+    public static void config() throws IOException {
         CliConfig.readFromCli();
     }
+
 }

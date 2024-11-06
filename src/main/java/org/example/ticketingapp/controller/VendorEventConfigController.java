@@ -110,11 +110,11 @@ public class VendorEventConfigController {
             if ("vendor".equalsIgnoreCase(user.getRole().name())) {
                 boolean configExist = vendorEventConfigService.existsByEventName(eventName);
                 if (configExist) {
-                    VendorEventConfigDTO updatedVendorEventConfig = vendorEventConfigService
+                    CompletableFuture<VendorEventConfigDTO> updatedVendorEventConfig = vendorEventConfigService
                             .updateTotalTickets(eventName, totalTickets);
 
 
-                    return new ResponseEntity<>(updatedVendorEventConfig, HttpStatus.OK);
+                    return new ResponseEntity<>(updatedVendorEventConfig.get(), HttpStatus.OK);
                 }
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -124,7 +124,7 @@ public class VendorEventConfigController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (ResourceCapacityException resCapEx) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        } catch (IOException e) {
+        } catch (IOException | ExecutionException | InterruptedException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
