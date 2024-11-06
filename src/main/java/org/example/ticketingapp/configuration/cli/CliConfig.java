@@ -16,10 +16,8 @@ public class CliConfig {
     private final Scanner sc = new Scanner(System.in);
     public static boolean isConfigured = false;
 
-    // Private constructor to prevent instantiation
     private CliConfig() {}
 
-    // Public method to provide access to the instance
     public static synchronized CliConfig getInstance() {
         if (instance == null) {
             instance = new CliConfig();
@@ -88,7 +86,7 @@ public class CliConfig {
         }
     }
 
-    // Overloading for a specific case (customerRetrievalRate, totalTickets)
+    // Overloading for specific cases (customerRetrievalRate, totalTickets)
     private int takeInputs(String message, int bigValue, String errorMessage) {
         while (true) {
             System.out.println(message);
