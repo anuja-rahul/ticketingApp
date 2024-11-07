@@ -128,4 +128,31 @@ public class VendorEventConfigController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Operation(summary = "Deletes a VendorEventConfig by event name, only if logged in as a vendor")
+    @DeleteMapping("/event/{eventName}")
+    public ResponseEntity deleteVendorEventConfig(
+            @RequestHeader("Authorization") String token,
+            @PathVariable String eventName
+    ) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        Claims claims = jwtService.extractAllClaims(token);
+        String email = claims.getSubject();
+        User user = repository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+            try {
+                if ("vendor".equalsIgnoreCase(user.getRole().name())) {
+                    vendorEventConfigService.deleteVendorEventConfig(eventName, email);
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                }
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            } catch (ResourceNotFoundException resEx) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+    }
+
 }

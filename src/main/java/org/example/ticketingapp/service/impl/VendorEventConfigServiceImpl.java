@@ -47,8 +47,20 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     }
 
     @Override
-    public void deleteVendorEventConfig(String eventName) {
-        // TODO: define a thread safe method logic to delete event/config (removeTickets) by event name
+    public void deleteVendorEventConfig(String eventName, String email) {
+        // TODO: test and review
+        lock.lock();
+        try {
+            VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
+                    .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found by event name " + eventName));
+            if (vendorEventConfig.getEmail().equals(email)) {
+                vendorEventConfigRepository.deleteByEventName(eventName);
+            } else {
+                throw new ResourceNotFoundException("VendorEventConfig not owned by vendor " + email);
+            }
+        } finally {
+            lock.unlock();
+        }
     }
 
 

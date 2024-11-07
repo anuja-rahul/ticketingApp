@@ -14,6 +14,7 @@ public class TicketingAppApplication{
     public static void main(String[] args){
         try {
             config();
+            // ConfigurableApplicationContext
             SpringApplication.run(TicketingAppApplication.class, args);
         } catch (IOException e) {
             System.err.println("Error reading from CLI: " + e.getMessage());

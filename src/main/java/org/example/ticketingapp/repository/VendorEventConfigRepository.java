@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface VendorEventConfigRepository extends JpaRepository<VendorEventConfig, Long> {
     Optional<VendorEventConfig> findByEventName(String eventName);
     Optional<List<VendorEventConfig>> findAllByEmail(String email);
+    void deleteByEventName(String eventName);
     boolean existsByEventName(String eventName);
 //    boolean existsByEmail(String email);
 }
