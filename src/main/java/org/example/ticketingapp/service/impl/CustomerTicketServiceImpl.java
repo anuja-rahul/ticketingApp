@@ -8,6 +8,7 @@ import org.example.ticketingapp.entity.CustomerTicketID;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.CustomerTicketMapper;
 import org.example.ticketingapp.repository.CustomerTicketRepository;
+import org.example.ticketingapp.service.CustomerService;
 import org.example.ticketingapp.service.CustomerTicketService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,10 @@ import java.util.concurrent.locks.ReentrantLock;
 public class CustomerTicketServiceImpl implements CustomerTicketService {
 
     private final CustomerTicketRepository customerTicketRepository;
+    private CustomerService customerService;
     private final Lock lock = new ReentrantLock();
 
+    @Async("customerExecutor")
     @Override
     public CompletableFuture<CustomerTicketDtoOut> createCustomerTicket(CustomerTicketDTO customerTicketDTO) {
         CustomerTicket customerTicket = CustomerTicketMapper.mapToCustomerTicket(customerTicketDTO);
@@ -34,12 +37,12 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
     }
 
     // TODO: Review this sh*t
-//    @Override
-//    public CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID) {
-//        CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
-//                .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
-//        return CustomerTicketMapper.mapToCustomerTicketDtoOut(customerTicket);
-//    }
+    @Override
+    public CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID) {
+        CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
+        return CustomerTicketMapper.mapToCustomerTicketDtoOut(customerTicket);
+    }
 
     // TODO: Implement logic for getting all tickets based on customer email
 
@@ -57,10 +60,20 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
             CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
                     .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
 
+            String email = customerTicketID.getCustomerEmail();
+
             customerTicket.setTicketsBought(customerTicket.getTicketsBought() + ticketRetrievalRate);
             CustomerTicket updatedCustomerTicket = customerTicketRepository.save(customerTicket);
             CustomerTicketDtoOut result = CustomerTicketMapper.mapToCustomerTicketDtoOut(updatedCustomerTicket);
+
+            // Check/set for VIP eligibility of the customer based on his purchases
+            if (customerTicketRepository
+                    .findTotalTicketsBoughtByCustomerEmail(email) >= 100 && !customerService.getCustomerPriority(email))
+            {
+                customerService.updateCustomerPriority(email);
+            }
             return CompletableFuture.completedFuture(result);
+
         } finally {
             lock.unlock();
         }

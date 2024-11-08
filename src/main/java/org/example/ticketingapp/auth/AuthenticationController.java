@@ -44,6 +44,7 @@ public class AuthenticationController {
                 customerDTO.setName(request.getName());
                 customerDTO.setEmail(request.getEmail());
                 customerDTO.setPassword(passwordEncoder.encode(request.getPassword()));
+                customerDTO.setVip(false);
                 customerService.createCustomer(customerDTO);
             }
             return new ResponseEntity<>(service.register(request), HttpStatus.CREATED);

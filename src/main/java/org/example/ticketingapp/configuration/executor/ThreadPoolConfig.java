@@ -54,4 +54,15 @@ public class ThreadPoolConfig {
         threadPoolTaskExecutor.initialize();
         return threadPoolTaskExecutor;
     }
+
+    @Bean(name = "customerExecutor")
+    public Executor customerExecutor() {
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        threadPoolTaskExecutor.setCorePoolSize(basePoolSize);
+        threadPoolTaskExecutor.setMaxPoolSize(basePoolSize);
+        threadPoolTaskExecutor.setQueueCapacity(maxQueueSize);
+        threadPoolTaskExecutor.setThreadNamePrefix("TicketingApiVendorThread-");
+        threadPoolTaskExecutor.initialize();
+        return threadPoolTaskExecutor;
+    }
 }

@@ -11,7 +11,8 @@ public class CustomerMapper {
                 customer.getId(),
                 customer.getName(),
                 customer.getEmail(),
-                customer.getPassword()
+                customer.getPassword(),
+                customer.isVip()
         );
     }
 
@@ -20,15 +21,8 @@ public class CustomerMapper {
                 customerDTO.getId(),
                 customerDTO.getName(),
                 customerDTO.getEmail(),
-                customerDTO.getPassword()
-        );
-    }
-
-    public static UserDTO mapToUserDto(CustomerDTO customerDTO) {
-        return new UserDTO(
-                customerDTO.getId(),
-                customerDTO.getName(),
-                customerDTO.getEmail()
+                customerDTO.getPassword(),
+                customerDTO.isVip()
         );
     }
 }

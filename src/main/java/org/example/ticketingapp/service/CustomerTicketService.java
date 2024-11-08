@@ -4,7 +4,6 @@ import org.example.ticketingapp.dto.CustomerTicketDTO;
 import org.example.ticketingapp.dto.CustomerTicketDtoOut;
 import org.example.ticketingapp.entity.CustomerTicketID;
 
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public interface CustomerTicketService {
@@ -14,5 +13,5 @@ public interface CustomerTicketService {
             CustomerTicketID customerTicketID,
             CustomerTicketDTO customerTicketDTO,
             int ticketRetrievalRate);
-//    CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID);
+    CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID);
 }
