@@ -3,6 +3,8 @@ package org.example.ticketingapp.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.example.ticketingapp.dto.CustomerDTO;
+import org.example.ticketingapp.dto.CustomerDtoOut;
+import org.example.ticketingapp.dto.CustomerTicketDtoOut;
 import org.example.ticketingapp.entity.Customer;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.CustomerMapper;
@@ -31,10 +33,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Async("customerExecutor")
     @Override
-    public CompletableFuture<CustomerDTO> getCustomerByEmail(String email) {
+    public CompletableFuture<CustomerDtoOut> getCustomerByEmail(String email) {
         Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found: " + email));
-        CustomerDTO result = CustomerMapper.mapToCustomerDto(customer);
+        CustomerDtoOut result = CustomerMapper.mapToCustomerDtoOut(customer);
         return CompletableFuture.completedFuture(result);
     }
 

@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -95,6 +96,30 @@ public class CustomerTicketController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Operation(summary = "Get a list of all the tickets bought by the user, if logged in as a customer")
+    @GetMapping("/all")
+    public ResponseEntity<List<CustomerTicketDtoOut>> getAllTicketsByEmail(
+            @RequestHeader("Authorization") String token) {
+
+        // get email/user from jwt token
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        Claims claims = jwtService.extractAllClaims(token);
+        String email = claims.getSubject();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        if ("customer".equalsIgnoreCase(user.getRole().name())) {
+            // check for existence of customer tickets by email
+            List<CustomerTicketDtoOut> customerTicketDtoOuts = customerTicketService.getCustomerTicketsByEmail(email);
+            return ResponseEntity.ok(customerTicketDtoOuts);
+        }
+
+
+        return null;
     }
 
     private int getTicketRetrievalRate(String eventName) throws ExecutionException, InterruptedException {

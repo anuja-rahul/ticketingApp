@@ -14,6 +14,7 @@ public interface CustomerTicketRepository extends JpaRepository<CustomerTicket, 
     @NonNull
     Optional<CustomerTicket> findById(@NonNull CustomerTicketID customerTicketID);
     boolean existsById(@NonNull CustomerTicketID customerTicketID);
+    List<CustomerTicket> getCustomerTicketByCustomerEmail(@NonNull String customerEmail);
 
     @Query("SELECT SUM(ct.ticketsBought) FROM customer_ticket ct WHERE ct.customerEmail = :customerEmail")
     Integer findTotalTicketsBoughtByCustomerEmail(@NonNull String customerEmail);

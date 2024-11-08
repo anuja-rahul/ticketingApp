@@ -1,6 +1,7 @@
 package org.example.ticketingapp.mapper;
 
 import org.example.ticketingapp.dto.CustomerDTO;
+import org.example.ticketingapp.dto.CustomerDtoOut;
 import org.example.ticketingapp.dto.UserDTO;
 import org.example.ticketingapp.entity.Customer;
 
@@ -23,6 +24,15 @@ public class CustomerMapper {
                 customerDTO.getEmail(),
                 customerDTO.getPassword(),
                 customerDTO.isVip()
+        );
+    }
+
+    public static CustomerDtoOut mapToCustomerDtoOut(Customer customer) {
+        return new CustomerDtoOut(
+                customer.getId(),
+                customer.getName(),
+                customer.getEmail(),
+                customer.isVip()
         );
     }
 }

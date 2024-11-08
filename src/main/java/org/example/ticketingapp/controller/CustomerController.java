@@ -4,8 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.example.ticketingapp.configuration.JwtService;
-import org.example.ticketingapp.dto.CustomerDTO;
-import org.example.ticketingapp.exception.ResourceNotFoundException;
+import org.example.ticketingapp.dto.CustomerDtoOut;
 import org.example.ticketingapp.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ public class CustomerController {
      */
     @Operation(summary = "Get the user profile information, if logged in as the user")
     @GetMapping
-    public ResponseEntity<CustomerDTO> getCustomer(
+    public ResponseEntity<CustomerDtoOut> getCustomer(
             @RequestHeader("Authorization") String token){
 
         if (token.startsWith("Bearer ")) {

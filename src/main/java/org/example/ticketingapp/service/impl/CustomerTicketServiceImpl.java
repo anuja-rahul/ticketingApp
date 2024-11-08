@@ -7,6 +7,7 @@ import org.example.ticketingapp.entity.CustomerTicket;
 import org.example.ticketingapp.entity.CustomerTicketID;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.CustomerTicketMapper;
+import org.example.ticketingapp.mapper.VendorEventConfigMapper;
 import org.example.ticketingapp.repository.CustomerTicketRepository;
 import org.example.ticketingapp.service.CustomerService;
 import org.example.ticketingapp.service.CustomerTicketService;
@@ -14,9 +15,11 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -42,6 +45,15 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
         CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
         return CustomerTicketMapper.mapToCustomerTicketDtoOut(customerTicket);
+    }
+
+    @Override
+    public List<CustomerTicketDtoOut> getCustomerTicketsByEmail(String email) {
+        List<CustomerTicket> customerTickets = customerTicketRepository.getCustomerTicketByCustomerEmail(email);
+        List<CustomerTicketDtoOut> result =  customerTickets.stream()
+                .map(CustomerTicketMapper::mapToCustomerTicketDtoOut)
+                .collect(Collectors.toList());
+        return result;
     }
 
     // TODO: Implement logic for getting all tickets based on customer email
