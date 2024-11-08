@@ -5,17 +5,14 @@ import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.example.ticketingapp.configuration.JwtService;
-import org.example.ticketingapp.dto.CustomerDTO;
 import org.example.ticketingapp.dto.UserDTO;
 import org.example.ticketingapp.dto.UserDtoOut;
 import org.example.ticketingapp.dto.VendorDTO;
 import org.example.ticketingapp.entity.User;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
-import org.example.ticketingapp.mapper.CustomerMapper;
 import org.example.ticketingapp.mapper.UserMapper;
 import org.example.ticketingapp.mapper.VendorMapper;
 import org.example.ticketingapp.repository.UserRepository;
-import org.example.ticketingapp.service.CustomerService;
 import org.example.ticketingapp.service.VendorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +28,6 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private VendorService vendorService;
-    private CustomerService customerService;
     private final UserRepository repository;
     private final JwtService jwtService;
 
