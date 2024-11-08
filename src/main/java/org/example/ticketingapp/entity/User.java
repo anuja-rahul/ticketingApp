@@ -1,6 +1,8 @@
 package org.example.ticketingapp.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +25,7 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private String name;
+    @Email
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)

@@ -1,6 +1,5 @@
 package org.example.ticketingapp.dto;
 
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class UserDtoOut {
     private long id;
-    @Pattern(regexp = "^\\S+$", message = "No whitespaces are allowed")
     private String name;
     private String email;
+    private String role;
 }

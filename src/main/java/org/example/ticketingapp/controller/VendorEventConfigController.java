@@ -131,7 +131,7 @@ public class VendorEventConfigController {
 
     @Operation(summary = "Deletes a VendorEventConfig by event name, only if logged in as a vendor")
     @DeleteMapping("/event/{eventName}")
-    public ResponseEntity deleteVendorEventConfig(
+    public ResponseEntity<Object> deleteVendorEventConfig(
             @RequestHeader("Authorization") String token,
             @PathVariable String eventName
     ) {

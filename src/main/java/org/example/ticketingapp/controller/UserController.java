@@ -7,10 +7,12 @@ import lombok.AllArgsConstructor;
 import org.example.ticketingapp.configuration.JwtService;
 import org.example.ticketingapp.dto.CustomerDTO;
 import org.example.ticketingapp.dto.UserDTO;
+import org.example.ticketingapp.dto.UserDtoOut;
 import org.example.ticketingapp.dto.VendorDTO;
 import org.example.ticketingapp.entity.User;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.CustomerMapper;
+import org.example.ticketingapp.mapper.UserMapper;
 import org.example.ticketingapp.mapper.VendorMapper;
 import org.example.ticketingapp.repository.UserRepository;
 import org.example.ticketingapp.service.CustomerService;
@@ -39,7 +41,7 @@ public class UserController {
      */
     @Operation(summary = "Get the user profile information, if logged in")
     @GetMapping
-    public ResponseEntity<UserDTO> getUserByEmail(
+    public ResponseEntity<UserDtoOut> getUser(
             @RequestHeader("Authorization") String token) {
 
         if (token.startsWith("Bearer ")) {
@@ -52,13 +54,8 @@ public class UserController {
         User user = repository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if ("vendor".equalsIgnoreCase(user.getRole().name())) {
-            VendorDTO vendorDTO = vendorService.getVendorByEmail(email);
-            return ResponseEntity.ok(VendorMapper.mapToUserDto(vendorDTO));
-        } else {
-            CustomerDTO customerDTO = customerService.getCustomerByEmail(email);
-            return ResponseEntity.ok(CustomerMapper.mapToUserDto(customerDTO));
-        }
+        return ResponseEntity.ok(UserMapper.mapToUserDtoOut(user));
+
         // could implement pre declared superuser logic here, if needed
 
     }

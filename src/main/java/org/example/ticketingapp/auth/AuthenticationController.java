@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,7 +31,7 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> register(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "User details for registration.", required = true)
-            @RequestBody RegisterRequest request) {
+            @Validated @RequestBody RegisterRequest request) {
         try {
             if ("vendor".equalsIgnoreCase(request.getRole())) {
                 VendorDTO vendorDTO = new VendorDTO();
