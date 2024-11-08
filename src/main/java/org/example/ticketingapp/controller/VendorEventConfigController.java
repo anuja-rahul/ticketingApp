@@ -15,6 +15,7 @@ import org.example.ticketingapp.service.VendorEventConfigService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -61,7 +62,7 @@ public class VendorEventConfigController {
     @PostMapping("/event")
     public ResponseEntity<VendorEventConfigDTO> createConfig(
             @RequestHeader("Authorization") String token,
-            @RequestBody VendorEventConfigDTOIn vendorEventConfigDTOIn) {
+            @Validated @RequestBody VendorEventConfigDTOIn vendorEventConfigDTOIn) {
 
         if (token.startsWith("Bearer ")) {
             token = token.substring(7);

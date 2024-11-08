@@ -1,7 +1,6 @@
 package org.example.ticketingapp.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,6 @@ public class Customer {
     @Column(nullable = false)
     private String name;
 
-    @Email
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 

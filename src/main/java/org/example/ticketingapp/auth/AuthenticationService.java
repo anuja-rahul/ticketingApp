@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.ticketingapp.configuration.JwtService;
 import org.example.ticketingapp.entity.Role;
 import org.example.ticketingapp.entity.User;
+import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.repository.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -51,6 +52,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -58,7 +60,7 @@ public class AuthenticationService {
                 )
         );
         var user = repository.findByEmail(request.getEmail())
-                .orElseThrow();
+                .orElseThrow(() -> new ResourceNotFoundException("No such user found"));
 
         var jwtToken = jwtService.generateToken(user);
 
