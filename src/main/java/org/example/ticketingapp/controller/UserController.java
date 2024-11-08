@@ -35,7 +35,7 @@ public class UserController {
     /**
      * Get the user data if a valid token is included in the request header
      */
-    @Operation(summary = "Get the user profile information, if logged in")
+    @Operation(summary = "Get the user profile information, if logged in as the user")
     @GetMapping
     public ResponseEntity<UserDtoOut> getUser(
             @RequestHeader("Authorization") String token) {
@@ -51,11 +51,13 @@ public class UserController {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         return ResponseEntity.ok(UserMapper.mapToUserDtoOut(user));
-
-        // could implement pre declared superuser logic here, if needed
-
     }
 
+    /**
+     * Get all user data if a valid token is included in the request header
+     */
+    @Operation(summary = "Get all user profile information, if logged in as an admin")
+    @GetMapping("/all")
     public ResponseEntity<List<UserDTO>> getAllUsers(
             @RequestHeader("Authorization") String token) {
         if (token.startsWith("Bearer ")) {
@@ -68,11 +70,12 @@ public class UserController {
         User user = repository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if ("admin".equalsIgnoreCase(user.getRole().name())) {
+        if("admin".equalsIgnoreCase(user.getRole().name())) {
             // TODO: implement logic to return all user data if logged in as an admin
+            return null;
         }
 
-        return null;
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     /**
