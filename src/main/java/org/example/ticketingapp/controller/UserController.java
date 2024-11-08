@@ -56,6 +56,25 @@ public class UserController {
 
     }
 
+    public ResponseEntity<List<UserDTO>> getAllUsers(
+            @RequestHeader("Authorization") String token) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        Claims claims = jwtService.extractAllClaims(token);
+        String email = claims.getSubject();
+
+        User user = repository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        if ("admin".equalsIgnoreCase(user.getRole().name())) {
+            // TODO: implement logic to return all user data if logged in as an admin
+        }
+
+        return null;
+    }
+
     /**
      * Get a sequence of all vendor data if a valid customer token is included in the request header
      */
