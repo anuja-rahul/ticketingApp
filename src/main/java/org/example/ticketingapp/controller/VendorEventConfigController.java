@@ -152,7 +152,30 @@ public class VendorEventConfigController {
             } catch (ResourceNotFoundException resEx) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
+    }
 
+    @Operation(summary = "Get all VendorEventConfigs if logged in as a customer/admin")
+    @GetMapping("/all")
+    public ResponseEntity<List<VendorEventConfigDTO>> getAllVendorEventConfigs(
+            @RequestHeader("Authorization") String token
+    ) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        Claims claims = jwtService.extractAllClaims(token);
+        String email = claims.getSubject();
+        User user = repository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        try {
+            if ("customer".equalsIgnoreCase(user.getRole().name()) || "admin".equalsIgnoreCase(user.getRole().name())) {
+                // TODO: implement the relevant logic to return all vendor event configs
+                return null;
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        } catch (ResourceNotFoundException resEx) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }
