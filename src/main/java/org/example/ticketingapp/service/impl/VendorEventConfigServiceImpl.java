@@ -47,19 +47,15 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     }
 
     @Override
+    @Transactional
     public void deleteVendorEventConfig(String eventName, String email) {
-        // TODO: test and review
-        lock.lock();
-        try {
-            VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
-                    .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found by event name " + eventName));
-            if (vendorEventConfig.getEmail().equals(email)) {
-                vendorEventConfigRepository.deleteByEventName(eventName);
-            } else {
-                throw new ResourceNotFoundException("VendorEventConfig not owned by vendor " + email);
-            }
-        } finally {
-            lock.unlock();
+
+        VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
+                .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found by event name " + eventName));
+        if (vendorEventConfig.getEmail().equals(email)) {
+            vendorEventConfigRepository.deleteByEventName(eventName);
+        } else {
+            throw new ResourceNotFoundException("VendorEventConfig not owned by vendor " + email);
         }
     }
 
@@ -128,6 +124,16 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
         }else {
             throw new ResourceCapacityException("Not enough tickets available");
         }
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<VendorEventConfigDTO>> getAllVendorEventConfigs() {
+        List<VendorEventConfig> vendorEventConfigList = vendorEventConfigRepository.findAll();
+        List<VendorEventConfigDTO> vendorEventConfigDTOList = vendorEventConfigList.stream()
+                .map(VendorEventConfigMapper::mapToVendorEventConfigDto)
+                .collect(Collectors.toList());
+        return CompletableFuture.completedFuture(vendorEventConfigDTOList);
     }
 
 }

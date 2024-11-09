@@ -15,4 +15,5 @@ public interface VendorEventConfigService {
     CompletableFuture<VendorEventConfigDTO> updateTotalTickets(String eventName, int totalTickets) throws IOException;
     boolean existsByEventName(String eventName);
     void buyTickets(String eventName);
+    CompletableFuture<List<VendorEventConfigDTO>> getAllVendorEventConfigs();
 }

@@ -170,12 +170,18 @@ public class VendorEventConfigController {
 
         try {
             if ("customer".equalsIgnoreCase(user.getRole().name()) || "admin".equalsIgnoreCase(user.getRole().name())) {
-                // TODO: implement the relevant logic to return all vendor event configs
-                return null;
+
+                // logic to return all vendor event configs
+                CompletableFuture<List<VendorEventConfigDTO>> allVendorEventConfigs = vendorEventConfigService
+                        .getAllVendorEventConfigs();
+
+                return new ResponseEntity<>(allVendorEventConfigs.get(), HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         } catch (ResourceNotFoundException resEx) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (ExecutionException | InterruptedException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
