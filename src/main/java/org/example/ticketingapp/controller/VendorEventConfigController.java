@@ -35,7 +35,9 @@ public class VendorEventConfigController {
 
     @Operation(summary = "Returns all the VendorEventConfigs created by the vendor email")
     @GetMapping("/event")
-    public ResponseEntity<List<VendorEventConfigDTO>> getConfigsByEmail(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<VendorEventConfigDTO>> getConfigsByEmail(
+            @RequestHeader("Authorization") String token
+    ) {
 
         try {
             if (token.startsWith("Bearer ")) {

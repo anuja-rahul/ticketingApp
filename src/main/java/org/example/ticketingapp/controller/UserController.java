@@ -60,6 +60,7 @@ public class UserController {
     @GetMapping("/all")
     public ResponseEntity<List<UserDTO>> getAllUsers(
             @RequestHeader("Authorization") String token) {
+
         if (token.startsWith("Bearer ")) {
             token = token.substring(7);
         }
@@ -72,6 +73,7 @@ public class UserController {
 
         if("admin".equalsIgnoreCase(user.getRole().name())) {
             // TODO: implement logic to return all user data if logged in as an admin
+            // TODO: You forgot to do this !!!
             return null;
         }
 
@@ -83,7 +85,9 @@ public class UserController {
      */
     @Operation(summary = "Get a list of all vendors, only if logged in as a customer")
     @GetMapping("/vendors")
-    public ResponseEntity<List<UserDTO>> getAllVendors(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<UserDTO>> getAllVendors(
+            @RequestHeader("Authorization") String token
+    ) {
 
         if (token.startsWith("Bearer ")) {
             token = token.substring(7);
