@@ -7,7 +7,6 @@ import org.example.ticketingapp.dto.CustomerDTO;
 import org.example.ticketingapp.dto.VendorDTO;
 import org.example.ticketingapp.service.CustomerService;
 import org.example.ticketingapp.service.VendorService;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -52,8 +51,6 @@ public class AuthenticationController {
                 }
                 return new ResponseEntity<>(service.register(request), HttpStatus.CREATED);
 
-            } catch (DataIntegrityViolationException ex) {
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
             } catch (Exception e) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
