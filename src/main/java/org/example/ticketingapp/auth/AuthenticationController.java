@@ -33,32 +33,39 @@ public class AuthenticationController {
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "User details for registration.", required = true)
             @Validated @RequestBody RegisterRequest request) {
-        try {
-            if ("vendor".equalsIgnoreCase(request.getRole())) {
-                VendorDTO vendorDTO = new VendorDTO();
-                vendorDTO.setName(request.getName());
-                vendorDTO.setEmail(request.getEmail());
-                vendorDTO.setPassword(passwordEncoder.encode(request.getPassword()));
-                vendorService.createVendor(vendorDTO);
-            } else if ("customer".equalsIgnoreCase(request.getRole())) {
-                CustomerDTO customerDTO = new CustomerDTO();
-                customerDTO.setName(request.getName());
-                customerDTO.setEmail(request.getEmail());
-                customerDTO.setPassword(passwordEncoder.encode(request.getPassword()));
-                customerDTO.setVip(false);
-                customerService.createCustomer(customerDTO);
+
+        if (!service.findUser(request.getEmail())) {
+            try {
+                if ("vendor".equalsIgnoreCase(request.getRole())) {
+                    VendorDTO vendorDTO = new VendorDTO();
+                    vendorDTO.setName(request.getName());
+                    vendorDTO.setEmail(request.getEmail());
+                    vendorDTO.setPassword(passwordEncoder.encode(request.getPassword()));
+                    vendorService.createVendor(vendorDTO);
+                } else if ("customer".equalsIgnoreCase(request.getRole())) {
+                    CustomerDTO customerDTO = new CustomerDTO();
+                    customerDTO.setName(request.getName());
+                    customerDTO.setEmail(request.getEmail());
+                    customerDTO.setPassword(passwordEncoder.encode(request.getPassword()));
+                    customerDTO.setVip(false);
+                    customerService.createCustomer(customerDTO);
+                }
+                return new ResponseEntity<>(service.register(request), HttpStatus.CREATED);
+
+            } catch (DataIntegrityViolationException ex) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity<>(service.register(request), HttpStatus.CREATED);
-
-        } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     @Operation(summary = "Authenticate a user (vendor/customer)")
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@Validated @RequestBody AuthenticationRequest request){
+    public ResponseEntity<AuthenticationResponse> authenticate(
+            @Validated @RequestBody AuthenticationRequest request
+    ){
         try {
             return ResponseEntity.ok(service.authenticate(request));
         } catch (BadCredentialsException e) {

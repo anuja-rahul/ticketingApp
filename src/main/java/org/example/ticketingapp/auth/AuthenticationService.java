@@ -22,6 +22,10 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    public boolean findUser(String email) {
+        return repository.existsByEmail(email);
+    }
+
     public AuthenticationResponse register(RegisterRequest request) {
         if (repository.existsByEmail(request.getEmail())) {
             throw new DataIntegrityViolationException("User already exists: " + request.getEmail());
