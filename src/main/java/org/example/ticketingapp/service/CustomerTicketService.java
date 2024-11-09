@@ -10,10 +10,13 @@ import java.util.concurrent.CompletableFuture;
 public interface CustomerTicketService {
     CompletableFuture<CustomerTicketDtoOut> createCustomerTicket(CustomerTicketDTO customerTicketDTO);
     boolean existsById(CustomerTicketID customerTicketID);
+
     CompletableFuture<CustomerTicketDtoOut> updateCustomerTicket(
             CustomerTicketID customerTicketID,
             CustomerTicketDTO customerTicketDTO,
             int ticketRetrievalRate);
+    CompletableFuture<CustomerTicketDtoOut> updateTicket(CustomerTicketID customerTicketID, int ticketRetrievalRate);
+
     CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID);
-    List<CustomerTicketDtoOut> getCustomerTicketsByEmail(String email);
+    CompletableFuture<List<CustomerTicketDtoOut>> getCustomerTicketsByEmail(String email);
 }

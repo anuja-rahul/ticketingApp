@@ -35,7 +35,16 @@ public class ThreadPoolConfig {
 
     @Bean(name = "ticketExecutor")
     public Executor ticketExecutor() {
-        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor() {
+            @Override
+            protected void beforeExecute(Thread t, Runnable r) {
+                super.beforeExecute(t, r);
+                if (r instanceof PriorityTask) {
+                    t.setPriority(((PriorityTask<?>) r).getPriority());
+                }
+            }
+        };
+
         threadPoolTaskExecutor.setCorePoolSize(basePoolSize);
         threadPoolTaskExecutor.setMaxPoolSize(basePoolSize);
         threadPoolTaskExecutor.setQueueCapacity(maxQueueSize);

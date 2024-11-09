@@ -112,14 +112,20 @@ public class CustomerTicketController {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if ("customer".equalsIgnoreCase(user.getRole().name())) {
-            // check for existence of customer tickets by email
-            List<CustomerTicketDtoOut> customerTicketDtoOuts = customerTicketService.getCustomerTicketsByEmail(email);
-            return ResponseEntity.ok(customerTicketDtoOuts);
+        try {
+
+            if ("customer".equalsIgnoreCase(user.getRole().name())) {
+                // check for existence of customer tickets by email
+                CompletableFuture<List<CustomerTicketDtoOut>> customerTicketDtoOuts = customerTicketService.getCustomerTicketsByEmail(email);
+                return ResponseEntity.ok(customerTicketDtoOuts.get());
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (InterruptedException | ExecutionException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-
-        return null;
     }
 
     private int getTicketRetrievalRate(String eventName) throws ExecutionException, InterruptedException {
