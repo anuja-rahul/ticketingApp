@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @CrossOrigin
 @OpenAPIDefinition(info = @Info(title = "TicketingAPI", version = "1.0",
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DefaultController {
 
     @Operation(summary = "Public endpoint available for testing the api status")
-    @GetMapping("/hello")
+    @GetMapping("/test")
     public String hello() {
         return "Hello from a public endpoint.";
     }
