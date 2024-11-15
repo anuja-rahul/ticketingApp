@@ -128,7 +128,7 @@ public class VendorEventConfigController {
         } catch (ResourceCapacityException resCapEx) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         } catch (IOException | ExecutionException | InterruptedException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
