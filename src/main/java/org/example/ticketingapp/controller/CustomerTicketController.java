@@ -67,20 +67,26 @@ public class CustomerTicketController {
                             ticketRetrievalRate);
 
                     // logic to update vendor event config
-                    vendorEventConfigService.buyTickets(eventName);
+                    boolean reduced = vendorEventConfigService.buyTickets(eventName).get();
+                    if (reduced) {
 
-                    if(!customerTicketExists) {
-                        // create a new customer ticket (async)
-                        CompletableFuture<CustomerTicketDtoOut> newCustomerTicket = customerTicketService
-                                .createCustomerTicket(customerTicketDTO);
-                        return new ResponseEntity<>(newCustomerTicket.get(), HttpStatus.CREATED);
-                    } else {
-                        // update existing customer ticket (async)
-                        CompletableFuture<CustomerTicketDtoOut> updatedCustomerTicketDtoOut = customerTicketService
-                                .updateCustomerTicket(
-                                customerTicketID, customerTicketDTO, ticketRetrievalRate);
-                        return new ResponseEntity<>(updatedCustomerTicketDtoOut.get(), HttpStatus.OK);
+                        if(!customerTicketExists) {
+                            // create a new customer ticket (async)
+                            CompletableFuture<CustomerTicketDtoOut> newCustomerTicket = customerTicketService
+                                    .createCustomerTicket(customerTicketDTO);
+                            return new ResponseEntity<>(newCustomerTicket.get(), HttpStatus.CREATED);
+                        } else {
+                            // update existing customer ticket (async)
+                            CompletableFuture<CustomerTicketDtoOut> updatedCustomerTicketDtoOut = customerTicketService
+                                    .updateCustomerTicket(
+                                            customerTicketID, customerTicketDTO, ticketRetrievalRate);
+                            return new ResponseEntity<>(updatedCustomerTicketDtoOut.get(), HttpStatus.OK);
+                            }
                     }
+                    else {
+                        return new ResponseEntity<>(HttpStatus.CONFLICT);
+                    }
+
                 }
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {

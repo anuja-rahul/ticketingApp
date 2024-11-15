@@ -114,15 +114,17 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     @Override
     @Async("ticketExecutor")
     @Transactional
-    public void buyTickets(String eventName) {
+    public CompletableFuture<Boolean> buyTickets(String eventName) {
         VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
                 .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found by event name " + eventName));
 
-        if (vendorEventConfig.getTotalTickets() > vendorEventConfig.getCustomerRetrievalRate()) {
+        if (vendorEventConfig.getTotalTickets() >= vendorEventConfig.getCustomerRetrievalRate()) {
             vendorEventConfig.setTotalTickets(vendorEventConfig.getTotalTickets() - vendorEventConfig.getCustomerRetrievalRate());
             vendorEventConfigRepository.save(vendorEventConfig);
+            return CompletableFuture.completedFuture(true);
         }else {
-            throw new ResourceCapacityException("Not enough tickets available");
+//            throw new ResourceCapacityException("Not enough tickets available");
+            return CompletableFuture.completedFuture(false);
         }
     }
 
