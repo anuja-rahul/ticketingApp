@@ -1,6 +1,7 @@
 package org.example.ticketingapp.auth;
 
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.example.ticketingapp.dto.CustomerDTO;
@@ -65,7 +66,7 @@ public class AuthenticationController {
     ){
         try {
             return ResponseEntity.ok(service.authenticate(request));
-        } catch (BadCredentialsException e) {
+        } catch (BadCredentialsException | ExpiredJwtException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

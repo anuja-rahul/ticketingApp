@@ -21,6 +21,7 @@ public class DefaultController {
     @Operation(summary = "Public endpoint available for testing the api status")
     @GetMapping("/test")
     public String hello() {
+        System.out.println("\n This is me printing stuff \n");
         return "Hello from a public endpoint.";
     }
 }

@@ -74,7 +74,7 @@ public class CustomerTicketController {
                             // create a new customer ticket (async)
                             CompletableFuture<CustomerTicketDtoOut> newCustomerTicket = customerTicketService
                                     .createCustomerTicket(customerTicketDTO);
-                            return new ResponseEntity<>(newCustomerTicket.get(), HttpStatus.CREATED);
+                            return new ResponseEntity<>(newCustomerTicket.get(), HttpStatus.OK);
                         } else {
                             // update existing customer ticket (async)
                             CompletableFuture<CustomerTicketDtoOut> updatedCustomerTicketDtoOut = customerTicketService
