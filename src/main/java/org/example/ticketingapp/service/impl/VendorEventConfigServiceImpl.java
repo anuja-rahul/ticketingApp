@@ -10,6 +10,7 @@ import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.VendorEventConfigMapper;
 import org.example.ticketingapp.repository.VendorEventConfigRepository;
 import org.example.ticketingapp.service.VendorEventConfigService;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,7 +73,10 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     @Override
     @Async("vendorExecutor")
     public CompletableFuture<List<VendorEventConfigDTO>> getAllVendorEventConfigsByEmail(String email) {
-        List<VendorEventConfig> vendorEventConfigs = vendorEventConfigRepository.findAllByEmail(email)
+        List<VendorEventConfig> vendorEventConfigs = vendorEventConfigRepository.findAllByEmail(
+                email,
+                Sort.by(Sort.Direction.ASC, "eventName")
+                )
                 .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found: " + email));
         List<VendorEventConfigDTO> result = vendorEventConfigs.stream()
                 .map(VendorEventConfigMapper::mapToVendorEventConfigDto)
@@ -131,7 +135,7 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     @Override
     @Async("taskExecutor")
     public CompletableFuture<List<VendorEventConfigDTO>> getAllVendorEventConfigs() {
-        List<VendorEventConfig> vendorEventConfigList = vendorEventConfigRepository.findAll();
+        List<VendorEventConfig> vendorEventConfigList = vendorEventConfigRepository.findAll(Sort.by(Sort.Direction.ASC, "eventName"));
         List<VendorEventConfigDTO> vendorEventConfigDTOList = vendorEventConfigList.stream()
                 .map(VendorEventConfigMapper::mapToVendorEventConfigDto)
                 .collect(Collectors.toList());

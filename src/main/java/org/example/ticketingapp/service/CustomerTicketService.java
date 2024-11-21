@@ -19,4 +19,5 @@ public interface CustomerTicketService {
 
     CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID);
     CompletableFuture<List<CustomerTicketDtoOut>> getCustomerTicketsByEmail(String email);
+    CompletableFuture<Void> deleteCustomerTickets(CustomerTicketID customerTicketID);
 }

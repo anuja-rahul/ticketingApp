@@ -134,6 +134,38 @@ public class CustomerTicketController {
 
     }
 
+    @Operation(summary = "Delete all tickets bought by the user, if logged in as a customer")
+    @DeleteMapping("/{eventName}")
+    public ResponseEntity<Void> deleteCustomerTicket(
+            @RequestHeader("Authorization") String token,
+            @PathVariable String eventName) {
+
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        Claims claims = jwtService.extractAllClaims(token);
+        String email = claims.getSubject();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        try{
+
+            if ("customer".equalsIgnoreCase(user.getRole().name())) {
+                CustomerTicketID customerTicketID = new CustomerTicketID(email, eventName);
+                customerTicketService.deleteCustomerTickets(customerTicketID).get();
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+
+
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private int getTicketRetrievalRate(String eventName) throws ExecutionException, InterruptedException {
         CompletableFuture<VendorEventConfigDTO> vendorEventConfigDTO = vendorEventConfigService.getVendorEventConfigByEventName(eventName);
         return vendorEventConfigDTO.get().getCustomerRetrievalRate();

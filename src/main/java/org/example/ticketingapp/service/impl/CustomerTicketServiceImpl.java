@@ -11,6 +11,7 @@ import org.example.ticketingapp.mapper.CustomerTicketMapper;
 import org.example.ticketingapp.repository.CustomerTicketRepository;
 import org.example.ticketingapp.service.CustomerService;
 import org.example.ticketingapp.service.CustomerTicketService;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,6 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
         return CompletableFuture.completedFuture(result);
     }
 
-    // TODO: Review this sh*t
     @Override
     public CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID) {
         CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
@@ -53,11 +53,24 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
     @Override
     @Async("taskExecutor")
     public CompletableFuture<List<CustomerTicketDtoOut>> getCustomerTicketsByEmail(String email) {
-        List<CustomerTicket> customerTickets = customerTicketRepository.getCustomerTicketByCustomerEmail(email);
+        List<CustomerTicket> customerTickets = customerTicketRepository.getCustomerTicketByCustomerEmail(
+                email,
+                Sort.by(Sort.Direction.ASC, "eventName"));
         List<CustomerTicketDtoOut> result =  customerTickets.stream()
                 .map(CustomerTicketMapper::mapToCustomerTicketDtoOut)
                 .collect(Collectors.toList());
         return CompletableFuture.completedFuture(result);
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<Void> deleteCustomerTickets(CustomerTicketID customerTicketID) {
+        CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
+
+        customerTicketRepository.delete(customerTicket);
+        return CompletableFuture.completedFuture(null);
+
     }
 
     @Override
