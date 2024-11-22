@@ -49,7 +49,8 @@ public class VendorEventConfigController {
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
             if ("vendor".equalsIgnoreCase(user.getRole().name())) {
-                CompletableFuture<List<VendorEventConfigDTO>> vendorEventConfigs = vendorEventConfigService.getAllVendorEventConfigsByEmail(email);
+                CompletableFuture<List<VendorEventConfigDTO>> vendorEventConfigs = vendorEventConfigService
+                        .getAllVendorEventConfigsByEmail(email);
                 return ResponseEntity.ok(vendorEventConfigs.get());
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
