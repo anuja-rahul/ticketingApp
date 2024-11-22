@@ -16,6 +16,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -110,6 +111,7 @@ public CompletableFuture<CustomerTicketDtoOut> updateTicket(CustomerTicketID cus
         String email = customerTicketID.getCustomerEmail();
 
         customerTicket.setTicketsBought(customerTicket.getTicketsBought() + ticketRetrievalRate);
+        customerTicket.setUpdatedAt(LocalDateTime.now());
         CustomerTicket updatedCustomerTicket = customerTicketRepository.save(customerTicket);
         CustomerTicketDtoOut result = CustomerTicketMapper.mapToCustomerTicketDtoOut(updatedCustomerTicket);
 
