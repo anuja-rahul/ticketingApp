@@ -2,7 +2,6 @@ package org.example.ticketingapp.mapper;
 
 import org.example.ticketingapp.dto.CustomerDTO;
 import org.example.ticketingapp.dto.CustomerDtoOut;
-import org.example.ticketingapp.dto.UserDTO;
 import org.example.ticketingapp.entity.Customer;
 
 public class CustomerMapper {

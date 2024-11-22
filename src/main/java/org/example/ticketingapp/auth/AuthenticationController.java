@@ -4,8 +4,11 @@ package org.example.ticketingapp.auth;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.example.ticketingapp.dto.AdminDTO;
 import org.example.ticketingapp.dto.CustomerDTO;
 import org.example.ticketingapp.dto.VendorDTO;
+import org.example.ticketingapp.exception.IllegalResourceException;
+import org.example.ticketingapp.service.AdminService;
 import org.example.ticketingapp.service.CustomerService;
 import org.example.ticketingapp.service.VendorService;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,7 @@ public class AuthenticationController {
     private final AuthenticationService service;
     private final VendorService vendorService;
     private final CustomerService customerService;
+    private final AdminService adminService;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -42,6 +46,7 @@ public class AuthenticationController {
                     vendorDTO.setEmail(request.getEmail());
                     vendorDTO.setPassword(passwordEncoder.encode(request.getPassword()));
                     vendorService.createVendor(vendorDTO);
+
                 } else if ("customer".equalsIgnoreCase(request.getRole())) {
                     CustomerDTO customerDTO = new CustomerDTO();
                     customerDTO.setName(request.getName());
@@ -49,6 +54,15 @@ public class AuthenticationController {
                     customerDTO.setPassword(passwordEncoder.encode(request.getPassword()));
                     customerDTO.setVip(false);
                     customerService.createCustomer(customerDTO);
+
+                } else if ("admin".equalsIgnoreCase(request.getRole())) {
+                    AdminDTO adminDTO = new AdminDTO();
+                    adminDTO.setName(request.getName());
+                    adminDTO.setEmail(request.getEmail());
+                    adminDTO.setPassword(passwordEncoder.encode(request.getPassword()));
+                    adminService.createAdmin(adminDTO);
+                } else {
+                    throw new IllegalResourceException("Invalid role: " + request.getRole());
                 }
                 return new ResponseEntity<>(service.register(request), HttpStatus.CREATED);
 

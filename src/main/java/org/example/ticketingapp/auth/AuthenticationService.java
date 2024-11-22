@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.ticketingapp.configuration.JwtService;
 import org.example.ticketingapp.entity.Role;
 import org.example.ticketingapp.entity.User;
+import org.example.ticketingapp.exception.IllegalResourceException;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.repository.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,6 +13,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -30,20 +33,19 @@ public class AuthenticationService {
         if (repository.existsByEmail(request.getEmail())) {
             throw new DataIntegrityViolationException("User already exists: " + request.getEmail());
         }
-        Role role;
-        if (request.getRole().equals("vendor")) {
-            role = Role.VENDOR;
-        } else if (request.getRole().equals("customer")) {
-            role = Role.CUSTOMER;
-        } else {
-            role = Role.ADMIN;
-        }
+        Role role = switch (request.getRole()) {
+            case "vendor" -> Role.VENDOR;
+            case "customer" -> Role.CUSTOMER;
+            case "admin" -> Role.ADMIN;
+            default -> throw new IllegalResourceException("Invalid role: " + request.getRole());
+        };
 
         var user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(role)
+                .createdAt(LocalDateTime.now())
                 .build();
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
