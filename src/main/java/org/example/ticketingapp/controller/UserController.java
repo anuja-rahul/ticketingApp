@@ -10,9 +10,9 @@ import org.example.ticketingapp.dto.UserDtoOut;
 import org.example.ticketingapp.dto.VendorDTO;
 import org.example.ticketingapp.entity.User;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
-import org.example.ticketingapp.mapper.UserMapper;
 import org.example.ticketingapp.mapper.VendorMapper;
 import org.example.ticketingapp.repository.UserRepository;
+import org.example.ticketingapp.service.UserService;
 import org.example.ticketingapp.service.VendorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +30,7 @@ public class UserController {
     private VendorService vendorService;
     private final UserRepository repository;
     private final JwtService jwtService;
+    private UserService userService;
 
 
     /**
@@ -43,22 +44,20 @@ public class UserController {
         if (token.startsWith("Bearer ")) {
             token = token.substring(7);
         }
-
         Claims claims = jwtService.extractAllClaims(token);
         String email = claims.getSubject();
 
-        User user = repository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        UserDtoOut userDtoOut = userService.getUserByEmail(email);
 
-        return ResponseEntity.ok(UserMapper.mapToUserDtoOut(user));
+        return ResponseEntity.ok(userDtoOut);
     }
 
     /**
-     * Get all user data if a valid token is included in the request header
+     * Get all user data if a valid admin token is included in the request header
      */
     @Operation(summary = "Get all user profile information, if logged in as an admin")
     @GetMapping("/all")
-    public ResponseEntity<List<UserDTO>> getAllUsers(
+    public ResponseEntity<List<UserDtoOut>> getAllUsers(
             @RequestHeader("Authorization") String token) {
 
         if (token.startsWith("Bearer ")) {
@@ -72,9 +71,7 @@ public class UserController {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         if("admin".equalsIgnoreCase(user.getRole().name())) {
-            // TODO: implement logic to return all user data if logged in as an admin
-            // TODO: You forgot to do this !!!
-            return null;
+            return ResponseEntity.ok(userService.getAllUsers());
         }
 
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -100,6 +97,7 @@ public class UserController {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         // Only allows Customers to access the vendor pool
+        // TODO: move mapping to the service layer
         if ("customer".equalsIgnoreCase(user.getRole().name())) {
             List<VendorDTO> vendors = vendorService.getAllVendors();
             return ResponseEntity.ok(vendors.stream()
@@ -108,7 +106,6 @@ public class UserController {
         } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-
 
     }
 }
