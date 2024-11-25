@@ -97,7 +97,6 @@ public class UserController {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         // Only allows Customers to access the vendor pool
-        // TODO: move mapping to the service layer
         if ("customer".equalsIgnoreCase(user.getRole().name())) {
             List<VendorDTO> vendors = vendorService.getAllVendors();
             return ResponseEntity.ok(vendors.stream()
