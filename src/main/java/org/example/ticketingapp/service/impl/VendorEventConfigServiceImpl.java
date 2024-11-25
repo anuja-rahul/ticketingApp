@@ -2,14 +2,17 @@ package org.example.ticketingapp.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.example.ticketingapp.configuration.cli.CliVendorEventConfig;
+import org.example.ticketingapp.dto.TotalTicketsTimeDtoOut;
 import org.example.ticketingapp.dto.VendorEventConfigDTO;
 import org.example.ticketingapp.dto.VendorEventConfigDTOIn;
 import org.example.ticketingapp.entity.VendorEventConfig;
 import org.example.ticketingapp.exception.ResourceCapacityException;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
+import org.example.ticketingapp.mapper.StatsMapper;
 import org.example.ticketingapp.mapper.VendorEventConfigMapper;
 import org.example.ticketingapp.repository.VendorEventConfigRepository;
 import org.example.ticketingapp.service.VendorEventConfigService;
+import org.example.ticketingapp.utility.BaseUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -140,6 +143,17 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
                 .map(VendorEventConfigMapper::mapToVendorEventConfigDto)
                 .collect(Collectors.toList());
         return CompletableFuture.completedFuture(vendorEventConfigDTOList);
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<TotalTicketsTimeDtoOut> getTicketPoolStats() {
+        int totalTickets = vendorEventConfigRepository.findTotalTicketPool();
+        int totalTicketCapacity = vendorEventConfigRepository.findTotalTicketPoolCapacity();
+        String formattedTime = BaseUtils.getFormattedTimeByMinutes();
+        TotalTicketsTimeDtoOut result = StatsMapper.mapToTotalTicketsTimeDtoOut(
+                formattedTime, totalTickets, totalTicketCapacity);
+        return CompletableFuture.completedFuture(result);
     }
 
 }

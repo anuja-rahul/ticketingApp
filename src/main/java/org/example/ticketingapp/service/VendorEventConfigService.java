@@ -1,5 +1,6 @@
 package org.example.ticketingapp.service;
 
+import org.example.ticketingapp.dto.TotalTicketsTimeDtoOut;
 import org.example.ticketingapp.dto.VendorEventConfigDTO;
 import org.example.ticketingapp.dto.VendorEventConfigDTOIn;
 
@@ -16,4 +17,5 @@ public interface VendorEventConfigService {
     boolean existsByEventName(String eventName);
     CompletableFuture<Boolean> buyTickets(String eventName);
     CompletableFuture<List<VendorEventConfigDTO>> getAllVendorEventConfigs();
+    CompletableFuture<TotalTicketsTimeDtoOut> getTicketPoolStats();
 }
