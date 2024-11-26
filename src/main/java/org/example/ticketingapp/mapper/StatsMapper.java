@@ -1,6 +1,7 @@
 package org.example.ticketingapp.mapper;
 
 import org.example.ticketingapp.dto.TotalTicketsTimeDtoOut;
+import org.example.ticketingapp.entity.Sales;
 import org.example.ticketingapp.entity.SalesID;
 
 import java.time.LocalDate;
@@ -17,5 +18,13 @@ public class StatsMapper {
 
     public static SalesID mapToSalesID(LocalDate date, String vendor) {
         return new SalesID(date, vendor);
+    }
+
+    public static Sales mapToSales(SalesID salesID, long ticketSales) {
+        return new Sales(
+                salesID.getDate(),
+                salesID.getVendor(),
+                ticketSales
+        );
     }
 }
