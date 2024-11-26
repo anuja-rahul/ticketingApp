@@ -17,6 +17,6 @@ public interface StatService {
 
     // Sales stuff
     CompletableFuture<Boolean> checkSalesRecordExistence(String vendor);
-    CompletableFuture<Void> createSalesRecord(String vendor, Long ticketSales);
-    CompletableFuture<Void> updateSalesRecord(String vendor, Long ticketSales);
+    void createSalesRecord(String vendor, int ticketSales);
+    void updateSalesRecord(String vendor, int ticketSales);
 }

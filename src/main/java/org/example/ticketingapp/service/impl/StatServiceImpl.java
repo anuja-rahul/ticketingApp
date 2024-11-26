@@ -55,17 +55,30 @@ public class StatServiceImpl implements StatService {
 
     @Override
     @Async("taskExecutor")
-    public CompletableFuture<Void> createSalesRecord(String vendor, Long ticketSales) {
+    public void createSalesRecord(String vendor, int ticketSales) {
         LocalDate date = LocalDate.now();
         SalesID salesID = StatsMapper.mapToSalesID(date, vendor);
         Sales sales = StatsMapper.mapToSales(salesID, ticketSales);
         salesRepository.save(sales);
-        return CompletableFuture.completedFuture(null);
+        CompletableFuture.completedFuture(null);
     }
 
     @Override
-    public CompletableFuture<Void> updateSalesRecord(String vendor, Long ticketSales) {
-        return null;
+    @Async("taskExecutor")
+    public void updateSalesRecord(String vendor, int ticketSales) {
+        LocalDate date = LocalDate.now();
+        SalesID salesID = StatsMapper.mapToSalesID(date, vendor);
+        boolean exists = salesRepository.existsById(salesID);
+
+        if (exists) {
+            Sales salesRecord = salesRepository.findById(salesID)
+                    .orElseThrow(() -> new ResourceNotFoundException("Sales record not found"));
+            salesRecord.setTicketSales(salesRecord.getTicketSales() + ticketSales);
+            salesRepository.save(salesRecord);
+        } else {
+            createSalesRecord(vendor, ticketSales);
+        }
+        CompletableFuture.completedFuture(null);
     }
 
     // History stuff

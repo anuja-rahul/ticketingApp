@@ -9,6 +9,7 @@ import org.example.ticketingapp.exception.ResourceCapacityException;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.VendorEventConfigMapper;
 import org.example.ticketingapp.repository.VendorEventConfigRepository;
+import org.example.ticketingapp.service.StatService;
 import org.example.ticketingapp.service.VendorEventConfigService;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 public class VendorEventConfigServiceImpl implements VendorEventConfigService {
 
     private final VendorEventConfigRepository vendorEventConfigRepository;
+    private StatService statService;
     private final Lock lock = new ReentrantLock();
 
     @Override
@@ -127,6 +129,8 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
 
         if (vendorEventConfig.getTotalTickets() >= vendorEventConfig.getCustomerRetrievalRate()) {
             vendorEventConfig.setTotalTickets(vendorEventConfig.getTotalTickets() - vendorEventConfig.getCustomerRetrievalRate());
+            // Update sales record
+            statService.updateSalesRecord(vendorEventConfig.getEmail(), vendorEventConfig.getCustomerRetrievalRate());
             vendorEventConfigRepository.save(vendorEventConfig);
             return CompletableFuture.completedFuture(true);
         }else {
