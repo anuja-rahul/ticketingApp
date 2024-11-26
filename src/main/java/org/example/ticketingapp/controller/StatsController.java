@@ -4,7 +4,7 @@ package org.example.ticketingapp.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.example.ticketingapp.dto.TotalTicketsTimeDtoOut;
-import org.example.ticketingapp.service.VendorEventConfigService;
+import org.example.ticketingapp.service.StatService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +19,12 @@ import java.util.concurrent.ExecutionException;
 @RestController
 @RequestMapping("/api/stats")
 public class StatsController {
-    private VendorEventConfigService vendorEventConfigService;
-
+    private StatService statService;
 
     @Operation(summary = "Returns all the current ticket pool stats")
     @GetMapping("/ticketPool")
     public ResponseEntity<TotalTicketsTimeDtoOut> getTotalTicketPoolStats() throws ExecutionException, InterruptedException {
-        CompletableFuture<TotalTicketsTimeDtoOut> result = vendorEventConfigService.getTicketPoolStats();
+        CompletableFuture<TotalTicketsTimeDtoOut> result = statService.getTicketPoolStats();
         return ResponseEntity.ok(result.get());
     }
 }

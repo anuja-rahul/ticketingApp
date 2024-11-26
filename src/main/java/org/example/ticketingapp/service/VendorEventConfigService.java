@@ -17,5 +17,4 @@ public interface VendorEventConfigService {
     boolean existsByEventName(String eventName);
     CompletableFuture<Boolean> buyTickets(String eventName);
     CompletableFuture<List<VendorEventConfigDTO>> getAllVendorEventConfigs();
-    CompletableFuture<TotalTicketsTimeDtoOut> getTicketPoolStats();
 }

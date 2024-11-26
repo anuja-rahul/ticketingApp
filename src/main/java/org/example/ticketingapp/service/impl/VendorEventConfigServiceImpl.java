@@ -145,15 +145,4 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
         return CompletableFuture.completedFuture(vendorEventConfigDTOList);
     }
 
-    @Override
-    @Async("taskExecutor")
-    public CompletableFuture<TotalTicketsTimeDtoOut> getTicketPoolStats() {
-        int totalTickets = vendorEventConfigRepository.findTotalTicketPool();
-        int totalTicketCapacity = vendorEventConfigRepository.findTotalTicketPoolCapacity();
-        String formattedTime = BaseUtils.getFormattedTimeByMinutes();
-        TotalTicketsTimeDtoOut result = StatsMapper.mapToTotalTicketsTimeDtoOut(
-                formattedTime, totalTickets, totalTicketCapacity);
-        return CompletableFuture.completedFuture(result);
-    }
-
 }
