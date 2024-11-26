@@ -1,6 +1,7 @@
 package org.example.ticketingapp.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.example.ticketingapp.dto.RecordDTO;
 import org.example.ticketingapp.dto.TotalTicketsTimeDtoOut;
 import org.example.ticketingapp.entity.History;
 import org.example.ticketingapp.entity.Sales;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @AllArgsConstructor
@@ -77,35 +79,39 @@ public class StatServiceImpl implements StatService {
     }
 
     @Override
-    public CompletableFuture<Void> createHistoryRecord() {
-        LocalDate date = LocalDate.now();
-
+    public void createHistoryRecord() throws ExecutionException, InterruptedException {
         // get total users and total sales
-        long totalUsers = userRepository.count();
-        int totalSalesToday = salesRepository.getTotalSalesByDate(date);
+        RecordDTO recordDTO = getRecordSkeletonForToday().get();
 
-        History history = new History(date, totalUsers, totalSalesToday);
+        History history = new History(recordDTO.getDate(), recordDTO.getTotalUsers(), recordDTO.getTotalSales());
         historyRepository.save(history);
-        return CompletableFuture.completedFuture(null);
+        CompletableFuture.completedFuture(null);
     }
 
     @Override
-    public CompletableFuture<Void> updateHistoryRecord() {
+    public void updateHistoryRecord() throws ExecutionException, InterruptedException {
         // get total users, total sales and today
-        LocalDate today = LocalDate.now();
-        long totalUsers = userRepository.count();
-        int totalSalesToday = salesRepository.getTotalSalesByDate(today);
-        boolean exists = historyRepository.existsById(today);
+        RecordDTO recordDTO = getRecordSkeletonForToday().get();
+        boolean exists = historyRepository.existsById(recordDTO.getDate());
 
         if (exists) {
-            History historyRecord = historyRepository.findById(today)
+            History historyRecord = historyRepository.findById(recordDTO.getDate())
                     .orElseThrow(() -> new ResourceNotFoundException("Record not found"));
-            historyRecord.setTotalUsers(totalUsers);
-            historyRecord.setTotalSales(totalSalesToday);
+            historyRecord.setTotalUsers(recordDTO.getTotalUsers());
+            historyRecord.setTotalSales(recordDTO.getTotalSales());
             historyRepository.save(historyRecord);
         } else {
             createHistoryRecord();
         }
-        return CompletableFuture.completedFuture(null);
+        CompletableFuture.completedFuture(null);
+    }
+
+    @Override
+    public CompletableFuture<RecordDTO> getRecordSkeletonForToday() {
+        LocalDate today = LocalDate.now();
+        long totalUsers = userRepository.count();
+        int totalSalesToday = salesRepository.getTotalSalesByDate(today);
+        RecordDTO record = new RecordDTO(today, totalUsers, totalSalesToday);
+        return CompletableFuture.completedFuture(record);
     }
 }

@@ -9,6 +9,6 @@ import java.time.LocalDate;
 
 public interface SalesRepository extends JpaRepository<Sales, SalesID> {
 
-    @Query("SELECT SUM(s.ticketSales) FROM sales s WHERE s.date = :today")
+    @Query("SELECT COALESCE(SUM(s.ticketSales), 0) FROM sales s WHERE s.date = :today")
     Integer getTotalSalesByDate(LocalDate today);
 }
