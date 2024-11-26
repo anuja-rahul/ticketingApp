@@ -41,6 +41,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
         CustomerTicket customerTicket = CustomerTicketMapper.mapToCustomerTicket(customerTicketDTO);
         CustomerTicket savedCustomerTicket =  customerTicketRepository.save(customerTicket);
         CustomerTicketDtoOut result = CustomerTicketMapper.mapToCustomerTicketDtoOut(savedCustomerTicket);
+        // TODO: Update record here
         return CompletableFuture.completedFuture(result);
     }
 
@@ -101,32 +102,33 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
         }
     }
 
-@Transactional
-public CompletableFuture<CustomerTicketDtoOut> updateTicket(CustomerTicketID customerTicketID, int ticketRetrievalRate) {
-    lock.lock();
-    try {
-        CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
+    @Transactional
+    public CompletableFuture<CustomerTicketDtoOut> updateTicket(CustomerTicketID customerTicketID, int ticketRetrievalRate) {
+        lock.lock();
+        try {
+            CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
+                    .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
 
-        String email = customerTicketID.getCustomerEmail();
+            String email = customerTicketID.getCustomerEmail();
 
-        customerTicket.setTicketsBought(customerTicket.getTicketsBought() + ticketRetrievalRate);
-        customerTicket.setUpdatedAt(LocalDateTime.now());
-        CustomerTicket updatedCustomerTicket = customerTicketRepository.save(customerTicket);
-        CustomerTicketDtoOut result = CustomerTicketMapper.mapToCustomerTicketDtoOut(updatedCustomerTicket);
+            customerTicket.setTicketsBought(customerTicket.getTicketsBought() + ticketRetrievalRate);
+            customerTicket.setUpdatedAt(LocalDateTime.now());
+            CustomerTicket updatedCustomerTicket = customerTicketRepository.save(customerTicket);
+            CustomerTicketDtoOut result = CustomerTicketMapper.mapToCustomerTicketDtoOut(updatedCustomerTicket);
 
-        // Check/set for VIP eligibility of the customer based on his purchases
-        if (customerTicketRepository
-                .findTotalTicketsBoughtByCustomerEmail(email) >= 100 && !customerService.getCustomerPriority(email))
-        {
-            customerService.updateCustomerPriority(email);
+            // Check/set for VIP eligibility of the customer based on his purchases
+            if (customerTicketRepository
+                    .findTotalTicketsBoughtByCustomerEmail(email) >= 100 && !customerService.getCustomerPriority(email))
+                {
+                    customerService.updateCustomerPriority(email);
+                }
+            // TODO: Update record here
+            return CompletableFuture.completedFuture(result);
+
+        } finally {
+            lock.unlock();
         }
-        return CompletableFuture.completedFuture(result);
-
-    } finally {
-        lock.unlock();
     }
-}
 
     @Override
     public boolean existsById(CustomerTicketID customerTicketID) {

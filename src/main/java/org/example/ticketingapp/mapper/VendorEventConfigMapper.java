@@ -40,7 +40,7 @@ public class VendorEventConfigMapper {
                 vendorEventConfigDTOIn.getId(),
                 email,
                 vendorEventConfigDTOIn.getEventName(),
-                cliVendorEventConfig.getTotalTickets(),
+                0,
                 cliVendorEventConfig.getTicketReleaseRate(),
                 cliVendorEventConfig.getCustomerRetrievalRate(),
                 cliVendorEventConfig.getMaxTicketCapacity()

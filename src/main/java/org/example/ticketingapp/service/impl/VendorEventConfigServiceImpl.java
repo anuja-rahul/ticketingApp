@@ -2,17 +2,14 @@ package org.example.ticketingapp.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.example.ticketingapp.configuration.cli.CliVendorEventConfig;
-import org.example.ticketingapp.dto.TotalTicketsTimeDtoOut;
 import org.example.ticketingapp.dto.VendorEventConfigDTO;
 import org.example.ticketingapp.dto.VendorEventConfigDTOIn;
 import org.example.ticketingapp.entity.VendorEventConfig;
 import org.example.ticketingapp.exception.ResourceCapacityException;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
-import org.example.ticketingapp.mapper.StatsMapper;
 import org.example.ticketingapp.mapper.VendorEventConfigMapper;
 import org.example.ticketingapp.repository.VendorEventConfigRepository;
 import org.example.ticketingapp.service.VendorEventConfigService;
-import org.example.ticketingapp.utility.BaseUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -47,6 +44,7 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
         VendorEventConfig vendorEventConfig = VendorEventConfigMapper.mapToVendorEventConfig(vendorEventConfigDTO);
         VendorEventConfig savedVendorEventConfig = vendorEventConfigRepository.save(vendorEventConfig);
         VendorEventConfigDTO result = VendorEventConfigMapper.mapToVendorEventConfigDto(savedVendorEventConfig);
+        // TODO: Update record here (just increase the pool capacity on record)
         return CompletableFuture.completedFuture(result);
     }
 
@@ -97,12 +95,14 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
             VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
                     .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found by event name " + eventName));
 
-            if (vendorEventConfig.getMaxTicketCapacity() > totalTickets) {
-                vendorEventConfig.setTotalTickets(totalTickets);
+            int currentTotalTickets = vendorEventConfig.getTotalTickets();
+
+            if (vendorEventConfig.getMaxTicketCapacity() > totalTickets + currentTotalTickets) {
+                vendorEventConfig.setTotalTickets(totalTickets + currentTotalTickets);
                 VendorEventConfig updatedVendorEventConfig = vendorEventConfigRepository.save(vendorEventConfig);
-
+                // TODO: Check the frontend toasts for errors
                 VendorEventConfigDTO result = VendorEventConfigMapper.mapToVendorEventConfigDto(updatedVendorEventConfig);
-
+                // TODO: Update record here
                 return CompletableFuture.completedFuture(result);
             }
             throw(new ResourceCapacityException("Total capacity exceeded"));

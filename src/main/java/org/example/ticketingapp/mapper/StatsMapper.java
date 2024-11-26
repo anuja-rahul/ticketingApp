@@ -1,6 +1,9 @@
 package org.example.ticketingapp.mapper;
 
 import org.example.ticketingapp.dto.TotalTicketsTimeDtoOut;
+import org.example.ticketingapp.entity.SalesID;
+
+import java.time.LocalDate;
 
 public class StatsMapper {
     public static TotalTicketsTimeDtoOut mapToTotalTicketsTimeDtoOut(
@@ -10,5 +13,9 @@ public class StatsMapper {
                 totalTickets,
                 totalCapacity
         );
+    }
+
+    public static SalesID mapToSalesID(LocalDate date, String vendor) {
+        return new SalesID(date, vendor);
     }
 }
