@@ -81,7 +81,7 @@ public class StatsController {
         }
     }
 
-    @Operation(summary = "Returns all the history records saved by the server")
+    @Operation(summary = "Returns all the tickets sold by eventName summed up based on customerTicket records")
     @GetMapping("/sold")
     public ResponseEntity<List<CustomerTicketRecordDTO>> getCustomerTicketRecords(
             @RequestHeader("Authorization") String token
