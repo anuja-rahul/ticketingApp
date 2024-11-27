@@ -1,6 +1,7 @@
 package org.example.ticketingapp.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.example.ticketingapp.dto.CustomerTicketRecordDTO;
 import org.example.ticketingapp.dto.RecordDTO;
 import org.example.ticketingapp.dto.TotalTicketsTimeDtoOut;
 import org.example.ticketingapp.entity.History;
@@ -8,23 +9,24 @@ import org.example.ticketingapp.entity.Sales;
 import org.example.ticketingapp.entity.SalesID;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.StatsMapper;
-import org.example.ticketingapp.repository.HistoryRepository;
-import org.example.ticketingapp.repository.SalesRepository;
-import org.example.ticketingapp.repository.UserRepository;
-import org.example.ticketingapp.repository.VendorEventConfigRepository;
+import org.example.ticketingapp.repository.*;
 import org.example.ticketingapp.service.StatService;
 import org.example.ticketingapp.utility.BaseUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class StatServiceImpl implements StatService {
     private final VendorEventConfigRepository vendorEventConfigRepository;
+    private final CustomerTicketRepository customerTicketRepository;
     private final HistoryRepository historyRepository;
     private final SalesRepository salesRepository;
     private final UserRepository userRepository;
@@ -102,6 +104,7 @@ public class StatServiceImpl implements StatService {
     }
 
     @Override
+    @Async("taskExecutor")
     public void updateHistoryRecord() throws ExecutionException, InterruptedException {
         // get total users, total sales and today
         RecordDTO recordDTO = getRecordSkeletonForToday().get();
@@ -120,6 +123,25 @@ public class StatServiceImpl implements StatService {
     }
 
     @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<RecordDTO>> getHistoryRecords() throws ExecutionException, InterruptedException {
+        updateHistoryRecord();
+        List<History> historyRecords = historyRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
+        List<RecordDTO> recordList = historyRecords.stream()
+                .map(StatsMapper::mapToRecordDTO)
+                .collect(Collectors.toList());
+        return CompletableFuture.completedFuture(recordList);
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public CompletableFuture<List<CustomerTicketRecordDTO>> getCustomerTicketPoolStats() {
+        List<CustomerTicketRecordDTO> customerTicketRecordDTOList = customerTicketRepository.findTotalTicketsBoughtGroupedByEvent();
+        return CompletableFuture.completedFuture(customerTicketRecordDTOList);
+    }
+
+    @Override
+    @Async("taskExecutor")
     public CompletableFuture<RecordDTO> getRecordSkeletonForToday() {
         LocalDate today = LocalDate.now();
         long totalUsers = userRepository.count();

@@ -1,6 +1,8 @@
 package org.example.ticketingapp.mapper;
 
+import org.example.ticketingapp.dto.RecordDTO;
 import org.example.ticketingapp.dto.TotalTicketsTimeDtoOut;
+import org.example.ticketingapp.entity.History;
 import org.example.ticketingapp.entity.Sales;
 import org.example.ticketingapp.entity.SalesID;
 
@@ -25,6 +27,14 @@ public class StatsMapper {
                 salesID.getDate(),
                 salesID.getVendor(),
                 ticketSales
+        );
+    }
+
+    public static RecordDTO mapToRecordDTO(History history) {
+        return new RecordDTO(
+                history.getDate(),
+                history.getTotalUsers(),
+                history.getTotalSales()
         );
     }
 }

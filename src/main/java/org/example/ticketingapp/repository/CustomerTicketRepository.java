@@ -1,5 +1,6 @@
 package org.example.ticketingapp.repository;
 
+import org.example.ticketingapp.dto.CustomerTicketRecordDTO;
 import org.example.ticketingapp.entity.CustomerTicket;
 import org.example.ticketingapp.entity.CustomerTicketID;
 import org.springframework.data.domain.Sort;
@@ -19,4 +20,8 @@ public interface CustomerTicketRepository extends JpaRepository<CustomerTicket, 
 
     @Query("SELECT SUM(ct.ticketsBought) FROM customer_ticket ct WHERE ct.customerEmail = :customerEmail")
     Integer findTotalTicketsBoughtByCustomerEmail(@NonNull String customerEmail);
+
+    @Query("SELECT new org.example.ticketingapp.dto.CustomerTicketRecordDTO(ct.eventName, SUM(ct.ticketsBought)) " +
+            "FROM customer_ticket ct GROUP BY ct.eventName")
+    List<CustomerTicketRecordDTO> findTotalTicketsBoughtGroupedByEvent();
 }

@@ -31,7 +31,6 @@ public class CustomerTicketController {
 
     private CustomerTicketService customerTicketService;
     private VendorEventConfigService vendorEventConfigService;
-    private StatService statService;
     private final UserRepository userRepository;
     private final JwtService jwtService;
 
