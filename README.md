@@ -71,31 +71,31 @@
 
   1. Clone the repository:
 
-    ```shell
-    git clone https://github.com/anuja-rahul/ticketingApp.git
+      ```shell
+      git clone https://github.com/anuja-rahul/ticketingApp.git
 
-    cd ticketingApp
-    ```
+      cd ticketingApp
+      ```
 
-  1. Configure the database in `src/main/resources/application.properties`:
+  2. Configure the database in application.properties:
 
-    ```properties
-    spring.datasource.url=jdbc:postgresql://localhost:5432/ticketingapp
-    spring.datasource.username=yourUsername
-    spring.datasource.password=yourPassword
-    ```
+      ```properties
+      spring.datasource.url=jdbc:postgresql://localhost:5432/ticketingapp
+      spring.datasource.username=yourUsername
+      spring.datasource.password=yourPassword
+      ```
 
-  2. Build the project:
+  3. Build the project:
 
-    ```shell
-    mvn clean install
-    ```
+      ```shell
+      mvn clean install
+      ```
 
-  3. Run the application:
+  4. Run the application:
 
-    ```shell
-    mvn spring-boot:run
-    ```
+      ```shell
+      mvn spring-boot:run
+      ```
 
   ### Running Tests
 
