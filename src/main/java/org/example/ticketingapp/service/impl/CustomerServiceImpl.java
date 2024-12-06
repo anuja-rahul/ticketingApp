@@ -4,7 +4,6 @@ package org.example.ticketingapp.service.impl;
 import lombok.AllArgsConstructor;
 import org.example.ticketingapp.dto.CustomerDTO;
 import org.example.ticketingapp.dto.CustomerDtoOut;
-import org.example.ticketingapp.dto.CustomerTicketDtoOut;
 import org.example.ticketingapp.entity.Customer;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.mapper.CustomerMapper;
@@ -13,7 +12,6 @@ import org.example.ticketingapp.service.CustomerService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

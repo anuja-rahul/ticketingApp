@@ -8,4 +8,5 @@ import java.util.List;
 public interface UserService {
     UserDtoOut getUserByEmail(String email);
     List<UserDtoOut> getAllUsers();
+    Boolean existsUserByEmail(String email);
 }

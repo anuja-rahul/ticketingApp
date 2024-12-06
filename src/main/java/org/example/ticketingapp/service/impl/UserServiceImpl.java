@@ -33,4 +33,9 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
         return userDtoOuts;
     }
+
+    @Override
+    public Boolean existsUserByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 }

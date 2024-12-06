@@ -13,7 +13,6 @@ import org.example.ticketingapp.exception.ResourceCapacityException;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.repository.UserRepository;
 import org.example.ticketingapp.service.CustomerTicketService;
-import org.example.ticketingapp.service.StatService;
 import org.example.ticketingapp.service.VendorEventConfigService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

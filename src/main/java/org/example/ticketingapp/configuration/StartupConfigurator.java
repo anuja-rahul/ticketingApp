@@ -16,7 +16,7 @@ public class StartupConfigurator implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws ExecutionException, InterruptedException {
-        System.out.println("\n" + LocalDate.now() + ": Setting up the record history...");
+        System.out.println("\n" + LocalDate.now() + ": Setting up the record history...\n");
         statService.updateHistoryRecord();
     }
 }
