@@ -1,9 +1,9 @@
 package org.example.ticketingapp.service.impl;
 
-
-import lombok.AllArgsConstructor;
+import jakarta.annotation.PostConstruct;
 import org.example.ticketingapp.configuration.executor.ThreadPoolConfig;
 import org.example.ticketingapp.dto.ThreadDtoOut;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -11,14 +11,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class ThreadPoolServiceImpl {
-    private ThreadPoolTaskExecutor taskExecutor;
-    private ThreadPoolTaskExecutor ticketExecutor;
-    private ThreadPoolTaskExecutor vendorExecutor;
-    private ThreadPoolTaskExecutor customerExecutor;
-    private ThreadPoolConfig threadPoolConfig;
 
+    private final ThreadPoolTaskExecutor taskExecutor;
+    private final ThreadPoolTaskExecutor ticketExecutor;
+    private final ThreadPoolTaskExecutor vendorExecutor;
+    private final ThreadPoolTaskExecutor customerExecutor;
+    private final ThreadPoolConfig threadPoolConfig;
+
+    public ThreadPoolServiceImpl(
+            @Qualifier("customTaskExecutor") ThreadPoolTaskExecutor taskExecutor,
+            @Qualifier("ticketExecutor") ThreadPoolTaskExecutor ticketExecutor,
+            @Qualifier("vendorExecutor") ThreadPoolTaskExecutor vendorExecutor,
+            @Qualifier("customerExecutor") ThreadPoolTaskExecutor customerExecutor,
+            ThreadPoolConfig threadPoolConfig) {
+        this.taskExecutor = taskExecutor;
+        this.ticketExecutor = ticketExecutor;
+        this.vendorExecutor = vendorExecutor;
+        this.customerExecutor = customerExecutor;
+        this.threadPoolConfig = threadPoolConfig;
+    }
+
+//    @PostConstruct
+//    public void init() {
+//        // Submit test tasks
+//        submitTestTasks(taskExecutor, "TaskExecutor");
+//        submitTestTasks(ticketExecutor, "TicketExecutor");
+//        submitTestTasks(vendorExecutor, "VendorExecutor");
+//        submitTestTasks(customerExecutor, "CustomerExecutor");
+//    }
+//
+//    private void submitTestTasks(ThreadPoolTaskExecutor executor, String executorName) {
+//        for (int i = 0; i < 5; i++) {
+//            executor.execute(() -> {
+//                System.out.println("Executing task in " + executorName);
+//                try {
+//                    Thread.sleep(2000); // Simulate task
+//                    System.out.println("Completed task in " + executorName);
+//                } catch (InterruptedException e) {
+//                    Thread.currentThread().interrupt();
+//                }
+//            });
+//        }
+//    }
 
     public List<ThreadDtoOut> getThreadStatus() {
         ArrayList<Integer> taskList = getStatus(taskExecutor);
@@ -33,7 +68,7 @@ public class ThreadPoolServiceImpl {
                 taskList.get(0),
                 taskList.get(1),
                 taskList.get(2)
-                );
+        );
         ThreadDtoOut ticket = new ThreadDtoOut(
                 "ticketExecutor",
                 ticketList.get(0),
@@ -57,7 +92,6 @@ public class ThreadPoolServiceImpl {
         threadDtoOutList.add(ticket);
         threadDtoOutList.add(vendor);
         threadDtoOutList.add(customer);
-
 
         return threadDtoOutList;
     }

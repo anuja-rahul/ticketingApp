@@ -53,7 +53,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
     }
 
     @Override
-    @Async("taskExecutor")
+    @Async("customTaskExecutor")
     public CompletableFuture<List<CustomerTicketDtoOut>> getCustomerTicketsByEmail(String email) {
         List<CustomerTicket> customerTickets = customerTicketRepository.getCustomerTicketByCustomerEmail(
                 email,
@@ -65,7 +65,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
     }
 
     @Override
-    @Async("taskExecutor")
+    @Async("customTaskExecutor")
     public CompletableFuture<Void> deleteCustomerTickets(CustomerTicketID customerTicketID) {
         CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
@@ -81,7 +81,9 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
     public CompletableFuture<CustomerTicketDtoOut> updateCustomerTicket(
             CustomerTicketID customerTicketID,
             CustomerTicketDTO customerTicketDTO,
-            int ticketRetrievalRate) {
+            int ticketRetrievalRate) throws InterruptedException {
+
+        Thread.sleep(1);
 
         boolean priority = customerService.getCustomerPriority(customerTicketDTO.getCustomerEmail());
 

@@ -14,7 +14,7 @@ public interface CustomerTicketService {
     CompletableFuture<CustomerTicketDtoOut> updateCustomerTicket(
             CustomerTicketID customerTicketID,
             CustomerTicketDTO customerTicketDTO,
-            int ticketRetrievalRate);
+            int ticketRetrievalRate) throws InterruptedException;
     CompletableFuture<CustomerTicketDtoOut> updateTicket(CustomerTicketID customerTicketID, int ticketRetrievalRate);
 
     CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID);

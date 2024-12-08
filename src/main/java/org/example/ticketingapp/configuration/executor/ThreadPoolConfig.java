@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
 
 import static org.example.ticketingapp.utility.BaseUtils.divideAndCeil;
 
@@ -22,19 +21,19 @@ public class ThreadPoolConfig {
 
     public ThreadPoolConfig() throws IOException {}
 
-    @Bean(name = "taskExecutor")
-    public Executor taskExecutor() {
+    @Bean(name = "customTaskExecutor")
+    public ThreadPoolTaskExecutor customTaskExecutor() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-        threadPoolTaskExecutor.setCorePoolSize(basePoolSize);
-        threadPoolTaskExecutor.setMaxPoolSize(basePoolSize);
-        threadPoolTaskExecutor.setQueueCapacity(maxQueueSize);
+        threadPoolTaskExecutor.setCorePoolSize(40);
+        threadPoolTaskExecutor.setMaxPoolSize(50);
+        threadPoolTaskExecutor.setQueueCapacity(400);
         threadPoolTaskExecutor.setThreadNamePrefix("TicketingApiTaskThread-");
         threadPoolTaskExecutor.initialize();
         return threadPoolTaskExecutor;
     }
 
     @Bean(name = "ticketExecutor")
-    public Executor ticketExecutor() {
+    public ThreadPoolTaskExecutor ticketExecutor() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor() {
             @Override
             protected void beforeExecute(Thread t, Runnable r) {
@@ -54,7 +53,7 @@ public class ThreadPoolConfig {
     }
 
     @Bean(name = "vendorExecutor")
-    public Executor vendorExecutor() {
+    public ThreadPoolTaskExecutor vendorExecutor() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
         threadPoolTaskExecutor.setCorePoolSize(basePoolSize);
         threadPoolTaskExecutor.setMaxPoolSize(basePoolSize);
@@ -65,12 +64,12 @@ public class ThreadPoolConfig {
     }
 
     @Bean(name = "customerExecutor")
-    public Executor customerExecutor() {
+    public ThreadPoolTaskExecutor customerExecutor() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
         threadPoolTaskExecutor.setCorePoolSize(basePoolSize);
         threadPoolTaskExecutor.setMaxPoolSize(basePoolSize);
         threadPoolTaskExecutor.setQueueCapacity(maxQueueSize);
-        threadPoolTaskExecutor.setThreadNamePrefix("TicketingApiVendorThread-");
+        threadPoolTaskExecutor.setThreadNamePrefix("TicketingApiCustomerThread-");
         threadPoolTaskExecutor.initialize();
         return threadPoolTaskExecutor;
     }
@@ -78,9 +77,11 @@ public class ThreadPoolConfig {
     public int getActiveThreads(ThreadPoolTaskExecutor executor) {
         return executor.getActiveCount();
     }
+
     public int getTotalThreads(ThreadPoolTaskExecutor executor) {
-        return executor.getThreadPoolExecutor().getPoolSize();
+        return executor.getThreadPoolExecutor().getMaximumPoolSize();
     }
+
     public int getIdleThreads(ThreadPoolTaskExecutor executor) {
         return getTotalThreads(executor) - getActiveThreads(executor);
     }

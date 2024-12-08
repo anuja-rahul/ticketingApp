@@ -140,7 +140,7 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     }
 
     @Override
-    @Async("taskExecutor")
+    @Async("customTaskExecutor")
     public CompletableFuture<List<VendorEventConfigDTO>> getAllVendorEventConfigs() {
         List<VendorEventConfig> vendorEventConfigList = vendorEventConfigRepository.findAll(
                 Sort.by(Sort.Direction.ASC, "eventName"));

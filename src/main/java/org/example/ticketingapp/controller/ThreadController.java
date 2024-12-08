@@ -25,7 +25,7 @@ public class ThreadController {
     private final JwtService jwtService;
     private final ThreadPoolServiceImpl threadPoolService;
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public ResponseEntity<List<ThreadDtoOut>> getThreadStatus(
             @RequestHeader("Authorization") String token
     ) {
