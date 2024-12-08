@@ -1,6 +1,6 @@
 package org.example.ticketingapp.service.impl;
 
-import jakarta.annotation.PostConstruct;
+//import jakarta.annotation.PostConstruct;
 import org.example.ticketingapp.configuration.executor.ThreadPoolConfig;
 import org.example.ticketingapp.dto.ThreadDtoOut;
 import org.springframework.beans.factory.annotation.Qualifier;
