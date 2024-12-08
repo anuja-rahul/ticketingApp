@@ -74,4 +74,14 @@ public class ThreadPoolConfig {
         threadPoolTaskExecutor.initialize();
         return threadPoolTaskExecutor;
     }
+
+    public int getActiveThreads(ThreadPoolTaskExecutor executor) {
+        return executor.getActiveCount();
+    }
+    public int getTotalThreads(ThreadPoolTaskExecutor executor) {
+        return executor.getThreadPoolExecutor().getPoolSize();
+    }
+    public int getIdleThreads(ThreadPoolTaskExecutor executor) {
+        return getTotalThreads(executor) - getActiveThreads(executor);
+    }
 }
