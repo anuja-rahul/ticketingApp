@@ -1,6 +1,7 @@
 package org.example.ticketingapp;
 
 import org.example.ticketingapp.configuration.cli.CliConfig;
+import org.example.ticketingapp.configuration.cli.CliVendorEventConfig;
 import org.example.ticketingapp.controller.SimulateController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -39,10 +40,11 @@ public class TicketingAppApplication{
     }
 
     public static void simulate(ConfigurableApplicationContext app) throws InterruptedException, IOException, ExecutionException {
+        final int retrievalRate = CliVendorEventConfig.readFromJson().getCustomerRetrievalRate();
         SimulateController simulateController = app.getBean(SimulateController.class);
         Thread.sleep(2500);
         if (true) {
-            simulateController.simulateOperations(5);
+            simulateController.simulateOperations(10, retrievalRate, 5);
         }
     }
 
