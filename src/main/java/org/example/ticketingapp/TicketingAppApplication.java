@@ -8,6 +8,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 @SpringBootApplication
 @EnableAsync
@@ -20,9 +21,11 @@ public class TicketingAppApplication{
             simulate(app);
             finish();
 
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             System.err.println("Error reading from CLI: " + e.getMessage());
             System.exit(1);
+        } catch (InterruptedException | ExecutionException e) {
+            System.err.println("Error simulating from CLI: " + e.getMessage());
         }
     }
 
@@ -35,7 +38,7 @@ public class TicketingAppApplication{
         // stop
     }
 
-    public static void simulate(ConfigurableApplicationContext app) throws InterruptedException {
+    public static void simulate(ConfigurableApplicationContext app) throws InterruptedException, IOException, ExecutionException {
         SimulateController simulateController = app.getBean(SimulateController.class);
         Thread.sleep(2500);
         if (true) {
