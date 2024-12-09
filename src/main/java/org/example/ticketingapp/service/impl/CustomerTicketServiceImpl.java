@@ -7,6 +7,7 @@ import org.example.ticketingapp.dto.CustomerTicketDtoOut;
 import org.example.ticketingapp.entity.CustomerTicket;
 import org.example.ticketingapp.entity.CustomerTicketID;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
+import org.example.ticketingapp.logger.MethodLogger;
 import org.example.ticketingapp.mapper.CustomerTicketMapper;
 import org.example.ticketingapp.repository.CustomerTicketRepository;
 import org.example.ticketingapp.service.CustomerService;
@@ -37,6 +38,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
 
     @Async("customerExecutor")
     @Override
+    @MethodLogger
     public CompletableFuture<CustomerTicketDtoOut> createCustomerTicket(CustomerTicketDTO customerTicketDTO) {
         CustomerTicket customerTicket = CustomerTicketMapper.mapToCustomerTicket(customerTicketDTO);
         CustomerTicket savedCustomerTicket =  customerTicketRepository.save(customerTicket);
@@ -78,11 +80,13 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
     @Override
     @Async("ticketExecutor")
     @Transactional
+    @MethodLogger
     public CompletableFuture<CustomerTicketDtoOut> updateCustomerTicket(
             CustomerTicketID customerTicketID,
             CustomerTicketDTO customerTicketDTO,
             int ticketRetrievalRate) throws InterruptedException {
 
+        // TODO: add logging
         Thread.sleep(0);
 
         boolean priority = customerService.getCustomerPriority(customerTicketDTO.getCustomerEmail());
@@ -124,7 +128,6 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
                 {
                     customerService.updateCustomerPriority(email);
                 }
-            // TODO: Update record here
             return CompletableFuture.completedFuture(result);
 
         } finally {
