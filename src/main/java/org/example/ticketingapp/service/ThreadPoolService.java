@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface ThreadPoolService {
-    List<ThreadDtoOut> getThreadStatus();
+    List<ThreadDtoOut> getCurrentThreadStatus();
+    List<ThreadDtoOut> getAllThreadRecords();
     ArrayList<Integer> getStatus(ThreadPoolTaskExecutor executor);
+
 }

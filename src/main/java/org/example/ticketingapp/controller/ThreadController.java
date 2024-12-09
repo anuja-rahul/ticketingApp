@@ -25,8 +25,8 @@ public class ThreadController {
     private final JwtService jwtService;
     private final ThreadPoolService threadPoolService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<ThreadDtoOut>> getThreadStatus(
+    @GetMapping("/current")
+    public ResponseEntity<List<ThreadDtoOut>> getCurrentThreadStatus(
             @RequestHeader("Authorization") String token
     ) {
         try {
@@ -39,7 +39,31 @@ public class ThreadController {
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
             if ("admin".equalsIgnoreCase(user.getRole().name())) {
-                return ResponseEntity.ok(threadPoolService.getThreadStatus());
+                return ResponseEntity.ok(threadPoolService.getCurrentThreadStatus());
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ThreadDtoOut>> getAllThreadRecords(
+            @RequestHeader("Authorization") String token
+    ) {
+        try {
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+            Claims claims = jwtService.extractAllClaims(token);
+            String email = claims.getSubject();
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+            if ("admin".equalsIgnoreCase(user.getRole().name())) {
+                return ResponseEntity.ok(threadPoolService.getAllThreadRecords());
             }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
