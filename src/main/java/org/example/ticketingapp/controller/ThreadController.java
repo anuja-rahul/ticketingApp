@@ -70,6 +70,28 @@ public class ThreadController {
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    @GetMapping("/sort/{type}")
+    public ResponseEntity<List<ThreadDtoOut>> getAllThreadRecordsByThreadName(
+            @RequestHeader("Authorization") String token,
+            @PathVariable String type
+    ) {
+        try {
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+            Claims claims = jwtService.extractAllClaims(token);
+            String email = claims.getSubject();
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+            if ("admin".equalsIgnoreCase(user.getRole().name())) {
+                return ResponseEntity.ok(threadPoolService.getAllThreadRecordsByType(type).get());
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

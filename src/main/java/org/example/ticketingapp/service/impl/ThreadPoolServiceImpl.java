@@ -9,6 +9,8 @@ import org.example.ticketingapp.repository.ThreadPoolRepository;
 import org.example.ticketingapp.service.ThreadPoolService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -132,6 +134,21 @@ public class ThreadPoolServiceImpl implements ThreadPoolService {
     public CompletableFuture<List<ThreadDtoOut>> getAllThreadRecords() throws ExecutionException, InterruptedException {
         getCurrentThreadStatus().get();
         List<ThreadPool> threadData = threadRepository.findLatestThreads(PageRequest.of(0, 60));
+        List<ThreadDtoOut> threadDtoOutList = threadData.stream()
+                .map(ThreadPoolMapper::mapToThreadDto)
+                .collect(Collectors.toList());
+        return CompletableFuture.completedFuture(threadDtoOutList);
+    }
+
+    @Async("customTaskExecutor")
+    @Override
+    public CompletableFuture<List<ThreadDtoOut>> getAllThreadRecordsByType(String name) throws ExecutionException, InterruptedException {
+        getCurrentThreadStatus().get();
+//        List<ThreadPool> threadData = threadRepository.findLatestThreadsByName(
+//                name,
+//                PageRequest.of(0, 60));
+        Pageable pageable = PageRequest.of(0, 60, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<ThreadPool> threadData = threadRepository.findByName(name, pageable);
         List<ThreadDtoOut> threadDtoOutList = threadData.stream()
                 .map(ThreadPoolMapper::mapToThreadDto)
                 .collect(Collectors.toList());

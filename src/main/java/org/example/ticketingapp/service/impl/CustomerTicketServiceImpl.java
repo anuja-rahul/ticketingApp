@@ -87,7 +87,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
             int ticketRetrievalRate) throws InterruptedException {
 
         // TODO: add delay to see the thread pool changes
-        Thread.sleep(0);
+        Thread.sleep(5000);
 
         boolean priority = customerService.getCustomerPriority(customerTicketDTO.getCustomerEmail());
 
