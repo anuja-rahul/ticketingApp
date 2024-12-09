@@ -44,7 +44,7 @@ public class TicketingAppApplication{
         SimulateController simulateController = app.getBean(SimulateController.class);
         Thread.sleep(2500);
         if (true) {
-            simulateController.simulateOperations(10, retrievalRate, 5);
+            simulateController.simulateOperations(5, retrievalRate, 2);
         }
     }
 
