@@ -3,6 +3,8 @@ package org.example.ticketingapp.service.impl;
 //import jakarta.annotation.PostConstruct;
 import org.example.ticketingapp.configuration.executor.ThreadPoolConfig;
 import org.example.ticketingapp.dto.ThreadDtoOut;
+import org.example.ticketingapp.repository.ThreadPoolRepository;
+import org.example.ticketingapp.service.ThreadPoolService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -10,26 +12,30 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+// PageRequest.of(0, 20)
+
 @Service
-public class ThreadPoolServiceImpl {
+public class ThreadPoolServiceImpl implements ThreadPoolService {
 
     private final ThreadPoolTaskExecutor taskExecutor;
     private final ThreadPoolTaskExecutor ticketExecutor;
     private final ThreadPoolTaskExecutor vendorExecutor;
     private final ThreadPoolTaskExecutor customerExecutor;
     private final ThreadPoolConfig threadPoolConfig;
+    private final ThreadPoolRepository threadRepository;
 
     public ThreadPoolServiceImpl(
             @Qualifier("customTaskExecutor") ThreadPoolTaskExecutor taskExecutor,
             @Qualifier("ticketExecutor") ThreadPoolTaskExecutor ticketExecutor,
             @Qualifier("vendorExecutor") ThreadPoolTaskExecutor vendorExecutor,
             @Qualifier("customerExecutor") ThreadPoolTaskExecutor customerExecutor,
-            ThreadPoolConfig threadPoolConfig) {
+            ThreadPoolConfig threadPoolConfig, ThreadPoolRepository threadRepository) {
         this.taskExecutor = taskExecutor;
         this.ticketExecutor = ticketExecutor;
         this.vendorExecutor = vendorExecutor;
         this.customerExecutor = customerExecutor;
         this.threadPoolConfig = threadPoolConfig;
+        this.threadRepository = threadRepository;
     }
 
 //    @PostConstruct
@@ -96,7 +102,7 @@ public class ThreadPoolServiceImpl {
         return threadDtoOutList;
     }
 
-    private ArrayList<Integer> getStatus(ThreadPoolTaskExecutor executor) {
+    public ArrayList<Integer> getStatus(ThreadPoolTaskExecutor executor) {
         ArrayList<Integer> threadList = new ArrayList<>();
 
         threadList.add(threadPoolConfig.getActiveThreads(executor));

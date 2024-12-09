@@ -8,7 +8,7 @@ import org.example.ticketingapp.dto.ThreadDtoOut;
 import org.example.ticketingapp.entity.User;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
 import org.example.ticketingapp.repository.UserRepository;
-import org.example.ticketingapp.service.impl.ThreadPoolServiceImpl;
+import org.example.ticketingapp.service.ThreadPoolService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class ThreadController {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
-    private final ThreadPoolServiceImpl threadPoolService;
+    private final ThreadPoolService threadPoolService;
 
     @GetMapping("/all")
     public ResponseEntity<List<ThreadDtoOut>> getThreadStatus(
