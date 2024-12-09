@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ThreadDtoOut {
     private LocalDateTime createdAt;
-    private String threadName;
+    private String name;
     private int activeThreads;
     private int idleThreads;
     private int totalThreads;

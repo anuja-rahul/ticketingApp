@@ -7,7 +7,7 @@ public class ThreadPoolMapper {
     public static ThreadPool mapToThreadPool(ThreadDtoOut threadDtoOut) {
         return  new ThreadPool(
                 threadDtoOut.getCreatedAt(),
-                threadDtoOut.getThreadName(),
+                threadDtoOut.getName(),
                 threadDtoOut.getActiveThreads(),
                 threadDtoOut.getIdleThreads(),
                 threadDtoOut.getTotalThreads()

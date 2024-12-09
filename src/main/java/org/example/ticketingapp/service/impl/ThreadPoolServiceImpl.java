@@ -9,12 +9,15 @@ import org.example.ticketingapp.repository.ThreadPoolRepository;
 import org.example.ticketingapp.service.ThreadPoolService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 // PageRequest.of(0, 20)
@@ -66,37 +69,39 @@ public class ThreadPoolServiceImpl implements ThreadPoolService {
 //        }
 //    }
 
-    public List<ThreadDtoOut> getCurrentThreadStatus() {
-        ArrayList<Integer> taskList = getStatus(taskExecutor);
-        ArrayList<Integer> ticketList = getStatus(ticketExecutor);
-        ArrayList<Integer> vendorList = getStatus(vendorExecutor);
-        ArrayList<Integer> customerList = getStatus(customerExecutor);
+    @Async("customTaskExecutor")
+    public CompletableFuture<List<ThreadDtoOut>> getCurrentThreadStatus() throws ExecutionException, InterruptedException {
+        ArrayList<Integer> taskList = getStatus(taskExecutor).get();
+        ArrayList<Integer> ticketList = getStatus(ticketExecutor).get();
+        ArrayList<Integer> vendorList = getStatus(vendorExecutor).get();
+        ArrayList<Integer> customerList = getStatus(customerExecutor).get();
 
         List<ThreadDtoOut> threadDtoOutList = new ArrayList<>();
+        LocalDateTime baseTime = LocalDateTime.now();
 
         ThreadDtoOut task = new ThreadDtoOut(
-                LocalDateTime.now(),
+                baseTime.plusNanos(1),
                 "taskExecutor",
                 taskList.get(0),
                 taskList.get(1),
                 taskList.get(2)
         );
         ThreadDtoOut ticket = new ThreadDtoOut(
-                LocalDateTime.now(),
+                baseTime.plusNanos(2),
                 "ticketExecutor",
                 ticketList.get(0),
                 ticketList.get(1),
                 ticketList.get(2)
         );
         ThreadDtoOut vendor = new ThreadDtoOut(
-                LocalDateTime.now(),
+                baseTime.plusNanos(3),
                 "vendorExecutor",
                 vendorList.get(0),
                 vendorList.get(1),
                 vendorList.get(2)
         );
         ThreadDtoOut customer = new ThreadDtoOut(
-                LocalDateTime.now(),
+                baseTime.plusNanos(4),
                 "customerExecutor",
                 customerList.get(0),
                 customerList.get(1),
@@ -119,26 +124,28 @@ public class ThreadPoolServiceImpl implements ThreadPoolService {
 //            threadRepository.save(mappedThreadPool);
 //        };
 
-        return threadDtoOutList;
+        return CompletableFuture.completedFuture(threadDtoOutList);
     }
 
+    @Async("customTaskExecutor")
     @Override
-    public List<ThreadDtoOut> getAllThreadRecords() {
-        getCurrentThreadStatus();
-        List<ThreadPool> threadData = threadRepository.findLatestThreads(PageRequest.of(0, 50));
+    public CompletableFuture<List<ThreadDtoOut>> getAllThreadRecords() throws ExecutionException, InterruptedException {
+        getCurrentThreadStatus().get();
+        List<ThreadPool> threadData = threadRepository.findLatestThreads(PageRequest.of(0, 60));
         List<ThreadDtoOut> threadDtoOutList = threadData.stream()
                 .map(ThreadPoolMapper::mapToThreadDto)
                 .collect(Collectors.toList());
-        return threadDtoOutList;
+        return CompletableFuture.completedFuture(threadDtoOutList);
     }
 
-    public ArrayList<Integer> getStatus(ThreadPoolTaskExecutor executor) {
+    @Async("customTaskExecutor")
+    public CompletableFuture<ArrayList<Integer>> getStatus(ThreadPoolTaskExecutor executor) {
         ArrayList<Integer> threadList = new ArrayList<>();
 
         threadList.add(threadPoolConfig.getActiveThreads(executor));
         threadList.add(threadPoolConfig.getIdleThreads(executor));
         threadList.add(threadPoolConfig.getTotalThreads(executor));
 
-        return threadList;
+        return CompletableFuture.completedFuture(threadList);
     }
 }

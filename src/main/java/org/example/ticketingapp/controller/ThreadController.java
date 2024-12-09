@@ -39,7 +39,7 @@ public class ThreadController {
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
             if ("admin".equalsIgnoreCase(user.getRole().name())) {
-                return ResponseEntity.ok(threadPoolService.getCurrentThreadStatus());
+                return ResponseEntity.ok(threadPoolService.getCurrentThreadStatus().get());
             }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -63,7 +63,7 @@ public class ThreadController {
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
             if ("admin".equalsIgnoreCase(user.getRole().name())) {
-                return ResponseEntity.ok(threadPoolService.getAllThreadRecords());
+                return ResponseEntity.ok(threadPoolService.getAllThreadRecords().get());
             }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

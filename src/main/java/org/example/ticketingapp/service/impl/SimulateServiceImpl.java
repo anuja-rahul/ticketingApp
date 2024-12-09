@@ -23,6 +23,8 @@ public class SimulateServiceImpl implements SimulateService {
     private UserService userService;
     private final VendorEventConfigService vendorEventConfigService;
     private final CustomerTicketService customerTicketService;
+//    private final ThreadPoolService threadPoolService;
+
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationService authService;
 
