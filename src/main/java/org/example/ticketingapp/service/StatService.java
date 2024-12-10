@@ -1,6 +1,5 @@
 package org.example.ticketingapp.service;
 
-import org.example.ticketingapp.dto.CustomerTicketDtoOut;
 import org.example.ticketingapp.dto.CustomerTicketRecordDTO;
 import org.example.ticketingapp.dto.RecordDTO;
 import org.example.ticketingapp.dto.TotalTicketsTimeDtoOut;
