@@ -7,6 +7,7 @@ import org.example.ticketingapp.dto.VendorEventConfigDTOIn;
 import org.example.ticketingapp.entity.VendorEventConfig;
 import org.example.ticketingapp.exception.ResourceCapacityException;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
+import org.example.ticketingapp.logger.MethodLogger;
 import org.example.ticketingapp.mapper.VendorEventConfigMapper;
 import org.example.ticketingapp.repository.VendorEventConfigRepository;
 import org.example.ticketingapp.service.StatService;
@@ -34,6 +35,7 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
 
     @Override
     @Async("vendorExecutor")
+    @MethodLogger
     public CompletableFuture<VendorEventConfigDTO> createVendorEventConfig(
             VendorEventConfigDTOIn vendorEventConfigDTOin,
             String email) throws IOException {
@@ -46,12 +48,12 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
         VendorEventConfig vendorEventConfig = VendorEventConfigMapper.mapToVendorEventConfig(vendorEventConfigDTO);
         VendorEventConfig savedVendorEventConfig = vendorEventConfigRepository.save(vendorEventConfig);
         VendorEventConfigDTO result = VendorEventConfigMapper.mapToVendorEventConfigDto(savedVendorEventConfig);
-        // TODO: Update record here (just increase the pool capacity on record)
         return CompletableFuture.completedFuture(result);
     }
 
     @Override
     @Transactional
+    @MethodLogger
     public void deleteVendorEventConfig(String eventName, String email) {
 
         VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
@@ -66,6 +68,7 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
 
     @Override
     @Async("vendorExecutor")
+    @MethodLogger
     public CompletableFuture<VendorEventConfigDTO> getVendorEventConfigByEventName(String eventName) {
         VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
                 .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found: " + eventName));
@@ -75,6 +78,7 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
 
     @Override
     @Async("vendorExecutor")
+    @MethodLogger
     public CompletableFuture<List<VendorEventConfigDTO>> getAllVendorEventConfigsByEmail(String email) {
         List<VendorEventConfig> vendorEventConfigs = vendorEventConfigRepository.findAllByEmail(
                 email,
@@ -91,6 +95,7 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     @Override
     @Async("vendorExecutor")
     @Transactional
+    @MethodLogger
     public CompletableFuture<VendorEventConfigDTO> updateTotalTickets(String eventName, int totalTickets){
         lock.lock();
         try {
@@ -123,6 +128,7 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
     @Override
     @Async("ticketExecutor")
     @Transactional
+    @MethodLogger
     public CompletableFuture<Boolean> buyTickets(String eventName) {
         VendorEventConfig vendorEventConfig = vendorEventConfigRepository.findByEventName(eventName)
                 .orElseThrow(() -> new ResourceNotFoundException("VendorEventConfig not found by event name " + eventName));
@@ -141,6 +147,7 @@ public class VendorEventConfigServiceImpl implements VendorEventConfigService {
 
     @Override
     @Async("customTaskExecutor")
+    @MethodLogger
     public CompletableFuture<List<VendorEventConfigDTO>> getAllVendorEventConfigs() {
         List<VendorEventConfig> vendorEventConfigList = vendorEventConfigRepository.findAll(
                 Sort.by(Sort.Direction.ASC, "eventName"));

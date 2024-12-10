@@ -48,6 +48,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
     }
 
     @Override
+    @MethodLogger
     public CustomerTicketDtoOut getCustomerTicketByCustomerTicketID(CustomerTicketID customerTicketID) {
         CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
@@ -56,6 +57,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
 
     @Override
     @Async("customTaskExecutor")
+    @MethodLogger
     public CompletableFuture<List<CustomerTicketDtoOut>> getCustomerTicketsByEmail(String email) {
         List<CustomerTicket> customerTickets = customerTicketRepository.getCustomerTicketByCustomerEmail(
                 email,
@@ -68,6 +70,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
 
     @Override
     @Async("customTaskExecutor")
+    @MethodLogger
     public CompletableFuture<Void> deleteCustomerTickets(CustomerTicketID customerTicketID) {
         CustomerTicket customerTicket = customerTicketRepository.findById(customerTicketID)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer ticket not found: " + customerTicketID));
@@ -109,6 +112,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
     }
 
     @Transactional
+    @MethodLogger
     public CompletableFuture<CustomerTicketDtoOut> updateTicket(CustomerTicketID customerTicketID, int ticketRetrievalRate) {
         lock.lock();
         try {
@@ -124,7 +128,7 @@ public class CustomerTicketServiceImpl implements CustomerTicketService {
 
             // Check/set for VIP eligibility of the customer based on his purchases
             if (customerTicketRepository
-                    .findTotalTicketsBoughtByCustomerEmail(email) >= 100 && !customerService.getCustomerPriority(email))
+                    .findTotalTicketsBoughtByCustomerEmail(email) >= 500 && !customerService.getCustomerPriority(email))
                 {
                     customerService.updateCustomerPriority(email);
                 }

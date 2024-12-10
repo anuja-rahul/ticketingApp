@@ -6,6 +6,7 @@ import org.example.ticketingapp.dto.CustomerDTO;
 import org.example.ticketingapp.dto.CustomerDtoOut;
 import org.example.ticketingapp.entity.Customer;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
+import org.example.ticketingapp.logger.MethodLogger;
 import org.example.ticketingapp.mapper.CustomerMapper;
 import org.example.ticketingapp.repository.CustomerRepository;
 import org.example.ticketingapp.service.CustomerService;
@@ -24,6 +25,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Async("customerExecutor")
     @Override
+    @MethodLogger
     public void createCustomer(CustomerDTO customerDTO) {
         Customer customer = CustomerMapper.mapToCustomer(customerDTO);
         customerRepository.save(customer);
@@ -31,6 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Async("customerExecutor")
     @Override
+    @MethodLogger
     public CompletableFuture<CustomerDtoOut> getCustomerByEmail(String email) {
         Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found: " + email));
@@ -40,6 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
+    @MethodLogger
     public void updateCustomerPriority(String email) {
         lock.lock();
         try {
@@ -54,6 +58,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @MethodLogger
     public boolean getCustomerPriority(String email) {
         Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found: " + email));

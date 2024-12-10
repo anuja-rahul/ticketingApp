@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.example.ticketingapp.dto.UserDtoOut;
 import org.example.ticketingapp.entity.User;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
+import org.example.ticketingapp.logger.MethodLogger;
 import org.example.ticketingapp.mapper.UserMapper;
 import org.example.ticketingapp.repository.UserRepository;
 import org.example.ticketingapp.service.UserService;
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @MethodLogger
     public List<UserDtoOut> getAllUsers() {
         List<User> users = userRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         List<UserDtoOut> userDtoOuts = users.stream()

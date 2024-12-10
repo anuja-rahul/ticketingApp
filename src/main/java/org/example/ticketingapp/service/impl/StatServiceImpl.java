@@ -8,6 +8,7 @@ import org.example.ticketingapp.entity.History;
 import org.example.ticketingapp.entity.Sales;
 import org.example.ticketingapp.entity.SalesID;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
+import org.example.ticketingapp.logger.MethodLogger;
 import org.example.ticketingapp.mapper.StatsMapper;
 import org.example.ticketingapp.repository.*;
 import org.example.ticketingapp.service.StatService;
@@ -35,6 +36,7 @@ public class StatServiceImpl implements StatService {
 
     @Override
     @Async("customTaskExecutor")
+    @MethodLogger
     public CompletableFuture<TotalTicketsTimeDtoOut> getTicketPoolStats() {
         int totalTickets = vendorEventConfigRepository.findTotalTicketPool();
         int totalTicketCapacity = vendorEventConfigRepository.findTotalTicketPoolCapacity();
@@ -57,6 +59,7 @@ public class StatServiceImpl implements StatService {
 
     @Override
     @Async("customTaskExecutor")
+    @MethodLogger
     public void createSalesRecord(String vendor, int ticketSales) {
         LocalDate date = LocalDate.now();
         SalesID salesID = StatsMapper.mapToSalesID(date, vendor);
@@ -67,6 +70,7 @@ public class StatServiceImpl implements StatService {
 
     @Override
     @Async("customTaskExecutor")
+    @MethodLogger
     public void updateSalesRecord(String vendor, int ticketSales) {
         LocalDate date = LocalDate.now();
         SalesID salesID = StatsMapper.mapToSalesID(date, vendor);
@@ -94,6 +98,7 @@ public class StatServiceImpl implements StatService {
     }
 
     @Override
+    @MethodLogger
     public void createHistoryRecord() throws ExecutionException, InterruptedException {
         // get total users and total sales
         RecordDTO recordDTO = getRecordSkeletonForToday().get();
@@ -105,6 +110,7 @@ public class StatServiceImpl implements StatService {
 
     @Override
     @Async("customTaskExecutor")
+    @MethodLogger
     public void updateHistoryRecord() throws ExecutionException, InterruptedException {
         // get total users, total sales and today
         RecordDTO recordDTO = getRecordSkeletonForToday().get();
@@ -124,6 +130,7 @@ public class StatServiceImpl implements StatService {
 
     @Override
     @Async("customTaskExecutor")
+    @MethodLogger
     public CompletableFuture<List<RecordDTO>> getHistoryRecords() throws ExecutionException, InterruptedException {
         updateHistoryRecord();
         List<History> historyRecords = historyRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
@@ -135,6 +142,7 @@ public class StatServiceImpl implements StatService {
 
     @Override
     @Async("customTaskExecutor")
+    @MethodLogger
     public CompletableFuture<List<CustomerTicketRecordDTO>> getCustomerTicketPoolStats() {
         List<CustomerTicketRecordDTO> customerTicketRecordDTOList = customerTicketRepository.findTotalTicketsBoughtGroupedByEvent();
         return CompletableFuture.completedFuture(customerTicketRecordDTOList);
@@ -142,6 +150,7 @@ public class StatServiceImpl implements StatService {
 
     @Override
     @Async("customTaskExecutor")
+    @MethodLogger
     public CompletableFuture<RecordDTO> getRecordSkeletonForToday() {
         LocalDate today = LocalDate.now();
         long totalUsers = userRepository.count();

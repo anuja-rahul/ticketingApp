@@ -9,6 +9,7 @@ import org.example.ticketingapp.dto.CustomerTicketDTO;
 import org.example.ticketingapp.dto.VendorDTO;
 import org.example.ticketingapp.dto.VendorEventConfigDTOIn;
 import org.example.ticketingapp.entity.CustomerTicketID;
+import org.example.ticketingapp.logger.MethodLogger;
 import org.example.ticketingapp.service.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,7 @@ public class SimulateServiceImpl implements SimulateService {
     private List<String> vendorList;
 
     @Override
+    @MethodLogger
     public boolean simulate(int userCount, int rate, int cycles) throws IOException, ExecutionException, InterruptedException {
         System.out.println("This is from service layer");
         System.out.println("Simulating " + userCount + " customer and " + userCount + " vendors\n");
@@ -168,6 +170,7 @@ public class SimulateServiceImpl implements SimulateService {
 
     // run simulation
     @Override
+    @MethodLogger
     public void runSimulation(int rate, int cycles) throws InterruptedException {
         try (ExecutorService executorService = Executors.newFixedThreadPool(2)) {
 

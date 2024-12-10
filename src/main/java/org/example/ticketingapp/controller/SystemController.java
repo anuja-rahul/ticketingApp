@@ -7,6 +7,7 @@ import org.example.ticketingapp.configuration.JwtService;
 import org.example.ticketingapp.configuration.ShutDownService;
 import org.example.ticketingapp.entity.User;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
+import org.example.ticketingapp.logger.MethodLogger;
 import org.example.ticketingapp.repository.UserRepository;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ public class SystemController {
 
     @Operation(summary = "Safely close off all thread pools and shuts down the system")
     @GetMapping("/nuke")
+    @MethodLogger
     public ResponseEntity<String> nukeTheWholeSystem(
             @RequestHeader("Authorization") String token
     ) {
@@ -59,6 +61,7 @@ public class SystemController {
         return new ResponseEntity<>("Failed Shutting down the system", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @MethodLogger
     public String nukeTheWholeSystemFromCLI() {
         try {
             System.out.println("\nSystem Shutdown was authorized by superuser\n");

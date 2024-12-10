@@ -4,6 +4,7 @@ package org.example.ticketingapp.service.impl;
 import org.example.ticketingapp.configuration.executor.ThreadPoolConfig;
 import org.example.ticketingapp.dto.ThreadDtoOut;
 import org.example.ticketingapp.entity.ThreadPool;
+import org.example.ticketingapp.logger.MethodLogger;
 import org.example.ticketingapp.mapper.ThreadPoolMapper;
 import org.example.ticketingapp.repository.ThreadPoolRepository;
 import org.example.ticketingapp.service.ThreadPoolService;
@@ -72,6 +73,7 @@ public class ThreadPoolServiceImpl implements ThreadPoolService {
 //    }
 
     @Async("customTaskExecutor")
+    @MethodLogger
     public CompletableFuture<List<ThreadDtoOut>> getCurrentThreadStatus() throws ExecutionException, InterruptedException {
         ArrayList<Integer> taskList = getStatus(taskExecutor).get();
         ArrayList<Integer> ticketList = getStatus(ticketExecutor).get();
@@ -131,6 +133,7 @@ public class ThreadPoolServiceImpl implements ThreadPoolService {
 
     @Async("customTaskExecutor")
     @Override
+    @MethodLogger
     public CompletableFuture<List<ThreadDtoOut>> getAllThreadRecords() throws ExecutionException, InterruptedException {
         getCurrentThreadStatus().get();
         List<ThreadPool> threadData = threadRepository.findLatestThreads(PageRequest.of(0, 60));
@@ -142,6 +145,7 @@ public class ThreadPoolServiceImpl implements ThreadPoolService {
 
     @Async("customTaskExecutor")
     @Override
+    @MethodLogger
     public CompletableFuture<List<ThreadDtoOut>> getAllThreadRecordsByType(String name) throws ExecutionException, InterruptedException {
         getCurrentThreadStatus().get();
 //        List<ThreadPool> threadData = threadRepository.findLatestThreadsByName(
@@ -156,6 +160,7 @@ public class ThreadPoolServiceImpl implements ThreadPoolService {
     }
 
     @Async("customTaskExecutor")
+    @MethodLogger
     public CompletableFuture<ArrayList<Integer>> getStatus(ThreadPoolTaskExecutor executor) {
         ArrayList<Integer> threadList = new ArrayList<>();
 
