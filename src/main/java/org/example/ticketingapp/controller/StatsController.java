@@ -105,4 +105,6 @@ public class StatsController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    // TODO: use the sales data
 }
