@@ -40,36 +40,39 @@ public class SimulateServiceImpl implements SimulateService {
 
     private List<String> eventList;
     private List<String> customerList;
+    private List<String> vendorList;
 
     @Override
     public boolean simulate(int userCount, int rate, int cycles) throws IOException, ExecutionException, InterruptedException {
         System.out.println("This is from service layer");
-        System.out.println("Simulating " + userCount + " users\n");
+        System.out.println("Simulating " + userCount + " customer and " + userCount + " vendors\n");
         System.out.println("\nValidating and creating users for the simulation\n");
 
         for (int i = 0; i < userCount; i++) {
-            System.out.println(i);
+//            System.out.println(i);
             String currentVendor = vendorCredentials + i;
             String currentCustomer = customerCredentials + i;
             String currentEvent = eventCredentials + i;
             eventList.add(currentEvent);
             customerList.add(currentCustomer);
+            vendorList.add(currentVendor);
 
-            System.out.println("\n\nCurrent vendor: " + currentVendor);
+            System.out.println("Current vendor: " + currentVendor);
             if (!checkUserExistence(currentVendor)) {
                 createVendor(currentVendor);
             }
-            System.out.println("\n\nCurrent customer: " + currentCustomer);
+            System.out.println("Current customer: " + currentCustomer);
             if (!checkUserExistence(currentCustomer)) {
                 createCustomer(currentCustomer);
             }
-            System.out.println("\n\nCurrent event: " + currentEvent);
+            System.out.println("Current event: " + currentEvent);
             if (!checkEventExistence(currentEvent)) {
                 createEvent(currentVendor, currentEvent);
             }
         }
-        System.out.println("\n\n" + eventList + "\n");
-        System.out.println("\n" + customerList + "\n");
+        System.out.println("\n\nSimulated eventList: " + eventList);
+        System.out.println("Simulated customerList: " + customerList);
+        System.out.println("Simulated vendorList: " + vendorList + "\n");
 
         runSimulation(rate, cycles);
 
@@ -133,7 +136,7 @@ public class SimulateServiceImpl implements SimulateService {
         try {
             vendorEventConfigService.updateTotalTickets(eventName, rate * (cycles + 1) * eventList.size());
         } finally {
-            System.out.println("\nTotal tickets updated on event " + eventName + "\n");
+            System.out.println("\nTotal tickets updated on event " + eventName);
         }
     }
 
@@ -159,7 +162,7 @@ public class SimulateServiceImpl implements SimulateService {
                 }
             }
         } finally {
-            System.out.println("\nCustomer :" + email + " bought " + rate + " tickets from " + eventName + "\n");
+            System.out.println("\nCustomer :" + email + " bought " + rate + " tickets from " + eventName);
         }
     }
 

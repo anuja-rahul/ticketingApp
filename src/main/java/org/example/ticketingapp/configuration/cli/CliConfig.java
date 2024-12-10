@@ -18,7 +18,6 @@ public class CliConfig {
 
     private CliConfig() {}
 
-    // fix it
     public static synchronized CliConfig getInstance() {
         if (instance == null) {
             instance = new CliConfig();
