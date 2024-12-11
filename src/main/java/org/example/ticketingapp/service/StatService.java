@@ -2,6 +2,7 @@ package org.example.ticketingapp.service;
 
 import org.example.ticketingapp.dto.CustomerTicketRecordDTO;
 import org.example.ticketingapp.dto.RecordDTO;
+import org.example.ticketingapp.dto.SalesDTO;
 import org.example.ticketingapp.dto.TotalTicketsTimeDtoOut;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public interface StatService {
     void createSalesRecord(String vendor, int ticketSales);
     void updateSalesRecord(String vendor, int ticketSales);
     CompletableFuture<List<RecordDTO>> getHistoryRecords() throws ExecutionException, InterruptedException;
+    CompletableFuture<List<SalesDTO>> getAllSalesRecords();
 
     // UserTickets stuff
     CompletableFuture<List<CustomerTicketRecordDTO>> getCustomerTicketPoolStats();

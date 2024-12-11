@@ -3,6 +3,7 @@ package org.example.ticketingapp.service.impl;
 import lombok.AllArgsConstructor;
 import org.example.ticketingapp.dto.CustomerTicketRecordDTO;
 import org.example.ticketingapp.dto.RecordDTO;
+import org.example.ticketingapp.dto.SalesDTO;
 import org.example.ticketingapp.dto.TotalTicketsTimeDtoOut;
 import org.example.ticketingapp.entity.History;
 import org.example.ticketingapp.entity.Sales;
@@ -13,6 +14,8 @@ import org.example.ticketingapp.mapper.StatsMapper;
 import org.example.ticketingapp.repository.*;
 import org.example.ticketingapp.service.StatService;
 import org.example.ticketingapp.utility.BaseUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -138,6 +141,18 @@ public class StatServiceImpl implements StatService {
                 .map(StatsMapper::mapToRecordDTO)
                 .collect(Collectors.toList());
         return CompletableFuture.completedFuture(recordList);
+    }
+
+    @Override
+    @Async("customTaskExecutor")
+    @MethodLogger
+    public CompletableFuture<List<SalesDTO>> getAllSalesRecords() {
+        Pageable pageable = PageRequest.of(0, 60, Sort.by(Sort.Direction.DESC, "date"));
+        List<Sales> salesList = salesRepository.findAll(pageable).getContent();
+        List<SalesDTO> salesDtoList = salesList.stream()
+                .map(StatsMapper:: mapToSalesDTO)
+                .collect(Collectors.toList());
+        return CompletableFuture.completedFuture(salesDtoList);
     }
 
     @Override
