@@ -24,8 +24,8 @@ public class ThreadPoolConfig {
     @Bean(name = "customTaskExecutor")
     public ThreadPoolTaskExecutor customTaskExecutor() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-        threadPoolTaskExecutor.setCorePoolSize(40);
-        threadPoolTaskExecutor.setMaxPoolSize(50);
+        threadPoolTaskExecutor.setCorePoolSize(60);
+        threadPoolTaskExecutor.setMaxPoolSize(100);
         threadPoolTaskExecutor.setQueueCapacity(400);
         threadPoolTaskExecutor.setThreadNamePrefix("TicketingApiTaskThread-");
         threadPoolTaskExecutor.initialize();

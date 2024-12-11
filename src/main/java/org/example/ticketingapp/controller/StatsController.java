@@ -133,7 +133,6 @@ public class StatsController {
         }
     }
 
-    // TODO: use the sales data
     /**
      * Returns all the sales records saved by the server sorted by date.
      *

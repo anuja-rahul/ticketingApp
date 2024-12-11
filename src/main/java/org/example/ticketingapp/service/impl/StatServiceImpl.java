@@ -148,7 +148,7 @@ public class StatServiceImpl implements StatService {
     @Async("customTaskExecutor")
     @MethodLogger
     public CompletableFuture<List<SalesDTO>> getAllSalesRecords() {
-        Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "ticketSales"));
+        Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "ticketSales"));
         List<Sales> salesList = salesRepository.findAll(pageable).getContent();
         List<SalesDTO> salesDtoList = salesList.stream()
                 .map(StatsMapper:: mapToSalesDTO)
