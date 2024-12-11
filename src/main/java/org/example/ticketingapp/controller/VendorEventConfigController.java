@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Controller class for handling vendor event configuration-related requests.
  * This class provides endpoints for managing vendor event configurations.
- * The class is annotated with {@link RestController} to indicate that it is a RESTful web service controller.
+ * The class is annotated with {@link RestController} to indicate that it is a REST ful web service controller.
  * It is also annotated with {@link CrossOrigin} to allow cross-origin requests.
  * The base URL for all endpoints in this class is "/api/config".
  */
