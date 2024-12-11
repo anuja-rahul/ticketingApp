@@ -21,6 +21,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller class for handling user-related requests.
+ * This class provides endpoints for managing users.
+ * It uses {@link UserService} and {@link VendorService} to perform operations related to users and vendors.
+ * The class is annotated with {@link RestController} to indicate that it is a RESTful web service controller.
+ * It is also annotated with {@link CrossOrigin} to allow cross-origin requests.
+ * The base URL for all endpoints in this class is "/api/user".
+ */
 @AllArgsConstructor
 @RestController
 @CrossOrigin
@@ -34,7 +42,10 @@ public class UserController {
 
 
     /**
-     * Get the user data if a valid token is included in the request header
+     * Get the user data if a valid token is included in the request header.
+     *
+     * @param token the JWT token included in the request header
+     * @return a {@link ResponseEntity} containing the user data
      */
     @Operation(summary = "Get the user profile information, if logged in as the user")
     @GetMapping
@@ -53,7 +64,10 @@ public class UserController {
     }
 
     /**
-     * Get all user data if a valid admin token is included in the request header
+     * Get all user data if a valid admin token is included in the request header.
+     *
+     * @param token the JWT token included in the request header
+     * @return a {@link ResponseEntity} containing the list of all users
      */
     @Operation(summary = "Get all user profile information, if logged in as an admin")
     @GetMapping("/all")
@@ -78,8 +92,11 @@ public class UserController {
     }
 
     /**
-     * Get a sequence of all vendor data if a valid customer token is included in the request header
-     */
+     * Get a sequence of all vendor data if a valid customer token is included in the request header.
+     *
+     * @param token the JWT token included in the request header
+     * @return a {@link ResponseEntity} containing the list of all vendors
+    */
     @Operation(summary = "Get a list of all vendors, only if logged in as a customer")
     @GetMapping("/vendors")
     public ResponseEntity<List<UserDTO>> getAllVendors(

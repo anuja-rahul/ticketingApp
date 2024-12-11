@@ -22,6 +22,14 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Controller class for handling customer ticket-related requests.
+ * This class provides endpoints for managing customer tickets.
+ * It uses {@link CustomerTicketService} and {@link VendorEventConfigService} to perform operations related to tickets and events.
+ * The class is annotated with {@link RestController} to indicate that it is a RESTful web service controller.
+ * It is also annotated with {@link CrossOrigin} to allow cross-origin requests.
+ * The base URL for all endpoints in this class is "/api/ticket".
+ */
 @AllArgsConstructor
 @CrossOrigin
 @RestController
@@ -34,6 +42,13 @@ public class CustomerTicketController {
     private final JwtService jwtService;
 
 
+    /**
+     * Add tickets if logged in as a customer.
+     * Creates new tickets if no pre-existing tickets are found.
+     *
+     * @param eventName the name of the event for which tickets are being added
+     * @return a {@link ResponseEntity} indicating the result of the operation
+     */
     @Operation(summary = "Add tickets if logged in as a customer, " +
             "creates a new tickets if no pre existing tickets are found")
     @PostMapping("add/{eventName}")
@@ -104,6 +119,12 @@ public class CustomerTicketController {
         }
     }
 
+    /**
+     * Get a list of all the tickets bought by the user, if logged in as a customer.
+     *
+     * @param token the JWT token included in the request header
+     * @return a {@link ResponseEntity} containing the list of tickets bought by the user
+     */
     @Operation(summary = "Get a list of all the tickets bought by the user, if logged in as a customer")
     @GetMapping("/all")
     public ResponseEntity<List<CustomerTicketDtoOut>> getAllTicketsByEmail(
@@ -134,6 +155,13 @@ public class CustomerTicketController {
 
     }
 
+    /**
+     * Delete all tickets bought by the user for a specific event, if logged in as a customer.
+     *
+     * @param token the JWT token included in the request header
+     * @param eventName the name of the event for which tickets are being deleted
+     * @return a {@link ResponseEntity} indicating the result of the operation
+     */
     @Operation(summary = "Delete all tickets bought by the user, if logged in as a customer")
     @DeleteMapping("/{eventName}")
     public ResponseEntity<Void> deleteCustomerTicket(
@@ -166,6 +194,14 @@ public class CustomerTicketController {
         }
     }
 
+    /**
+     * Retrieve the ticket retrieval rate for a specific event.
+     *
+     * @param eventName the name of the event for which the ticket retrieval rate is being retrieved
+     * @return the ticket retrieval rate for the specified event
+     * @throws ExecutionException if an error occurs during the asynchronous computation
+     * @throws InterruptedException if the current thread is interrupted while waiting
+     */
     private int getTicketRetrievalRate(String eventName) throws ExecutionException, InterruptedException {
         CompletableFuture<VendorEventConfigDTO> vendorEventConfigDTO = vendorEventConfigService.getVendorEventConfigByEventName(eventName);
         return vendorEventConfigDTO.get().getCustomerRetrievalRate();

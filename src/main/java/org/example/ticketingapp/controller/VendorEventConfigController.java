@@ -23,6 +23,13 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Controller class for handling vendor event configuration-related requests.
+ * This class provides endpoints for managing vendor event configurations.
+ * The class is annotated with {@link RestController} to indicate that it is a RESTful web service controller.
+ * It is also annotated with {@link CrossOrigin} to allow cross-origin requests.
+ * The base URL for all endpoints in this class is "/api/config".
+ */
 @AllArgsConstructor
 @CrossOrigin
 @RestController
@@ -33,6 +40,12 @@ public class VendorEventConfigController {
     private final UserRepository repository;
     private final JwtService jwtService;
 
+    /**
+     * Returns all the VendorEventConfigs created by the vendor email.
+     *
+     * @param token the JWT token included in the request header
+     * @return a {@link ResponseEntity} containing the list of vendor event configurations
+     */
     @Operation(summary = "Returns all the VendorEventConfigs created by the vendor email")
     @GetMapping("/event")
     public ResponseEntity<List<VendorEventConfigDTO>> getConfigsByEmail(
@@ -60,7 +73,13 @@ public class VendorEventConfigController {
         }
     }
 
-    // 29:50
+    /**
+     * Create a new VendorEventConfig, only if logged in as a vendor.
+     *
+     * @param token the JWT token included in the request header
+     * @param vendorEventConfigDTOIn the data of the vendor event configuration to create
+     * @return a {@link ResponseEntity} containing the created vendor event configuration
+     */
     @Operation(summary = "Create a new VendorEventConfig, only if logged in as a vendor")
     @PostMapping("/event")
     public ResponseEntity<VendorEventConfigDTO> createConfig(
@@ -91,8 +110,14 @@ public class VendorEventConfigController {
         }
     }
 
-
-
+    /**
+     * Updates the VendorEventConfig totalTicket parameter, only if logged in as a vendor and it already exists.
+     *
+     * @param token the JWT token included in the request header
+     * @param eventName the name of the event for which the configuration is being updated
+     * @param totalTickets the new number of tickets to be added for the event total ticket number
+     * @return a {@link ResponseEntity} containing the updated vendor event configuration
+     */
     @Operation(summary = "Updates the VendorEventConfig totalTicket parameter, " +
             "only if logged in as a vendor and it already exists")
     @PutMapping("/event/{eventName}/{totalTickets}")
@@ -133,6 +158,13 @@ public class VendorEventConfigController {
         }
     }
 
+    /**
+     * Deletes a VendorEventConfig by event name, only if logged in as a vendor.
+     *
+     * @param token the JWT token included in the request header
+     * @param eventName the name of the event for which the configuration is being deleted
+     * @return a {@link ResponseEntity} indicating the result of the operation
+     */
     @Operation(summary = "Deletes a VendorEventConfig by event name, only if logged in as a vendor")
     @DeleteMapping("/event/{eventName}")
     public ResponseEntity<Object> deleteVendorEventConfig(
@@ -158,6 +190,12 @@ public class VendorEventConfigController {
             }
     }
 
+    /**
+     * Get all VendorEventConfigs if logged in as a customer/admin.
+     *
+     * @param token the JWT token included in the request header
+     * @return a {@link ResponseEntity} containing the list of all vendor event configurations
+     */
     @Operation(summary = "Get all VendorEventConfigs if logged in as a customer/admin")
     @GetMapping("/all")
     public ResponseEntity<List<VendorEventConfigDTO>> getAllVendorEventConfigs(

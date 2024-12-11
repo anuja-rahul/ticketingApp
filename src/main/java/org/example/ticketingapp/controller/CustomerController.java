@@ -12,6 +12,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.ExecutionException;
 
+
+/**
+ * Controller class for handling customer-related requests.
+ * This class provides endpoints for retrieving customer information.
+ * It uses {@link CustomerService} to perform operations related to customers.
+ * The class is annotated with {@link RestController} to indicate that it is a RESTful web service controller.
+ * It is also annotated with {@link CrossOrigin} to allow cross-origin requests.
+ * The base URL for all endpoints in this class is "/api/customer".
+ */
 @AllArgsConstructor
 @RestController
 @CrossOrigin
@@ -21,7 +30,10 @@ public class CustomerController {
     private CustomerService customerService;
 
     /**
-     * Get the user data if a valid token is included in the request header
+     * Get the user data if a valid token is included in the request header.
+     *
+     * @param token the JWT token included in the request header
+     * @return a {@link ResponseEntity} containing the customer data if the token is valid, or an error response otherwise
      */
     @Operation(summary = "Get the user profile information, if logged in as the user")
     @GetMapping

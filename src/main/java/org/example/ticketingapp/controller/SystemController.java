@@ -14,6 +14,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller class for handling system-related requests.
+ * This class provides endpoints for system operations such as shutdown.
+ * The class is annotated with {@link RestController} to indicate that it is a RESTful web service controller.
+ * It is also annotated with {@link CrossOrigin} to allow cross-origin requests.
+ * The base URL for all endpoints in this class is "/api/system".
+ */
 @AllArgsConstructor
 @CrossOrigin
 @RestController
@@ -26,6 +33,12 @@ public class SystemController {
     private ConfigurableApplicationContext context;
     private ShutDownService shutDownService;
 
+    /**
+     * Safely close off all thread pools and shuts down the system.
+     *
+     * @param token the JWT token included in the request header
+     * @return a {@link ResponseEntity} containing a string message indicating the result of the operation
+     */
     @Operation(summary = "Safely close off all thread pools and shuts down the system")
     @GetMapping("/nuke")
     @MethodLogger
@@ -61,6 +74,11 @@ public class SystemController {
         return new ResponseEntity<>("Failed Shutting down the system", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * Safely close off all thread pools and shuts down the system from the command line interface.
+     *
+     * @return a string message indicating the result of the operation
+     */
     @MethodLogger
     public String nukeTheWholeSystemFromCLI() {
         try {

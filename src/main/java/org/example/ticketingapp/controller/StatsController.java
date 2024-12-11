@@ -20,6 +20,14 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Controller class for handling statistics-related requests.
+ * This class provides endpoints for retrieving various statistics.
+ * It uses {@link StatService} to perform operations related to statistics.
+ * The class is annotated with {@link RestController} to indicate that it is a RESTful web service controller.
+ * It is also annotated with {@link CrossOrigin} to allow cross-origin requests.
+ * The base URL for all endpoints in this class is "/api/stats".
+ */
 @AllArgsConstructor
 @CrossOrigin
 @RestController
@@ -29,6 +37,12 @@ public class StatsController {
     private final JwtService jwtService;
     private final UserRepository repository;
 
+    /**
+     * Returns all the current ticket pool stats.
+     *
+     * @param token the JWT token included in the request header
+     * @return a {@link ResponseEntity} containing the total ticket pool stats
+     */
     @Operation(summary = "Returns all the current ticket pool stats")
     @GetMapping("/ticketPool")
     public ResponseEntity<TotalTicketsTimeDtoOut> getTotalTicketPoolStats(
@@ -55,6 +69,12 @@ public class StatsController {
         }
     }
 
+    /**
+     * Returns all the history records saved by the server.
+     *
+     * @param token the JWT token included in the request header
+     * @return a {@link ResponseEntity} containing the list of history records
+     */
     @Operation(summary = "Returns all the history records saved by the server")
     @GetMapping("/history")
     public ResponseEntity<List<RecordDTO>> getHistoryRecords(
@@ -81,6 +101,12 @@ public class StatsController {
         }
     }
 
+    /**
+     * Returns all the tickets sold by eventName summed up based on customerTicket records.
+     *
+     * @param token the JWT token included in the request header
+     * @return a {@link ResponseEntity} containing the list of customer ticket records
+     */
     @Operation(summary = "Returns all the tickets sold by eventName summed up based on customerTicket records")
     @GetMapping("/sold")
     public ResponseEntity<List<CustomerTicketRecordDTO>> getCustomerTicketRecords(

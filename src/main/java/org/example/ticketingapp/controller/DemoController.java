@@ -10,6 +10,13 @@ import org.example.ticketingapp.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Demo controller class for handling demo-related requests.
+ * This class provides endpoints for testing the API JWT authentication services.
+ * The class is annotated with {@link RestController} to indicate that it is a RESTful web service controller.
+ * It is also annotated with {@link CrossOrigin} to allow cross-origin requests.
+ * The base URL for all endpoints in this class is "/api/demo".
+ */
 @RestController
 @RequestMapping("/api/demo")
 @RequiredArgsConstructor
@@ -18,6 +25,12 @@ public class DemoController {
     private final JwtService jwtService;
     private final UserRepository repository;
 
+    /**
+     * Secure endpoint available for testing the API JWT authentication services.
+     *
+     * @param token the JWT token included in the request header
+     * @return a {@link ResponseEntity} containing a string message indicating the result of the operation
+     */
     @Operation(summary = "Secure endpoint available for testing the api JWT auth services")
     @GetMapping
     public ResponseEntity<String> hello(@RequestHeader("Authorization") String token) {
