@@ -111,7 +111,7 @@
 
   ### Usage
 
-  After starting the application, you can access the API at `http://localhost:8080/api`.
+  After starting the application, you can access the API at `http://localhost:8080/swagger-ui/index.html`.
 
   ## 📄 License
 
