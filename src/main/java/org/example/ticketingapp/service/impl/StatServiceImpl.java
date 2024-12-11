@@ -143,11 +143,12 @@ public class StatServiceImpl implements StatService {
         return CompletableFuture.completedFuture(recordList);
     }
 
+    // TODO: test this
     @Override
     @Async("customTaskExecutor")
     @MethodLogger
     public CompletableFuture<List<SalesDTO>> getAllSalesRecords() {
-        Pageable pageable = PageRequest.of(0, 60, Sort.by(Sort.Direction.DESC, "date"));
+        Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "ticketSales"));
         List<Sales> salesList = salesRepository.findAll(pageable).getContent();
         List<SalesDTO> salesDtoList = salesList.stream()
                 .map(StatsMapper:: mapToSalesDTO)

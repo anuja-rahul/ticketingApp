@@ -3844,3 +3844,13 @@ Class: [org.example.ticketingapp.service.impl.ThreadPoolServiceImpl], Method: [g
 Class: [org.example.ticketingapp.service.impl.ThreadPoolServiceImpl], Method: [getAllThreadRecordsByType] executed at 2024-12-11T10:18:35.4367957
 Class: [org.example.ticketingapp.service.impl.StatServiceImpl], Method: [getTicketPoolStats] executed at 2024-12-11T10:18:35.568796
 Class: [org.example.ticketingapp.controller.SystemController], Method: [nukeTheWholeSystemFromCLI] executed at 2024-12-11T10:19:44.4661933
+Class: [org.example.ticketingapp.service.impl.StatServiceImpl], Method: [updateHistoryRecord] executed at 2024-12-11T14:44:02.2291108
+Class: [org.example.ticketingapp.service.impl.StatServiceImpl], Method: [getCustomerTicketPoolStats] executed at 2024-12-11T14:44:07.0016155
+Class: [org.example.ticketingapp.service.impl.StatServiceImpl], Method: [getAllSalesRecords] executed at 2024-12-11T14:45:01.6729483
+Class: [org.example.ticketingapp.service.impl.StatServiceImpl], Method: [getHistoryRecords] executed at 2024-12-11T14:45:43.8550619
+Class: [org.example.ticketingapp.controller.SystemController], Method: [nukeTheWholeSystemFromCLI] executed at 2024-12-11T14:48:31.891988
+Class: [org.example.ticketingapp.service.impl.StatServiceImpl], Method: [updateHistoryRecord] executed at 2024-12-11T14:49:10.9823523
+Class: [org.example.ticketingapp.service.impl.StatServiceImpl], Method: [getAllSalesRecords] executed at 2024-12-11T14:49:22.3301878
+Class: [org.example.ticketingapp.service.impl.StatServiceImpl], Method: [updateHistoryRecord] executed at 2024-12-11T14:50:19.000193
+Class: [org.example.ticketingapp.service.impl.StatServiceImpl], Method: [getAllSalesRecords] executed at 2024-12-11T14:50:27.1399424
+Class: [org.example.ticketingapp.controller.SystemController], Method: [nukeTheWholeSystem] executed at 2024-12-11T14:50:56.2625725

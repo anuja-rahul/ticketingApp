@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.example.ticketingapp.configuration.JwtService;
 import org.example.ticketingapp.dto.CustomerTicketRecordDTO;
 import org.example.ticketingapp.dto.RecordDTO;
+import org.example.ticketingapp.dto.SalesDTO;
 import org.example.ticketingapp.dto.TotalTicketsTimeDtoOut;
 import org.example.ticketingapp.entity.User;
 import org.example.ticketingapp.exception.ResourceNotFoundException;
@@ -24,7 +25,7 @@ import java.util.concurrent.ExecutionException;
  * Controller class for handling statistics-related requests.
  * This class provides endpoints for retrieving various statistics.
  * It uses {@link StatService} to perform operations related to statistics.
- * The class is annotated with {@link RestController} to indicate that it is a RESTful web service controller.
+ * The class is annotated with {@link RestController} to indicate that it is a REST ful web service controller.
  * It is also annotated with {@link CrossOrigin} to allow cross-origin requests.
  * The base URL for all endpoints in this class is "/api/stats".
  */
@@ -133,4 +134,35 @@ public class StatsController {
     }
 
     // TODO: use the sales data
+    /**
+     * Returns all the sales records saved by the server sorted by date.
+     *
+     * @param token the JWT token included in the request header
+     * @return a {@link ResponseEntity} containing the list of sales records
+     */
+    @Operation(summary = "Returns all the sales records saved by the server sorted by date")
+    @GetMapping("/sales")
+    public ResponseEntity<List<SalesDTO>> getAllSalesRecords(
+            @RequestHeader("Authorization") String token
+    ) {
+
+        try {
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+            Claims claims = jwtService.extractAllClaims(token);
+            String email = claims.getSubject();
+            User user = repository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+            if ("admin".equalsIgnoreCase(user.getRole().name())) {
+                List<SalesDTO> salesRecord = statService.getAllSalesRecords().get();
+                return ResponseEntity.ok(salesRecord);
+            }
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        } catch (InterruptedException | ExecutionException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
