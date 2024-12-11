@@ -57,62 +57,73 @@
 - [x] **Dynamic Configuration Feature (Optional)**
   Allow for real-time, customizable configurations during runtime.
 
-- [x] **Documentation for CLI Usage and Config Options**
-  Provide clear documentation for all available CLI commands and configuration options.
+  - [x] **Documentation for CLI Usage and Config Options**
+    Provide clear documentation for all available CLI commands and configuration options.
 
-- [x] **Javadoc for All Classes and Methods**
-  Ensure comprehensive Javadoc documentation is provided for maintainability.
+    - [x] **Javadoc for All Classes and Methods**
+      Ensure comprehensive Javadoc documentation is provided for maintainability.
 
-  ## 🚀 Getting Started
+      ## 🚀 Getting Started
 
-  ### Prerequisites
+      ### Prerequisites
 
-  - Java 21 or higher
-  - Maven 3.6.3 or higher
-  - PostgreSQL 13 or higher
+      - Java 21 or higher
+      - Maven 3.6.3 or higher
+      - PostgreSQL 13 or higher
 
-  ### Installation
+      ### Installation
 
-  1. Clone the repository:
+      1. Clone the repository:
 
-      ```shell
-      git clone https://github.com/anuja-rahul/ticketingApp.git
+          ```shell
+          git clone https://github.com/anuja-rahul/ticketingApp.git
 
-      cd ticketingApp
-      ```
+          cd ticketingApp
+          ```
 
-  2. Configure the database in application.properties:
+      2. Environment variables Configuration:
+    
+         in the `.env` file
 
-      ```properties
-      spring.datasource.url=jdbc:postgresql://localhost:5432/ticketingapp
-      spring.datasource.username=yourUsername
-      spring.datasource.password=yourPassword
-      ```
+          ```bash
+           # Database connection URL for PostgreSQL
+           SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/ticketingapp
+      
+           # Database username
+           SPRING_DATASOURCE_USERNAME=yourUsername
+      
+           # Database password
+           SPRING_DATASOURCE_PASSWORD=yourPassword
+      
+           # Secret key for JWT authentication (265bit preferably)
+           SECRET_KEY=yourSecretKey
+          
+          ```
 
-  3. Build the project:
+      3. Build the project:
 
-      ```shell
-      mvn clean install
-      ```
+          ```shell
+          mvn clean install
+          ```
 
-  4. Run the application:
+      4. Run the application:
 
-      ```shell
-      mvn spring-boot:run
-      ```
+          ```shell
+          mvn spring-boot:run
+          ```
 
-  ### Running Tests
+         ### Running Tests
 
-  To run the tests, use the following command:
+         To run the tests, use the following command:
 
-  ```shell
-  mvn test
-  ```
+         ```shell
+         mvn test
+         ```
 
-  ### Usage
+         ### Usage
 
-  After starting the application, you can access the API at `http://localhost:8080/swagger-ui/index.html`.
+         After starting the application, you can access the API at `http://localhost:8080/swagger-ui/index.html`.
 
-  ## 📄 License
+         ## 📄 License
 
-  This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+         This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
