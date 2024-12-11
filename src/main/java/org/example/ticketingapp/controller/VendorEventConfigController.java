@@ -98,6 +98,7 @@ public class VendorEventConfigController {
             if ("vendor".equalsIgnoreCase(user.getRole().name())) {
                 CompletableFuture<VendorEventConfigDTO> savedVendorEventConfig = vendorEventConfigService
                         .createVendorEventConfig(vendorEventConfigDTOIn, email);
+                System.out.println("Vendor: " + email + " created an event: " + vendorEventConfigDTOIn.getEventName());
                 return new ResponseEntity<>(savedVendorEventConfig.get(), HttpStatus.CREATED);
 
             } else {
@@ -143,6 +144,8 @@ public class VendorEventConfigController {
                             .updateTotalTickets(eventName, totalTickets);
 
 
+                    System.out.println("Vendor: " + email + " Updated the ticket pool by adding: " +
+                            totalTickets + " tickets to the event: " + eventName);
                     return new ResponseEntity<>(updatedVendorEventConfig.get(), HttpStatus.OK);
                 }
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);

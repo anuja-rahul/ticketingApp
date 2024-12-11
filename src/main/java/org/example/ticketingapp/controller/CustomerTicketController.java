@@ -83,6 +83,8 @@ public class CustomerTicketController {
 
                     // logic to update vendor event config
                     boolean reduced = vendorEventConfigService.buyTickets(eventName).get();
+                    System.out.println("Customer: " + email + " bought " + ticketRetrievalRate +
+                            " tickets for the event: " + eventName);
                     if (reduced) {
 
                         if(!customerTicketExists) {
