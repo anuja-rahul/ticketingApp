@@ -139,3 +139,7 @@ Seamlessly integrating with the frontend, it offers a dynamic, real-time experie
      ## 📄 License
 
      This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+<br />
+
+  [![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=anuja-rahul&repo=ticketingApp&theme=nightowl)](https://github.com/anuja-rahul/ticketingApp/)
