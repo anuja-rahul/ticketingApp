@@ -134,7 +134,7 @@ Seamlessly integrating with the frontend, it offers a dynamic, real-time experie
 
      After starting the application, you can access the API documentation at `http://localhost:8080/swagger-ui/index.html`.
      <br /><br />
-     ![Swagger UI](./diagrams/SwaggerUI.gif)
+     ![Swagger UI](diagrams/SwaggerUI.gif)
 
      ## 📄 License
 
