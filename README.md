@@ -128,8 +128,14 @@ Seamlessly integrating with the frontend, it offers a dynamic, real-time experie
 
      ### Usage
 
-     After starting the application, you can access the API at `http://localhost:8080/swagger-ui/index.html`.
+     After starting the application, you can access the API at `http://localhost:8080/api`.
+    
+     ### API Documentation
+
+     After starting the application, you can access the API documentation at `http://localhost:8080/swagger-ui/index.html`.
+     <br /><br />
+     ![Swagger UI](./diagrams/SwaggerUI.gif)
 
      ## 📄 License
 
-     This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+     This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
